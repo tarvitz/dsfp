@@ -1,6 +1,6 @@
 DSFP
 ====
-DSFP means *D*arkSouls *s*ave *f*ile *p*arser
+DSFP means Darksouls Save File Parser
 
 dsfp servers for fetching statistics purposes
 
