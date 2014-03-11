@@ -17,6 +17,7 @@ TIME_BLOCK_SIZE = 0x170
 
 data_map = [
     {'offset': 0x70, 'type': 'i', 'field': 'health_bar', 'size': 4},
+    {'offset': 0x6c, 'type': 'i', 'field': 'health_current', 'size': 4},
     # what's the difference?
     {'offset': 0x74, 'type': 'i', 'field': 'health_bar2', 'size': 4},
     {'offset': 0x88, 'type': 'i', 'field': 'stamina', 'size': 4},
@@ -36,14 +37,26 @@ data_map = [
 ]
 
 
+class FileTypeException(Exception):
+    def __init__(self, *args):
+        self.args = args
+
+
 class DSSaveFileParser(object):
     """ Dark Souls save file parser
     original gist: https://gist.github.com/infuasto/8382836
     """
     def __init__(self, filename):
         self.filename = filename
-        # todo: insert dark souls save file validation
         self._fo = open(self.filename, 'rb')
+        # check if it's a dark souls save file
+        self._fo.seek(0)
+        fmt = self._fo.read(4)
+        self._fo.seek(0x18)
+        version = self._fo.read(8)
+        self._fo.seek(0)
+        if fmt != 'BND4' and version != '000000001':
+            raise FileTypeException("Not an Dark Souls save file")
         self.slots = []
 
     def get_data(self, reload=False):
