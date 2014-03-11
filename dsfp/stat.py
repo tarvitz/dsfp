@@ -6,6 +6,13 @@ import struct
 
 BLOCK_INDEX = 0x2c0
 BLOCK_SIZE = 0x60190
+DEBUG = True
+
+# time stored as seconds with unsigned int
+# time: 0x3c12c0 (1 slot)
+# time: 0x3c1430 (2 slot) (0x170 offset between game times)
+TIME_INDEX = 0x3c12c0
+TIME_BLOCK_SIZE = 0x170
 
 
 data_map = [
@@ -49,6 +56,7 @@ class DSSaveFileParser(object):
 
         for slot in range(0, 10):
             _offset = BLOCK_INDEX + BLOCK_SIZE * slot
+            _time_offset = TIME_INDEX + TIME_BLOCK_SIZE * slot
             fo.seek(_offset, 0)
             storage = {}
             for item in data_map:
@@ -61,6 +69,11 @@ class DSSaveFileParser(object):
                 else:
                     encoded = struct.unpack(item['type'], data)[0]
                 storage.update({item['field']: encoded})
+            # process time
+            fo.seek(_time_offset, 0)
+            storage.update({
+                'time': struct.unpack('i', fo.read(4))[0]
+            })
             slots.append(storage)
         self.slots = slots
         return self.slots
@@ -100,6 +113,8 @@ def main():
     for slot in ds.get_data():
         if slot['name']:
             print("Name: %(name)s, deaths: %(deaths)s" % slot)
+            if DEBUG:
+                print(slot)
 
 
 if __name__ == '__main__':
