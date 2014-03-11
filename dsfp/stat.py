@@ -16,19 +16,19 @@ TIME_BLOCK_SIZE = 0x170
 
 
 data_map = [
-    {'offset': 0x70, 'type': 'i', 'field': 'health_bar', 'size': 4},
-    {'offset': 0x6c, 'type': 'i', 'field': 'health_current', 'size': 4},
+    {'offset': 0x70, 'type': 'i', 'field': 'hp', 'size': 4},
+    {'offset': 0x6c, 'type': 'i', 'field': 'hp_current', 'size': 4},
     # what's the difference?
-    {'offset': 0x74, 'type': 'i', 'field': 'health_bar2', 'size': 4},
+    {'offset': 0x74, 'type': 'i', 'field': 'hp2', 'size': 4},
     {'offset': 0x88, 'type': 'i', 'field': 'stamina', 'size': 4},
     {'offset': 0xe8, 'type': 'i', 'field': 'level', 'size': 4},
     {'offset': 0xec, 'type': 'i', 'field': 'souls', 'size': 4},
-    {'offset': 0x98, 'type': 'i', 'field': 'health', 'size': 4},
-    {'offset': 0xa0, 'type': 'i', 'field': 'mind', 'size': 4},
-    {'offset': 0xa8, 'type': 'i', 'field': 'durability', 'size': 4},
+    {'offset': 0x98, 'type': 'i', 'field': 'vitality', 'size': 4},
+    {'offset': 0xa0, 'type': 'i', 'field': 'attunement', 'size': 4},
+    {'offset': 0xa8, 'type': 'i', 'field': 'endurance', 'size': 4},
     {'offset': 0xb0, 'type': 'i', 'field': 'strength', 'size': 4},
-    {'offset': 0xb8, 'type': 'i', 'field': 'agility', 'size': 4},
-    {'offset': 0xe0, 'type': 'i', 'field': 'resist', 'size': 4},
+    {'offset': 0xb8, 'type': 'i', 'field': 'dexterity', 'size': 4},
+    {'offset': 0xe0, 'type': 'i', 'field': 'resistance', 'size': 4},
     {'offset': 0xc0, 'type': 'i', 'field': 'intelligence', 'size': 4},
     {'offset': 0xc8, 'type': 'i', 'field': 'faith', 'size': 4},
     {'offset': 0xd8, 'type': 'i', 'field': 'humanity', 'size': 4},
