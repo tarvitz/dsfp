@@ -17,9 +17,14 @@ CLASSES = {
     9: 'Deprived'
 }
 
-
-BLOCK_INDEX = 0x2c0
 BLOCK_SIZE = 0x60190
+BLOCK_INDEX = 0x2c0
+BLOCK_DATA_OFFSET = 0x14
+"""
+Each existing character save block data should have not \x00
+value on BLOCK_INDEX + BLOCK_DATA_OFFSET
+"""
+
 DEBUG = True
 
 # time stored as seconds with unsigned int
@@ -85,6 +90,8 @@ class DSSaveFileParser(object):
     def __init__(self, filename):
         self.filename = filename
         self._fo = open(self.filename, 'rb')
+        self._slots = self.get_slots()
+
         # check if it's a dark souls save file
         self._fo.seek(0)
         fmt = self._fo.read(4)
@@ -95,6 +102,19 @@ class DSSaveFileParser(object):
             raise FileTypeException("Not an Dark Souls save file")
         self.slots = []
 
+    def get_slots(self):
+        # there's 10 save slots
+        slots = 0
+        for slot in range(0, 9):
+            offset = (BLOCK_INDEX + BLOCK_SIZE * slot) + BLOCK_DATA_OFFSET
+            self._fo.seek(offset, 0)
+            is_exists = self._fo.read(1)
+            if is_exists == '\x00':
+                break
+            slots += 1
+        self._slots = slots
+        return self._slots
+
     def get_data(self, reload=False):
         if self.slots and not reload:
             return self.slots
@@ -103,7 +123,7 @@ class DSSaveFileParser(object):
         fo.seek(BLOCK_INDEX, 0)
         slots = []
 
-        for slot in range(0, 10):
+        for slot in range(self._slots):
             _offset = BLOCK_INDEX + BLOCK_SIZE * slot
             _time_offset = TIME_INDEX + TIME_BLOCK_SIZE * slot
             fo.seek(_offset, 0)
@@ -160,10 +180,20 @@ def main():
     filename = sys.argv[1]
     ds = DSSaveFileParser(filename)
     for slot in ds.get_data():
-        if slot['name']:
-            print("Name: %(name)s, deaths: %(deaths)s" % slot)
-            if DEBUG:
-                print(slot)
+        slot['skill'] = (
+            1
+            #300 / (slot['deaths'] or 1) +
+            #slot['level']
+            #3600 * 3 / float(slot['time']) +
+            #850.0 / slot['hp']
+
+        )
+        print("Name: %(name)s, deaths: %(deaths)s, skill: %(skill)s" % slot)
+        if DEBUG:
+            print(slot)
+            for key, value in slot.items():
+                if key.startswith('smth'):
+                    print("%s: %s" % (key, value))
 
 
 if __name__ == '__main__':
