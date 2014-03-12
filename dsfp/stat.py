@@ -79,6 +79,7 @@ data_map = [
 
 
 class FileTypeException(Exception):
+    """ not a DarkSouls save file exception """
     def __init__(self, *args):
         self.args = args
 
