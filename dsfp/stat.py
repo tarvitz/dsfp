@@ -147,29 +147,6 @@ class DSSaveFileParser(object):
         self.slots = slots
         return self.slots
 
-    def get_death_stats(self):
-        """ returns dict for death chars stat, the old one """
-        stats = []
-
-        self._fo.seek(0x2c0, 0)
-        for slot in range(0, 10):
-            self._fo.seek(0x100, 1)
-            name = self._fo.read(32)
-            if name[0] != '\00':
-                self._fo.seek(-0x120, 1)
-                self._fo.seek(0x1f128, 1)
-                deaths = self._fo.read(4)
-                self._fo.seek(-0x04, 1)
-                self._fo.seek(-0x1f128, 1)
-                stats.append({
-                    'name': name.decode('utf-16').split('\00')[0],
-                    'deaths': struct.unpack('i', deaths)[0]
-                })
-            else:
-                self._fo.seek(-0x120, 1)
-            self._fo.seek(0x60190, 1)
-        return stats
-
 
 def usage():
     print("%s <filename.sl2>" % sys.argv[0])
