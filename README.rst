@@ -10,7 +10,7 @@ dsfp servers for fetching statistics purposes
 Original source
 ~~~~~~~~~~~~~~~
 
-`gist <https://gist.github.com/infuasto/8382836>`_
+`gist <https://gist.github.com/infuasto/8382836>`_ (could be deleted/disabled for present time)
 
 Common features
 ~~~~~~~~~~~~~~~
