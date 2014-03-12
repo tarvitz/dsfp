@@ -15,7 +15,7 @@ Contents:
    tests
    saves
 
-.. include:: ../INSTALL.rst
+.. include:: install.rst
 
 
 Indices and tables
