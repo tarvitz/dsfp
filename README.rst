@@ -17,3 +17,6 @@ Common features
 Supports fetching data about character's death, his/her general stats, hp and stamina
 
 Help for reverse engineering DarkSouls save file is appreciated.
+
+
+.. include:: INSTALL.rst

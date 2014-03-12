@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+import bz2
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
 import sys
 import struct
 
@@ -86,10 +90,19 @@ class FileTypeException(Exception):
 class DSSaveFileParser(object):
     """ Dark Souls save file parser
     original gist: https://gist.github.com/infuasto/8382836
+
+    :param filename: basestring, bz2.BZ2File or StringIO instances
     """
     def __init__(self, filename):
         self.filename = filename
-        self._fo = open(self.filename, 'rb')
+        if isinstance(self.filename, basestring):
+            self._fo = open(self.filename, 'rb')
+        elif isinstance(self.filename, bz2.BZ2File):
+            self._fo = self.filename
+        elif isinstance(self.filename, StringIO):
+            self._fo = self.filename
+        else:
+            raise FileTypeException("Not supported file format")
         self._slots = self.get_slots()
 
         # check if it's a dark souls save file
@@ -150,6 +163,14 @@ class DSSaveFileParser(object):
             slots.append(storage)
         self.slots = slots
         return self.slots
+
+    def store_data(self, slot, data={}):
+        """ store data in DarkSouls save file
+
+         :param slot: slot number, could be 0 up to 10
+         :param data: dict of data should be stored
+        """
+        raise NotImplemented
 
 
 def usage():
