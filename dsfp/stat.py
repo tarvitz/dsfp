@@ -103,7 +103,10 @@ class DSSaveFileParser(object):
         self.slots = []
 
     def get_slots(self):
-        # there's 10 save slots
+        """ get active slots count, could be 0 up to 10
+
+        :return: active characters' slots amount
+        """
         slots = 0
         for slot in range(0, 9):
             offset = (BLOCK_INDEX + BLOCK_SIZE * slot) + BLOCK_DATA_OFFSET
@@ -115,10 +118,11 @@ class DSSaveFileParser(object):
         self._slots = slots
         return self._slots
 
-    def get_data(self, reload=False):
-        if self.slots and not reload:
-            return self.slots
+    def get_data(self):
+        """ get character stats data
 
+        :return: list of dicts
+        """
         fo = self._fo
         fo.seek(BLOCK_INDEX, 0)
         slots = []
