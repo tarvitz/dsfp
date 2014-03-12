@@ -65,7 +65,7 @@ data_map = [
     {'offset': 0xf0, 'type': 'i', 'field': 'earned', 'size': 4},
     # 28 bytes, 2*13 + finishing zero for char name
 
-    {'offset': 0x100, 'type': 'c', 'field': 'name', 'size': 32},
+    {'offset': 0x100, 'type': 'c', 'field': 'name', 'size': 14*2},
     {'offset': 0x122, 'type': '?', 'field': 'male', 'size': 1},
     # enums
     {'offset': 0x126, 'type': 'B', 'field': 'class', 'size': 1},
