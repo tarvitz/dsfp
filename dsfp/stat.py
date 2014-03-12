@@ -34,8 +34,7 @@ TIME_INDEX = 0x3c12c0
 TIME_BLOCK_SIZE = 0x170
 
 
-data_map = [
-    {'offset': 0x70, 'type': 'i', 'field': 'hp', 'size': 4},
+DATA_MAP = [
     {'offset': 0x6c, 'type': 'i', 'field': 'hp_current', 'size': 4},
     {'offset': 0x70, 'type': 'i', 'field': 'hp', 'size': 4},
     # what's the difference?
@@ -133,7 +132,7 @@ class DSSaveFileParser(object):
             _time_offset = TIME_INDEX + TIME_BLOCK_SIZE * slot
             fo.seek(_offset, 0)
             storage = {}
-            for item in data_map:
+            for item in DATA_MAP:
                 fo.seek(_offset + item['offset'], 0)
                 data = fo.read(item['size'])
                 if item['type'] == 'c':
