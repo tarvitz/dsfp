@@ -14,6 +14,7 @@ Contents:
    dsfp
    tests
    saves
+   datasheet
 
 .. include:: install.rst
 

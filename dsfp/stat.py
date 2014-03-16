@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import bz2
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+from StringIO import StringIO
 import sys
 import struct
 
@@ -96,7 +93,7 @@ class DSSaveFileParser(object):
     def __init__(self, filename):
         self.filename = filename
         if isinstance(self.filename, basestring):
-            self._fo = open(self.filename, 'rb')
+            self._fo = open(self.filename, 'r+b')
         elif isinstance(self.filename, bz2.BZ2File):
             self._fo = self.filename
         elif isinstance(self.filename, StringIO):
@@ -116,7 +113,7 @@ class DSSaveFileParser(object):
         self.slots = []
 
     def get_slots(self):
-        """ get active slots count, could be 0 up to 10
+        """ get active slots count, could be 0 up to 9
 
         :return: active characters' slots amount
         """
@@ -164,13 +161,35 @@ class DSSaveFileParser(object):
         self.slots = slots
         return self.slots
 
-    def store_data(self, slot, data={}):
-        """ store data in DarkSouls save file
+    def __store_data(self, slot, data={}):
+        """ store data in DarkSouls save file.
 
-         :param slot: slot number, could be 0 up to 10
+        Please not that you should control write process because you can
+        easily spoil save file with wrong store data on right address or vise
+        versa.
+
+         :param slot: slot number, could be 0 up to 9
          :param data: dict of data should be stored
+
+         ``data`` param example:
+
+         .. code-block:: python
+
+            data = {"offset": 0xec, "type": "i", "data": 666}
         """
-        raise NotImplemented
+        if 0 < slot > 9:  # slot < 0 and slot > 9
+            raise IndexError(
+                "Dark Souls save file supports only 10 save slots: 0 up to 9"
+            )
+        offset = BLOCK_INDEX + BLOCK_SIZE * slot
+        self._fo.seek(offset)
+        self._fo.seek(data['offset'], 1)
+        store_data = struct.pack(data['type'], data['data'])
+        self._fo.write(store_data)
+
+    def reopen(self, mode='rb'):
+        self._fo.close()
+        self._fo = open(self.filename, mode)
 
 
 def usage():
