@@ -74,4 +74,11 @@ dictionary format
 
 
 
-that's all folks
+
+Datasheets
+~~~~~~~~~~
+There's no many information about Dark Souls save file format (as well as the
+other games), so there's not much complete around its format.
+Some knowledge represented `here <docs/datasheet.rst>`_.
+
+Please notify me if you have something interesting around whole file format.
