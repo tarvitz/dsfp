@@ -1,4 +1,4 @@
 DSFP documentation
 ==================
-.. automodule:: dsfp.stat
+.. automodule:: dsfp.dsfp
     :members:
