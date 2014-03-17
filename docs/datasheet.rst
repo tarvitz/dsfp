@@ -13,7 +13,7 @@ Headers format and structures
 +-----------------+---------+------------+-----------------------------------+
 | **0x00**        | 4 bytes | String     | Probably file format container    |
 +-----------------+---------+------------+-----------------------------------+
-| **0x04**        | 4 bytes | c_uint32   | \x00\x00\x00\x00 sequence,        |
+| **0x04**        | 4 bytes | c_uint32   | **\x00\x00\x00\x00** sequence,    |
 |                 |         |            | could be a separator              |
 +-----------------+---------+------------+-----------------------------------+
 | **0x08**        | 4 bytes | c_uint32   | Unknow data                       |
@@ -22,7 +22,7 @@ Headers format and structures
 +-----------------+---------+------------+-----------------------------------+
 | **0x10**        | 4 bytes | c_uint32   | Unknown data                      |
 +-----------------+---------+------------+-----------------------------------+
-| **0x14**        | 4 bytes | c_uint32   | \x00\x00\x00\x00 sequence,        |
+| **0x14**        | 4 bytes | c_uint32   | **\x00\x00\x00\x00** sequence,    |
 |                 |         |            | could be a separator              |
 +-----------------+---------+------------+-----------------------------------+
 | **0x18**        | 8 bytes | String     | It seems a version of document or |
@@ -30,20 +30,20 @@ Headers format and structures
 +-----------------+---------+------------+-----------------------------------+
 | **0x20**        | 4 bytes | c_uint32   | Unknown data (20h->32)            |
 +-----------------+---------+------------+-----------------------------------+
-| **0x24**        | 4 bytes | c_uint32   | \x00\x00\x00\x00 sequence,        |
+| **0x24**        | 4 bytes | c_uint32   | **\x00\x00\x00\x00** sequence,    |
 |                 |         |            | could be a separator              |
 +-----------------+---------+------------+-----------------------------------+
 | **0x28**        | 4 bytes | c_uint32   | First data block offset from the  |
 |                 |         |            | of the file (2c0h->704)           |
 +-----------------+---------+------------+-----------------------------------+
-| **0x2c**        | 4 bytes | c_uint32   | \x00\x00\x00\x00 sequence,        |
+| **0x2c**        | 4 bytes | c_uint32   | **\x00\x00\x00\x00** sequence,    |
 |                 |         |            | could be a separator              |
 +-----------------+---------+------------+-----------------------------------+
 | **0x30**        | 4 bytes | c_uint32   | Unknown data (0x0120->8193)       |
 |                 |         |            |                                   |
 +-----------------+---------+------------+-----------------------------------+
 | **0x34**,       | 4 bytes | c_uint32   | Unknown block of data:            |
-| **0x38**,       | * 3     |            | \x00\x00\x00\x00 three times      |
+| **0x38**,       | * 3     |            | **\x00\x00\x00\x00** three times  |
 | **0x3c**        |         |            |                                   |
 +-----------------+---------+------------+-----------------------------------+
 | **0x40**        | 4 bytes | c_uint32   | Unknown block of data             |
@@ -61,11 +61,11 @@ Headers format and structures
 | **0x48**        | 4 bytes | c_uint32   | Block data size                   |
 |                 |         |            |                                   |
 +-----------------+---------+------------+-----------------------------------+
-| **0x4c**        | 4 bytes | c_uint32   | \x00\x00\x00\x00 sequence         |
+| **0x4c**        | 4 bytes | c_uint32   | **\x00\x00\x00\x00** sequence     |
 |                 |         |            | could be a separator              |
 +-----------------+---------+------------+-----------------------------------+
 | **0x50**        | 4 bytes | c_uint32   | data block start offset from the  |
-|                 |         |            | file beggining                    |
+|                 |         |            | file beginning                    |
 |                 |         |            |                                   |
 +-----------------+---------+------------+-----------------------------------+
 | **0x54**        | 4 bytes | c_uint32   | Unknown data, could be an some    |
@@ -74,7 +74,7 @@ Headers format and structures
 | **0x58**        | 4 bytes | c_uint32   | Unknown block of data             |
 |                 |         |            | (4h->4)                           |
 +-----------------+---------+------------+-----------------------------------+
-| **0x5c**        | 4 bytes | c_uint32   | \x00\x00\x00\x00 sequence         |
+| **0x5c**        | 4 bytes | c_uint32   | **\x00\x00\x00\x00** sequence     |
 |                 |         |            | could be a separator              |
 +-----------------+---------+------------+-----------------------------------+
 | **0x60**        | 4 bytes | c_uint32   | Unknown block of data (50h->80)   |
@@ -89,11 +89,11 @@ Headers format and structures
 | **0x188**       | 4 bytes | c_uint32   | 11th block data siz               |
 |                 |         |            |                                   |
 +-----------------+---------+------------+-----------------------------------+
-| **0x18c**       | 4 bytes | c_uint32   | \x00\x00\x00\x00 sequence         |
+| **0x18c**       | 4 bytes | c_uint32   | **\x00\x00\x00\x00** sequence     |
 |                 |         |            | could be a separator              |
 +-----------------+---------+------------+-----------------------------------+
 | **0x190**       | 4 bytes | c_uint32   | data block start offset from the  |
-|                 |         |            | file beggining                    |
+|                 |         |            | file beginning                    |
 |                 |         |            |                                   |
 +-----------------+---------+------------+-----------------------------------+
 | **0x194**       | 4 bytes | c_uint32   | Unknown data, could be an some    |
@@ -102,14 +102,14 @@ Headers format and structures
 | **0x198**       | 4 bytes | c_uint32   | Unknown block of data             |
 |                 |         |            | (4h->4)                           |
 +-----------------+---------+------------+-----------------------------------+
-| **0x19c**       | 4 bytes | c_uint32   | \x00\x00\x00\x00 sequence         |
+| **0x19c**       | 4 bytes | c_uint32   | **\x00\x00\x00\x00** sequence     |
 |                 |         |            | could be a separator              |
 +-----------------+---------+------------+-----------------------------------+
 |                                        | **End of Containers Header**      |
 +-----------------+---------+------------+-----------------------------------+
 |                                         **0x1A0** => **0x2Bf**             |
 |                                         ``USER_DATA xxx`` representation   |
-|                                         in folling format                  |
+|                                         in following format                |
 +-----------------+---------+------------+-----------------------------------+
 | **0x1A0**       |26 bytes | String     | USER_DATA 000\x00 sequence        |
 +-----------------+---------+------------+-----------------------------------+
@@ -118,7 +118,7 @@ Headers format and structures
 |                                        | **And so on until**               |
 |                                        | ``USER_DATA 010\x00`` **sequence**|
 +-----------------+---------+------------+-----------------------------------+
-| **0x2bc**       | 4 bytes | c_uint32   | \x00\x00\x00\x00 separtor         |
+| **0x2bc**       | 4 bytes | c_uint32   | **\x00\x00\x00\x00** separator    |
 +-----------------+---------+------------+-----------------------------------+
 
 **0x2c** starts with first character data. Character data is under heavily
