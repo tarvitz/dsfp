@@ -1,6 +1,6 @@
 Dark Souls Data
 ===============
-``Base File Index`` equals to **0x2c0** (**BFI**)
+``Base File Index`` equals to :ref:`start-block` **0x2c0** (**BFI**)
 
 Headers format and structures
 -----------------------------
@@ -34,7 +34,8 @@ Headers format and structures
 |                 |         |            | could be a separator              |
 +-----------------+---------+------------+-----------------------------------+
 | **0x28**        | 4 bytes | c_uint32   | First data block offset from the  |
-|                 |         |            | of the file (2c0h->704)           |
+|                 |         |            | of the file :ref:`start-block`    |
+|                 |         |            | (2c0h->704)                       |
 +-----------------+---------+------------+-----------------------------------+
 | **0x2c**        | 4 bytes | c_uint32   | **\x00\x00\x00\x00** sequence,    |
 |                 |         |            | could be a separator              |
@@ -121,9 +122,18 @@ Headers format and structures
 | **0x2bc**       | 4 bytes | c_uint32   | **\x00\x00\x00\x00** separator    |
 +-----------------+---------+------------+-----------------------------------+
 
-**0x2c** starts with first character data. Character data is under heavily
-process of reverse engineering, so there is only some simple bunch of data
-represented withing different blocks/structures such like as *stats*, *items*
+.. _start-block:
+
+Start block
+-----------
+.. note::
+
+    **0x2c** starts with first character data. Character data is under heavily
+    process of reverse engineering, so there is only some simple bunch of data
+    represented withing different blocks/structures such like as :ref:`stats`,
+    :ref:`items`
+
+.. _stats:
 
 Stats
 -----
@@ -188,6 +198,8 @@ Stats
 +-----------+--------------------------+-------------------------+
 | Deaths    | 1 slot, 1 byte           | BFI + **0x1f128**       |
 +-----------+--------------------------+-------------------------+
+
+.. _items:
 
 Items
 -----
