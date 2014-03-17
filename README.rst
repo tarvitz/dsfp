@@ -87,4 +87,10 @@ There's no many information about Dark Souls save file format (as well as the
 other games), so there's not much complete around its format.
 Some knowledge represented `here <docs/datasheet.rst>`_.
 
-Please notify me if you have something interesting around whole file format.
+Please notify me here or by email (tarvitz [at] blacklibrary.ru)
+if you have something interesting around whole file format.
+
+Documentation
+~~~~~~~~~~~~~
+Whole bunch of the docs you can read by clicking this link
+`dsfp.readthedocs.org <http://dsfp.readthedocs.org>`_

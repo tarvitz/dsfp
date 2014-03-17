@@ -1,5 +1,5 @@
-Dark Souls Data
-===============
+Datasheet
+=========
 ``Base File Index`` equals to :ref:`start-block` **0x2c0** (**BFI**)
 
 Headers format and structures
