@@ -56,8 +56,8 @@ Headers format and structures
 | **0x44**        | 4 bytes | c_uint32   | Possibly end of block(header)     |
 |                 |         |            | (0xffff)                          |
 +-----------------+---------+------------+-----------------------------------+
-| ``Containers Header (11 block containers)``                                |
-| ``datasheet below represents only 1 of 11th metadata blocks``              |
+| **Containers Header** (11 block containers) (10 for chars)                 |
+| (*datasheet below represents only 1 of 11th metadata blocks*)              |
 +-----------------+---------+------------+-----------------------------------+
 | **0x48**        | 4 bytes | c_uint32   | Block data size                   |
 |                 |         |            |                                   |
@@ -120,6 +120,8 @@ Headers format and structures
 |                                        | ``USER_DATA 010\x00`` **sequence**|
 +-----------------+---------+------------+-----------------------------------+
 | **0x2bc**       | 4 bytes | c_uint32   | **\x00\x00\x00\x00** separator    |
++-----------------+---------+------------+-----------------------------------+
+|                                        | **End of File General Header**    |
 +-----------------+---------+------------+-----------------------------------+
 
 .. _start-block:
