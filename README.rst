@@ -1,8 +1,13 @@
-DSFP
-====
-DSFP means Darksouls Save File Parser
+Darksouls Save File Parser
+==========================
 
-dsfp servers for fetching statistics purposes
+* DSFP means Darksouls Save File Parser.
+* `Dark Souls <http://darksouls.wikia.com/wiki/Dark_Souls>`_
+   is game of Namco Bandai with pretty hard to get it finished without being killed.
+   Lot's of death, fun and broken gamepads/keyboards.
+
+
+``DSFP`` *serves* for getting/fetching your saved characters statistics purposes.
 
 .. contents:: :local:
     :depth: 2
@@ -10,13 +15,16 @@ dsfp servers for fetching statistics purposes
 Original source
 ~~~~~~~~~~~~~~~
 
-`gist <https://gist.github.com/infausto/8382836/>`_
+Original source and some key knowledge were taken from this
+`gist <https://gist.github.com/infausto/8382836/>`_.
 
 Common features
 ~~~~~~~~~~~~~~~
-Supports fetching data about character's death, his/her general stats, hp and stamina
+Supports fetching data about character's death, his/her general stats, hp and stamina.
+Whole bunch of reversed stats you can see in datasheet document which is placed
+`here <docs/datasheet.rst>`_
 
-Help for reverse engineering DarkSouls save file is appreciated.
+(*Help for reverse engineering DarkSouls save file is appreciated*).
 
 Installation
 ~~~~~~~~~~~~
@@ -48,9 +56,8 @@ You could run tests via `python -m unittest module` or via `run_tests.sh` script
 
    user@localhost$ ./run_tests.sh tests.TestDSFPReader
 
-
-Usage
-~~~~~
+Fast Usage
+~~~~~~~~~~
 You can parse Dark Souls save files and get data in standard python
 dictionary format
 
