@@ -144,17 +144,25 @@ Start block
 
 Stats
 -----
+.. note::
+
+    All character statistics depending on items/primary stats (vitality->resistance)
+    are dynamicly-calculated type of data. So there's no reason to store it or
+    modify it via runtime. Therefore only two of this type of data present in
+    the table below. it's Capacity and Physical defence.
+
+.. note::
+
+    General stats such like as Vitality, Attunement, Strength and so on stored
+    in RAM with given offsets listed in 3rd table column. But their real address
+    slightly different from save file one, be warned.
+    For example if Vitality has **0x7C563C00** address then Attunement is certainly
+    with 0x08 offset further and stored into **0x7C563C08**
 
 +-----------+--------------------------+-------------------------+
 | Parameter | Amount of memory entries | Amount of store entries |
 |           | (ingame)                 | (save file)             |
 +===========+==========================+=========================+
-| Capacity  | 2 slots 4 byte float     | Offsets don't concure   |
-|           | (evaluateable)           | with memory ones        |
-+-----------+--------------------------+-------------------------+
-| Phisical  | 6 slots 4 byte           | Offsets do not concure  |
-| defence   | (evaluateable)           | with memory offsets     |
-+-----------+--------------------------+-------------------------+
 | Stamina   | 3 slots, 4 byte          | BFI + **0x88**          |
 |           |                          | (and **0x8c**, **0x90**)|
 +-----------+--------------------------+-------------------------+
@@ -204,6 +212,14 @@ Stats
 | Color     | 1 slot, 1 byte           | BFI + **0x16e**         |
 +-----------+--------------------------+-------------------------+
 | Deaths    | 1 slot, 1 byte           | BFI + **0x1f128**       |
++-----------+--------------------------+-------------------------+
+| ** Dynamicly-calculated data **                                |
+|-----------+--------------------------+-------------------------+
+| Capacity  | 2 slots 4 byte float     | Offsets don't concure   |
+|           | (evaluateable)           | with memory ones        |
++-----------+--------------------------+-------------------------+
+| Physical  | 6 slots 4 byte           | Offsets do not concure  |
+| defence   | (evaluateable)           | with memory offsets     |
 +-----------+--------------------------+-------------------------+
 
 .. _items:
