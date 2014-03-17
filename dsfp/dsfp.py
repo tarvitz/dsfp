@@ -37,6 +37,28 @@ TIME_BLOCK_SIZE = 0x170
 
 
 DATA_MAP = [
+    #{'offset': 0x1f, 'type': 'i', 'field': '0x1f', 'size': 4},  # 393216 all
+    #{'offset': 0x14, 'type': 'i', 'field': '0x14', 'size': 4}, # 57 all
+    #{'offset': 0x18, 'type': 'i', 'field': '0x18', 'size': 4},
+    #{'offset': 0x1c, 'type': 'i', 'field': '0x1c', 'size': 4},
+    #{'offset': 0x20, 'type': 'i', 'field': '0x20', 'size': 4},  # 84 all
+    #{'offset': 0x24, 'type': 'i', 'field': '0x24', 'size': 4},  # 127185 all
+    #{'offset': 0x28, 'type': 'i', 'field': '0x28', 'size': 4},  # 84 all
+    #{'offset': 0x2c, 'type': 'i', 'field': '0x2c', 'size': 4},  # 123888 all
+    #{'offset': 0x30, 'type': 'i', 'field': '0x30', 'size': 4},  # 124186 all
+    #{'offset': 0x34, 'type': 'i', 'field': '0x34', 'size': 4},  # 64 all
+    #{'offset': 0x38, 'type': 'i', 'field': '0x38', 'size': 4},  # 124036 all
+    #{'offset': 0x3c, 'type': 'i', 'field': '0x3c', 'size': 4},  # 142 all
+    #{'offset': 0x40, 'type': 'i', 'field': '0x40', 'size': 4},  # 124178 all
+    #{'offset': 0x44, 'type': 'i', 'field': '0x44', 'size': 4},  # 8 all
+    #{'offset': 0x48, 'type': 'i', 'field': '0x48', 'size': 4},  # 127269 all
+    #{'offset': 0x4c, 'type': 'i', 'field': '0x4c', 'size': 4},  # 93441 all
+    #{'offset': 0x50, 'type': 'i', 'field': '0x50', 'size': 4},  # 220710 all
+    {'offset': 0x54, 'type': 'i', 'field': '0x54', 'size': 4},
+    {'offset': 0x58, 'type': 'i', 'field': '0x58', 'size': 4},
+    {'offset': 0x5c, 'type': 'i', 'field': '0x5c', 'size': 4},
+    {'offset': 0x60, 'type': 'i', 'field': '0x60', 'size': 4},
+    #{'offset': 0x64, 'type': 'i', 'field': '0x64', 'size': 4},  # 131076 all
     {'offset': 0x6c, 'type': 'i', 'field': 'hp_current', 'size': 4},
     {'offset': 0x70, 'type': 'i', 'field': 'hp', 'size': 4},
     # what's the difference?
