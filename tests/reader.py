@@ -38,7 +38,7 @@ class TestDSFPReader(TestCase):
 
     def test_read_ds_slot_stats(self):
         ds = DSSaveFileParser(filename=self.filename)
-        data = ds.get_data()
+        data = ds.get_stats()
         for (idx, slot) in enumerate(data):
             self.assertEqual(slot['deaths'], self.slots[idx]['deaths'])
             self.assertEqual(slot['name'], self.slots[idx]['name'])

@@ -4,6 +4,7 @@ import bz2
 from StringIO import StringIO
 import sys
 import struct
+from ctypes import *
 
 CLASSES = {
     0: 'Warrior',
@@ -77,6 +78,19 @@ DATA_MAP = [
     {'offset': 0x1f128, 'type': 'i', 'field': 'deaths', 'size': 4},
 ]
 
+ITEMS_MAP = [
+    # 0x448 - items start offset
+    #{'offset': 0xba4, 'type': 'ii', 'size': 8, 'name': 'estus'}
+    #{'offset': 0xb1c, 'type': 'ii', 'size': 8, 'name': 'estus'}
+]
+
+
+class ItemStructure(Structure):
+    _fields_ = [
+        ('type', c_uint32),
+        ('amount', c_uint32)
+    ]
+
 
 class FileTypeException(Exception):
     """ not a DarkSouls save file exception """
@@ -90,6 +104,18 @@ class DSSaveFileParser(object):
 
     :param filename: basestring, bz2.BZ2File or StringIO instances
     """
+    _errors = {
+        "slot_error": (
+            "Dark Souls save file supports only 10 save slots: 0 up to 9")
+    }
+
+    def _seek(self, slot=0):
+        """ seek dark souls file handler to slot position in the file
+        """
+        offset = BLOCK_INDEX + BLOCK_SIZE * slot
+        self._fo.seek(offset)
+        return offset
+
     def __init__(self, filename):
         self.filename = filename
         if isinstance(self.filename, basestring):
@@ -128,7 +154,7 @@ class DSSaveFileParser(object):
         self._slots = slots
         return self._slots
 
-    def get_data(self):
+    def get_stats(self):
         """ get character stats data
 
         :return: list of dicts
@@ -161,6 +187,28 @@ class DSSaveFileParser(object):
         self.slots = slots
         return self.slots
 
+    def get_items(self, slot=0):
+        """ get character's item list
+
+        :param slot: character save slot (0 up to 9)
+        :return: list of dicts
+        """
+        if 0 < slot > 9:
+            raise IndexError(self._errors["slot_error"])
+
+        offset = self._seek(slot)
+        items = []
+        for item in ITEMS_MAP:
+            self._fo.seek(offset + item['offset'], 0)
+            data = self._fo.read(item['size'])
+            encoded = struct.unpack(item['type'], data)
+            item = {
+                'name': item['name'],
+                'data': ItemStructure(*encoded)
+            }
+            items.append(item)
+        return items
+
     def __store_data(self, slot, data={}):
         """ store data in DarkSouls save file.
 
@@ -178,9 +226,7 @@ class DSSaveFileParser(object):
             data = {"offset": 0xec, "type": "i", "data": 666}
         """
         if 0 < slot > 9:  # slot < 0 and slot > 9
-            raise IndexError(
-                "Dark Souls save file supports only 10 save slots: 0 up to 9"
-            )
+            raise IndexError(self._errors['slot_error'])
         offset = BLOCK_INDEX + BLOCK_SIZE * slot
         self._fo.seek(offset)
         self._fo.seek(data['offset'], 1)
@@ -200,7 +246,7 @@ def usage():
 def main():
     filename = sys.argv[1]
     ds = DSSaveFileParser(filename)
-    for slot in ds.get_data():
+    for slot in ds.get_stats():
         slot['skill'] = (
             1
             #300 / (slot['deaths'] or 1) +
@@ -215,6 +261,13 @@ def main():
             for key, value in slot.items():
                 if key.startswith('smth'):
                     print("%s: %s" % (key, value))
+    items = ds.get_items(1)
+    for item in items:
+        print("name: %(name)s, %(type)s:%(amount)s" % {
+            'name': item['name'],
+            'type': item['data'].type,
+            'amount': item['data'].amount
+        })
 
 
 if __name__ == '__main__':

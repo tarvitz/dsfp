@@ -38,7 +38,7 @@ dictionary format
 
     >>> import dsfp
     >>> ds = dsfp.DSSaveFileParser('saves/DRAKS0005.sl2')
-    >>> data = ds.get_data()
+    >>> data = ds.get_stats()
     >>> data
     [{
         'attunement': 8, 'body': 0, 'class': 0, 'color': 0, 'deaths': 0,

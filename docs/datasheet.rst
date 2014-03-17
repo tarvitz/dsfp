@@ -2,6 +2,129 @@ Dark Souls Data
 ===============
 ``Base File Index`` equals to **0x2c0** (**BFI**)
 
+Headers format and structures
+-----------------------------
+
++-----------------+---------+------------+-----------------------------------+
+| Offset (from the| Size    | Type       | Explain                           |
+| begging)        |         |            |                                   |
++=================+=========+============+===================================+
+|                                        | **File General Header**           |
++-----------------+---------+------------+-----------------------------------+
+| **0x00**        | 4 bytes | String     | Probably file format container    |
++-----------------+---------+------------+-----------------------------------+
+| **0x04**        | 4 bytes | c_uint32   | \x00\x00\x00\x00 sequence,        |
+|                 |         |            | could be a separator              |
++-----------------+---------+------------+-----------------------------------+
+| **0x08**        | 4 bytes | c_uint32   | Unknow data                       |
++-----------------+---------+------------+-----------------------------------+
+| **0x0c**        | 4 bytes | c_uint32   | Unknown data                      |
++-----------------+---------+------------+-----------------------------------+
+| **0x10**        | 4 bytes | c_uint32   | Unknown data                      |
++-----------------+---------+------------+-----------------------------------+
+| **0x14**        | 4 bytes | c_uint32   | \x00\x00\x00\x00 sequence,        |
+|                 |         |            | could be a separator              |
++-----------------+---------+------------+-----------------------------------+
+| **0x18**        | 8 bytes | String     | It seems a version of document or |
+|                 |         |            | application: (00000001)           |
++-----------------+---------+------------+-----------------------------------+
+| **0x20**        | 4 bytes | c_uint32   | Unknown data (20h->32)            |
++-----------------+---------+------------+-----------------------------------+
+| **0x24**        | 4 bytes | c_uint32   | \x00\x00\x00\x00 sequence,        |
+|                 |         |            | could be a separator              |
++-----------------+---------+------------+-----------------------------------+
+| **0x28**        | 4 bytes | c_uint32   | First data block offset from the  |
+|                 |         |            | of the file (2c0h->704)           |
++-----------------+---------+------------+-----------------------------------+
+| **0x2c**        | 4 bytes | c_uint32   | \x00\x00\x00\x00 sequence,        |
+|                 |         |            | could be a separator              |
++-----------------+---------+------------+-----------------------------------+
+| **0x30**        | 4 bytes | c_uint32   | Unknown data (0x0120->8193)       |
+|                 |         |            |                                   |
++-----------------+---------+------------+-----------------------------------+
+| **0x34**,       | 4 bytes | c_uint32   | Unknown block of data:            |
+| **0x38**,       | * 3     |            | \x00\x00\x00\x00 three times      |
+| **0x3c**        |         |            |                                   |
++-----------------+---------+------------+-----------------------------------+
+| **0x40**        | 4 bytes | c_uint32   | Unknown block of data             |
+|                 |         |            | (50h->80)                         |
++-----------------+---------+------------+-----------------------------------+
+| **0x40**        | 4 bytes | c_uint32   | Unknown block of data             |
+|                 |         |            | (50h->80)                         |
++-----------------+---------+------------+-----------------------------------+
+| **0x44**        | 4 bytes | c_uint32   | Possibly end of block(header)     |
+|                 |         |            | (0xffff)                          |
++-----------------+---------+------------+-----------------------------------+
+| ``Containers Header (11 block containers)``                                |
+| ``datasheet below represents only 1 of 11th metadata blocks``              |
++-----------------+---------+------------+-----------------------------------+
+| **0x48**        | 4 bytes | c_uint32   | Block data size                   |
+|                 |         |            |                                   |
++-----------------+---------+------------+-----------------------------------+
+| **0x4c**        | 4 bytes | c_uint32   | \x00\x00\x00\x00 sequence         |
+|                 |         |            | could be a separator              |
++-----------------+---------+------------+-----------------------------------+
+| **0x50**        | 4 bytes | c_uint32   | data block start offset from the  |
+|                 |         |            | file beggining                    |
+|                 |         |            |                                   |
++-----------------+---------+------------+-----------------------------------+
+| **0x54**        | 4 bytes | c_uint32   | Unknown data, could be an some    |
+|                 |         |            | sort of offsets ?                 |
++-----------------+---------+------------+-----------------------------------+
+| **0x58**        | 4 bytes | c_uint32   | Unknown block of data             |
+|                 |         |            | (4h->4)                           |
++-----------------+---------+------------+-----------------------------------+
+| **0x5c**        | 4 bytes | c_uint32   | \x00\x00\x00\x00 sequence         |
+|                 |         |            | could be a separator              |
++-----------------+---------+------------+-----------------------------------+
+| **0x60**        | 4 bytes | c_uint32   | Unknown block of data (50h->80)   |
+|                 |         |            | could be a separator              |
++-----------------+---------+------------+-----------------------------------+
+| **0x64**        | 4 bytes | c_uint32   | 0xFFFF end of block               |
+|                 |         |            |                                   |
++-----------------+---------+------------+-----------------------------------+
+| **0x68** -> **0x184**  2 to 10 character slot bunch of data with structure |
+| represented    above                                                       |
++-----------------+---------+------------+-----------------------------------+
+| **0x188**       | 4 bytes | c_uint32   | 11th block data siz               |
+|                 |         |            |                                   |
++-----------------+---------+------------+-----------------------------------+
+| **0x18c**       | 4 bytes | c_uint32   | \x00\x00\x00\x00 sequence         |
+|                 |         |            | could be a separator              |
++-----------------+---------+------------+-----------------------------------+
+| **0x190**       | 4 bytes | c_uint32   | data block start offset from the  |
+|                 |         |            | file beggining                    |
+|                 |         |            |                                   |
++-----------------+---------+------------+-----------------------------------+
+| **0x194**       | 4 bytes | c_uint32   | Unknown data, could be an some    |
+|                 |         |            | sort of offsets ?                 |
++-----------------+---------+------------+-----------------------------------+
+| **0x198**       | 4 bytes | c_uint32   | Unknown block of data             |
+|                 |         |            | (4h->4)                           |
++-----------------+---------+------------+-----------------------------------+
+| **0x19c**       | 4 bytes | c_uint32   | \x00\x00\x00\x00 sequence         |
+|                 |         |            | could be a separator              |
++-----------------+---------+------------+-----------------------------------+
+|                                        | **End of Containers Header**      |
++-----------------+---------+------------+-----------------------------------+
+|                                         **0x1A0** => **0x2Bf**             |
+|                                         ``USER_DATA xxx`` representation   |
+|                                         in folling format                  |
++-----------------+---------+------------+-----------------------------------+
+| **0x1A0**       |26 bytes | String     | USER_DATA 000\x00 sequence        |
++-----------------+---------+------------+-----------------------------------+
+| **0x1BA**       |26 bytes | String     | USER_DATA 001\x00 sequence        |
++-----------------+---------+------------+-----------------------------------+
+|                                        | **And so on until**               |
+|                                        | ``USER_DATA 010\x00`` **sequence**|
++-----------------+---------+------------+-----------------------------------+
+| **0x2bc**       | 4 bytes | c_uint32   | \x00\x00\x00\x00 separtor         |
++-----------------+---------+------------+-----------------------------------+
+
+**0x2c** starts with first character data. Character data is under heavily
+process of reverse engineering, so there is only some simple bunch of data
+represented withing different blocks/structures such like as *stats*, *items*
+
 Stats
 -----
 
@@ -15,55 +138,55 @@ Stats
 | Phisical  | 6 slots 4 byte           | Offsets do not concure  |
 | defence   | (evaluateable)           | with memory offsets     |
 +-----------+--------------------------+-------------------------+
-| Stamina   | 3 slots, 4 byte          | Base File Index + 0x88  |
-|           |                          | (and 0x8c, 0x90)        |
+| Stamina   | 3 slots, 4 byte          | BFI + **0x88**          |
+|           |                          | (and **0x8c**, **0x90**)|
 +-----------+--------------------------+-------------------------+
-| Vitality  | 1 slot, 4 byte           | Base File Index + 0x98  |
+| Vitality  | 1 slot, 4 byte           | BFI + **0x98**          |
 +-----------+--------------------------+-------------------------+
-| Attunement| 1 slot, 4 byte           | Base File Index + 0xa0  |
+| Attunement| 1 slot, 4 byte           | BFI + **0xa0**          |
 +-----------+--------------------------+-------------------------+
-| Endurance | 1 slot, 4 byte           | Base File Index + 0xa8  |
+| Endurance | 1 slot, 4 byte           | BFI + **0xa8**          |
 +-----------+--------------------------+-------------------------+
-| Strength  | 1 slot, 4 byte           | Base File Index + 0xb0  |
+| Strength  | 1 slot, 4 byte           | BFI + **0xb0**          |
 +-----------+--------------------------+-------------------------+
-| Dexterity | 1 slot, 4 byte           | Base File Index + 0xb8  |
+| Dexterity | 1 slot, 4 byte           | BFI + **0xb8**          |
 +-----------+--------------------------+-------------------------+
-| Intel.    | 1 slot, 4 byte           | Base File Index + 0xc0  |
+| Intel.    | 1 slot, 4 byte           | BFI + **0xc0**          |
 +-----------+--------------------------+-------------------------+
-| Faith     | 1 slot, 4 byte           | Base File Index + 0xc8  |
+| Faith     | 1 slot, 4 byte           | BFI + **0xc8**          |
 +-----------+--------------------------+-------------------------+
-| Unknown   | 1 slot, 4 byte (unsigned)| Base File Index + 0xd0  |
+| Unknown   | 1 slot, 4 byte (unsigned)| BFI + **0xd0**          |
 +-----------+--------------------------+-------------------------+
-| Humanity  | 1 slot, 4 byte           | Base File Index + 0xd8  |
+| Humanity  | 1 slot, 4 byte           | BFI + **0xd8**          |
 +-----------+--------------------------+-------------------------+
-| Resistance| 1 slot, 4 byte           | Base File Index + 0xe0  |
+| Resistance| 1 slot, 4 byte           | BFI + **0xe0**          |
 +-----------+--------------------------+-------------------------+
-| Level     | 1 slot, 4 byte           | Base File Index + 0xe8  |
+| Level     | 1 slot, 4 byte           | BFI + **0xe8**          |
 +-----------+--------------------------+-------------------------+
-| Souls     | 1 slot, 4 byte           | Base File Index + 0xec  |
+| Souls     | 1 slot, 4 byte           | BFI + **0xec**          |
 +-----------+--------------------------+-------------------------+
 | Collected |                          |                         |
-| Souls     | 1 slot, 4 byte           | Base File Index + 0xf0  |
+| Souls     | 1 slot, 4 byte           | BFI + **0xf0**          |
 +-----------+--------------------------+-------------------------+
 | Name      | 1 slot, 28 byte          |                         |
-|           | 13*2 = name, 1 = 0x00    | Base File Index + 0x100 |
+|           | 13*2 = name, 1 = **0x00**| BFI + **0x100**         |
 +-----------+--------------------------+-------------------------+
-| Gender    | 1 slot, 1 byte           | Base File Index + 0x122 |
+| Gender    | 1 slot, 1 byte           | BFI + **0x122**         |
 | (male)    | 0 - female, 1 - male     |                         |
 +-----------+--------------------------+-------------------------+
-| Class     | 1 slot, 1 byte           | Base File Index + 0x126 |
+| Class     | 1 slot, 1 byte           | BFI + **0x126**         |
 +-----------+--------------------------+-------------------------+
-| Body      | 1 slot, 1 byte           | Base File Index + 0x127 |
+| Body      | 1 slot, 1 byte           | BFI + **0x127**         |
 +-----------+--------------------------+-------------------------+
-| Gift      | 1 slot, 1 byte           | Base File Index + 0x128 |
+| Gift      | 1 slot, 1 byte           | BFI + **0x128**         |
 +-----------+--------------------------+-------------------------+
-| Face      | 1 slot, 1 byte           | Base File Index + 0x16c |
+| Face      | 1 slot, 1 byte           | BFI + **0x16c**         |
 +-----------+--------------------------+-------------------------+
-| Haris     | 1 slot, 1 byte           | Base File Index + 0x16d |
+| Haris     | 1 slot, 1 byte           | BFI + **0x16d**         |
 +-----------+--------------------------+-------------------------+
-| Color     | 1 slot, 1 byte           | Base File Index + 0x16e |
+| Color     | 1 slot, 1 byte           | BFI + **0x16e**         |
 +-----------+--------------------------+-------------------------+
-| Deaths    | 1 slot, 1 byte           | **BFI** + 0x1f128       |
+| Deaths    | 1 slot, 1 byte           | BFI + **0x1f128**       |
 +-----------+--------------------------+-------------------------+
 
 Items
@@ -73,7 +196,7 @@ Items
 | Item              | Amount of memory entries | Amount of store entries |
 |                   | (ingame)                 | (save file)             |
 +===================+==========================+=========================+
-| Flask of estus    | 3 slot, 1 active -> 2    | 1 slot: 0x60FF8         |
+| Flask of estus    | 3 slot, 1 active -> 2    | 1 slot: 0x60FF8(random) |
 |                   | depends on active        |                         |
 +-------------------+--------------------------+-------------------------+
 
