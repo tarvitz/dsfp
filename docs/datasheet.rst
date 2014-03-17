@@ -4,14 +4,18 @@ Dark Souls Data
 
 Headers format and structures
 -----------------------------
+.. note::
+
+    Information about **data type** you can access with
+    `official python documentation <http://docs.python.org/2/library/ctypes.html#fundamental-data-types>`_
 
 +-----------------+---------+------------+-----------------------------------+
-| Offset (from the| Size    | Type       | Explain                           |
+| Offset (from the| Size    | Data Type  | Explain                           |
 | begging)        |         |            |                                   |
 +=================+=========+============+===================================+
 |                                        | **File General Header**           |
 +-----------------+---------+------------+-----------------------------------+
-| **0x00**        | 4 bytes | String     | Probably file format container    |
+| **0x00**        | 4 bytes | c_char_p   | Probably file format container    |
 +-----------------+---------+------------+-----------------------------------+
 | **0x04**        | 4 bytes | c_uint32   | **\x00\x00\x00\x00** sequence,    |
 |                 |         |            | could be a separator              |
@@ -26,7 +30,7 @@ Headers format and structures
 | **0x14**        | 4 bytes | c_uint32   | **\x00\x00\x00\x00** sequence,    |
 |                 |         |            | could be a separator              |
 +-----------------+---------+------------+-----------------------------------+
-| **0x18**        | 8 bytes | String     | It seems a version of document or |
+| **0x18**        | 8 bytes | c_char_p   | It seems a version of document or |
 |                 |         |            | application: (00000001)           |
 +-----------------+---------+------------+-----------------------------------+
 | **0x20**        | 4 bytes | c_uint32   | Unknown data (20h->32)            |
@@ -113,9 +117,9 @@ Headers format and structures
 |                                         ``USER_DATA xxx`` representation   |
 |                                         in following format                |
 +-----------------+---------+------------+-----------------------------------+
-| **0x1A0**       |26 bytes | String     | USER_DATA 000\x00 sequence        |
+| **0x1A0**       |26 bytes | c_char_p   | USER_DATA 000\x00 sequence        |
 +-----------------+---------+------------+-----------------------------------+
-| **0x1BA**       |26 bytes | String     | USER_DATA 001\x00 sequence        |
+| **0x1BA**       |26 bytes | c_char_p   | USER_DATA 001\x00 sequence        |
 +-----------------+---------+------------+-----------------------------------+
 |                                        | **And so on until**               |
 |                                        | ``USER_DATA 010\x00`` **sequence**|
