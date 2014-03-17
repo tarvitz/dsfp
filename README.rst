@@ -2,12 +2,11 @@ Darksouls Save File Parser
 ==========================
 
 * DSFP means Darksouls Save File Parser.
-* `Dark Souls <http://darksouls.wikia.com/wiki/Dark_Souls>`_
-   is game of Namco Bandai with pretty hard to get it finished without being killed.
-   Lot's of death, fun and broken gamepads/keyboards.
+* `Dark Souls <http://darksouls.wikia.com/wiki/Dark_Souls>`_ is game of
+  Namco Bandai with pretty hard to get it finished without being killed.
+  Lot's of death, fun and broken gamepads/keyboards.
 
-
-``DSFP`` *serves* for getting/fetching your saved characters statistics purposes.
+**DSFP** *serves* for getting/fetching your saved characters statistics purposes.
 
 .. contents:: :local:
     :depth: 2
