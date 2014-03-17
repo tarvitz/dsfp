@@ -73,7 +73,7 @@ Headers format and structures
 +-----------------+---------+------------+-----------------------------------+---------------------+
 | **0x5c**        | 4 bytes | c_uint32   | could be a separator              |**\x00\x00\x00\x00** |
 +-----------------+---------+------------+-----------------------------------+---------------------+
-| **0x60**        | 4 bytes | c_uint32   | Unknown block of data             | hex: **0x50**h      |
+| **0x60**        | 4 bytes | c_uint32   | Unknown block of data             | hex: **0x50**       |
 |                 |         |            | could be a separator              | dec: **80**         |
 +-----------------+---------+------------+-----------------------------------+---------------------+
 | **0x64**        | 4 bytes | c_uint32   | end of block                      | hex: **0xFFFF**     |
@@ -94,7 +94,7 @@ Headers format and structures
 | **0x194**       | 4 bytes | c_uint32   | Unknown data, could be an some    |                     |
 |                 |         |            | sort of offsets ?                 |                     |
 +-----------------+---------+------------+-----------------------------------+---------------------+
-| **0x198**       | 4 bytes | c_uint32   | Unknown block of data             | hex: **0x04**h      |
+| **0x198**       | 4 bytes | c_uint32   | Unknown block of data             | hex: **0x04**       |
 |                 |         |            |                                   | dec: **04**         |
 +-----------------+---------+------------+-----------------------------------+---------------------+
 | **0x19c**       | 4 bytes | c_uint32   | could be a separator              |**\x00\x00\x00\x00** |
