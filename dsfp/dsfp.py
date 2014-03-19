@@ -22,6 +22,9 @@ CLASSES = {
 BLOCK_SIZE = 0x60190
 BLOCK_INDEX = 0x2c0
 BLOCK_DATA_OFFSET = 0x14
+SLOTS_AMOUNT_OFFSET = 0xC
+SLOTS_METADATA_OFFSET = 0x40
+
 """
 Each existing character save block data should have not \x00
 value on BLOCK_INDEX + BLOCK_DATA_OFFSET
@@ -108,9 +111,24 @@ ITEMS_MAP = [
 
 
 class ItemStructure(Structure):
+    """ Characters items structure """
     _fields_ = [
         ('type', c_uint32),
         ('amount', c_uint32)
+    ]
+
+
+class SlotHeaderStructure(Structure):
+    """ Characters containers slots header structure """
+    _fields_ = [
+        ('block_metadata_high', c_uint32),    # hex(0x50000000)
+        ('block_metadata_low', c_uint32),     # hex(0xFFFFFFFF)
+        ('block_size', c_uint32),
+        ('block_space_separator', c_uint32),  # \x00 sequence
+        ('block_start_offset', c_uint32),
+        ('block_unknown_data_1', c_uint32),
+        ('block_unknown_data_2', c_uint32),
+        ('end_of_block', c_uint32),
     ]
 
 
@@ -131,13 +149,6 @@ class DSSaveFileParser(object):
             "Dark Souls save file supports only 10 save slots: 0 up to 9")
     }
 
-    def _seek(self, slot=0):
-        """ seek dark souls file handler to slot position in the file
-        """
-        offset = BLOCK_INDEX + BLOCK_SIZE * slot
-        self._fo.seek(offset)
-        return offset
-
     def __init__(self, filename):
         self.filename = filename
         if isinstance(self.filename, basestring):
@@ -148,7 +159,9 @@ class DSSaveFileParser(object):
             self._fo = self.filename
         else:
             raise FileTypeException("Not supported file format")
-        self._slots = self.get_slots()
+        self._active_slots = None
+        self._block_slots_amount = None
+        self._block_slots_metadata = []
 
         # check if it's a dark souls save file
         self._fo.seek(0)
@@ -160,21 +173,62 @@ class DSSaveFileParser(object):
             raise FileTypeException("Not an Dark Souls save file")
         self.slots = []
 
-    def get_slots(self):
+    def _read(self, offset=0x0, size=4):
+        self._fo.seek(offset)
+        return self._fo.read(size)
+
+    def _seek(self, slot=0):
+        """ seek dark souls file handler to slot position in the file
+        """
+        offset = BLOCK_INDEX + BLOCK_SIZE * slot
+        self._fo.seek(offset)
+        return offset
+
+    def get_blocks_metadata(self, update=False):
+        """ get save file blocks metadata metadata
+
+        :param update: runs re-read blocks metadata process, if False returns
+        back cached list
+        :return: list of ``SlotHeaderStructure`` instances
+        """
+        if self._block_slots_metadata:
+            return self._block_slots_metadata
+
+        self._fo.seek(SLOTS_AMOUNT_OFFSET)
+        self._block_slots_amount = struct.unpack('i', self._fo.read(4))[0]
+
+        self._fo.seek(SLOTS_METADATA_OFFSET)
+        blocks_amount = len(SlotHeaderStructure._fields_)
+
+        for slot in range(0, self._block_slots_amount):
+            encoded = struct.unpack('i' * blocks_amount,
+                                    self._fo.read(4 * blocks_amount))
+            slot = SlotHeaderStructure(*encoded)
+            self._block_slots_metadata.append(slot)
+        return self._block_slots_metadata
+
+    def get_active_slots_amount(self):
         """ get active slots count, could be 0 up to 9
 
         :return: active characters' slots amount
         """
         slots = 0
-        for slot in range(0, 9):
-            offset = (BLOCK_INDEX + BLOCK_SIZE * slot) + BLOCK_DATA_OFFSET
-            self._fo.seek(offset, 0)
-            is_exists = self._fo.read(1)
-            if is_exists == '\x00':
+        # for slot in range(0, 9):
+        #     offset = (BLOCK_INDEX + BLOCK_SIZE * slot) + BLOCK_DATA_OFFSET
+        #     self._fo.seek(offset, 0)
+        #     is_exists = self._fo.read(1)
+        #     if is_exists == '\x00':
+        #         break
+        #     slots += 1
+
+        for idx, header in enumerate(self.get_blocks_metadata()):
+            self._fo.seek(header.block_start_offset + BLOCK_DATA_OFFSET, 0)
+            data = self._fo.read(1)
+            if data == '\x00':
                 break
             slots += 1
-        self._slots = slots
-        return self._slots
+        self._active_slots = slots
+        return self._active_slots
 
     def get_stats(self):
         """ get character stats data
@@ -184,8 +238,9 @@ class DSSaveFileParser(object):
         fo = self._fo
         fo.seek(BLOCK_INDEX, 0)
         slots = []
-
-        for slot in range(self._slots):
+        if self._active_slots is None:
+            self.get_active_slots_amount()
+        for slot in range(self._active_slots):
             _offset = BLOCK_INDEX + BLOCK_SIZE * slot
             _time_offset = TIME_INDEX + TIME_BLOCK_SIZE * slot
             fo.seek(_offset, 0)
@@ -254,10 +309,6 @@ class DSSaveFileParser(object):
         self._fo.seek(data['offset'], 1)
         store_data = struct.pack(data['type'], data['data'])
         self._fo.write(store_data)
-
-    def reopen(self, mode='rb'):
-        self._fo.close()
-        self._fo = open(self.filename, mode)
 
 
 def usage():

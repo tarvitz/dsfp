@@ -28,12 +28,17 @@ class TestDSFPReader(TestCase):
                 'name': 'Smithy'
             }
         ]
+        self.metadata = {
+            'slots': 11,
+            'start_offsets': [704, 394320, 787936, 1181552, 1575168, 1968784,
+                              2362400, 2756016, 3149632, 3543248, 3936864]
+        }
 
     def test_read_ds_file(self):
         """ test get character dark souls file slots """
 
         ds = DSSaveFileParser(filename=self.filename)
-        data = ds.get_slots()
+        data = ds.get_active_slots_amount()
         self.assertEqual(data, self.valid_slots)
 
     def test_read_ds_slot_stats(self):
@@ -42,3 +47,12 @@ class TestDSFPReader(TestCase):
         for (idx, slot) in enumerate(data):
             self.assertEqual(slot['deaths'], self.slots[idx]['deaths'])
             self.assertEqual(slot['name'], self.slots[idx]['name'])
+
+    def test_read_ds_file_metadata(self):
+        """ read file metadata """
+        ds = DSSaveFileParser(filename=self.filename)
+        metadata = ds.get_blocks_metadata()
+        self.assertEqual(len(metadata), self.metadata['slots'])
+        for idx, header in enumerate(metadata):
+            self.assertEqual(header.block_start_offset,
+                             self.metadata['start_offsets'][idx])
