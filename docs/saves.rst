@@ -1,4 +1,4 @@
-Dark Souls save files
-=====================
+Save files examples
+===================
 
 .. include:: ../saves/README.rst

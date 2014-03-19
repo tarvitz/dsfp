@@ -11,10 +11,10 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   datasheet
    dsfp
    tests
    saves
-   datasheet
 
 .. include:: install.rst
 
