@@ -30,6 +30,9 @@ class TestDSFPReader(TestCase):
         ]
         self.metadata = {
             'slots': 11,
+            # it's always constant because of fixed block size
+            # but there's a header that contains block offsets inside of
+            # meta data block so we should check it
             'start_offsets': [704, 394320, 787936, 1181552, 1575168, 1968784,
                               2362400, 2756016, 3149632, 3543248, 3936864]
         }

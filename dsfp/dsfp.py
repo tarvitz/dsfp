@@ -213,14 +213,6 @@ class DSSaveFileParser(object):
         :return: active characters' slots amount
         """
         slots = 0
-        # for slot in range(0, 9):
-        #     offset = (BLOCK_INDEX + BLOCK_SIZE * slot) + BLOCK_DATA_OFFSET
-        #     self._fo.seek(offset, 0)
-        #     is_exists = self._fo.read(1)
-        #     if is_exists == '\x00':
-        #         break
-        #     slots += 1
-
         for idx, header in enumerate(self.get_blocks_metadata()):
             self._fo.seek(header.block_start_offset + BLOCK_DATA_OFFSET, 0)
             data = self._fo.read(1)
