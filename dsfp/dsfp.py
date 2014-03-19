@@ -5,18 +5,12 @@ from StringIO import StringIO
 import sys
 import struct
 from ctypes import *
+from .utils import *
+from .exceptions import *
 
 CLASSES = {
-    0: 'Warrior',
-    1: 'Knight',
-    2: 'Wanderer',
-    3: 'Thief',
-    4: 'Bandit',
-    5: 'Hunter',
-    6: 'Sorcerer',
-    7: 'Pyromancer',
-    8: 'Cleric',
-    9: 'Deprived'
+    0: 'Warrior', 1: 'Knight', 2: 'Wanderer', 3: 'Thief', 4: 'Bandit',
+    5: 'Hunter', 6: 'Sorcerer', 7: 'Pyromancer', 8: 'Cleric', 9: 'Deprived'
 }
 
 BLOCK_SIZE = 0x60190
@@ -24,12 +18,6 @@ BLOCK_INDEX = 0x2c0
 BLOCK_DATA_OFFSET = 0x14
 SLOTS_AMOUNT_OFFSET = 0xC
 SLOTS_METADATA_OFFSET = 0x40
-
-"""
-Each existing character save block data should have not \x00
-value on BLOCK_INDEX + BLOCK_DATA_OFFSET
-"""
-
 DEBUG = True
 
 # time stored as seconds with unsigned int
@@ -40,55 +28,55 @@ TIME_BLOCK_SIZE = 0x170
 
 
 DATA_MAP = [
-    #{'offset': 0x1f, 'type': 'i', 'field': '0x1f', 'size': 4},  # 393216 all
-    #{'offset': 0x14, 'type': 'i', 'field': '0x14', 'size': 4}, # 57 all
-    #{'offset': 0x18, 'type': 'i', 'field': '0x18', 'size': 4},
-    #{'offset': 0x1c, 'type': 'i', 'field': '0x1c', 'size': 4},
-    #{'offset': 0x20, 'type': 'i', 'field': '0x20', 'size': 4},  # 84 all
-    #{'offset': 0x24, 'type': 'i', 'field': '0x24', 'size': 4},  # 127185 all
-    #{'offset': 0x28, 'type': 'i', 'field': '0x28', 'size': 4},  # 84 all
-    #{'offset': 0x2c, 'type': 'i', 'field': '0x2c', 'size': 4},  # 123888 all
-    #{'offset': 0x30, 'type': 'i', 'field': '0x30', 'size': 4},  # 124186 all
-    #{'offset': 0x34, 'type': 'i', 'field': '0x34', 'size': 4},  # 64 all
-    #{'offset': 0x38, 'type': 'i', 'field': '0x38', 'size': 4},  # 124036 all
-    #{'offset': 0x3c, 'type': 'i', 'field': '0x3c', 'size': 4},  # 142 all
-    #{'offset': 0x40, 'type': 'i', 'field': '0x40', 'size': 4},  # 124178 all
-    #{'offset': 0x44, 'type': 'i', 'field': '0x44', 'size': 4},  # 8 all
-    #{'offset': 0x48, 'type': 'i', 'field': '0x48', 'size': 4},  # 127269 all
-    #{'offset': 0x4c, 'type': 'i', 'field': '0x4c', 'size': 4},  # 93441 all
-    #{'offset': 0x50, 'type': 'i', 'field': '0x50', 'size': 4},  # 220710 all
-    {'offset': 0x54, 'type': 'i', 'field': '0x54', 'size': 4},
-    {'offset': 0x58, 'type': 'i', 'field': '0x58', 'size': 4},
-    {'offset': 0x5c, 'type': 'i', 'field': '0x5c', 'size': 4},
-    {'offset': 0x60, 'type': 'i', 'field': '0x60', 'size': 4},
-    #{'offset': 0x64, 'type': 'i', 'field': '0x64', 'size': 4},  # 131076 all
-    {'offset': 0x6c, 'type': 'i', 'field': 'hp_current', 'size': 4},
-    {'offset': 0x70, 'type': 'i', 'field': 'hp', 'size': 4},
+    #{'offset': 0x1f, 'type': 'I', 'field': '0x1f', 'size': 4},  # 393216 all
+    #{'offset': 0x14, 'type': 'I', 'field': '0x14', 'size': 4}, # 57 all
+    #{'offset': 0x18, 'type': 'I', 'field': '0x18', 'size': 4},
+    #{'offset': 0x1c, 'type': 'I', 'field': '0x1c', 'size': 4},
+    #{'offset': 0x20, 'type': 'I', 'field': '0x20', 'size': 4},  # 84 all
+    #{'offset': 0x24, 'type': 'I', 'field': '0x24', 'size': 4},  # 127185 all
+    #{'offset': 0x28, 'type': 'I', 'field': '0x28', 'size': 4},  # 84 all
+    #{'offset': 0x2c, 'type': 'I', 'field': '0x2c', 'size': 4},  # 123888 all
+    #{'offset': 0x30, 'type': 'I', 'field': '0x30', 'size': 4},  # 124186 all
+    #{'offset': 0x34, 'type': 'I', 'field': '0x34', 'size': 4},  # 64 all
+    #{'offset': 0x38, 'type': 'I', 'field': '0x38', 'size': 4},  # 124036 all
+    #{'offset': 0x3c, 'type': 'I', 'field': '0x3c', 'size': 4},  # 142 all
+    #{'offset': 0x40, 'type': 'I', 'field': '0x40', 'size': 4},  # 124178 all
+    #{'offset': 0x44, 'type': 'I', 'field': '0x44', 'size': 4},  # 8 all
+    #{'offset': 0x48, 'type': 'I', 'field': '0x48', 'size': 4},  # 127269 all
+    #{'offset': 0x4c, 'type': 'I', 'field': '0x4c', 'size': 4},  # 93441 all
+    #{'offset': 0x50, 'type': 'I', 'field': '0x50', 'size': 4},  # 220710 all
+    {'offset': 0x54, 'type': 'I', 'field': '0x54', 'size': 4},
+    {'offset': 0x58, 'type': 'I', 'field': '0x58', 'size': 4},
+    {'offset': 0x5c, 'type': 'I', 'field': '0x5c', 'size': 4},
+    {'offset': 0x60, 'type': 'I', 'field': '0x60', 'size': 4},
+    #{'offset': 0x64, 'type': 'I', 'field': '0x64', 'size': 4},  # 131076 all
+    {'offset': 0x6c, 'type': 'I', 'field': 'hp_current', 'size': 4},
+    {'offset': 0x70, 'type': 'I', 'field': 'hp', 'size': 4},
     # what's the difference?
-    {'offset': 0x74, 'type': 'i', 'field': 'hp2', 'size': 4},
+    {'offset': 0x74, 'type': 'I', 'field': 'hp2', 'size': 4},
     # unrevealed
-    {'offset': 0x78, 'type': 'i', 'field': '0x78', 'size': 4},
-    #{'offset': 0x7c, 'type': 'i', 'field': '0x7c', 'size': 4},  # same as 0x78
-    #{'offset': 0x80, 'type': 'i', 'field': '0x80', 'size': 4},  # same as 0x78
+    {'offset': 0x78, 'type': 'I', 'field': '0x78', 'size': 4},
+    #{'offset': 0x7c, 'type': 'I', 'field': '0x7c', 'size': 4},  # same as 0x78
+    #{'offset': 0x80, 'type': 'I', 'field': '0x80', 'size': 4},  # same as 0x78
     #
     # 4 bytes space between chars stats
-    {'offset': 0x88, 'type': 'i', 'field': 'stamina', 'size': 4},
-    {'offset': 0x8c, 'type': 'i', 'field': 'stamina2', 'size': 4},
-    {'offset': 0x90, 'type': 'i', 'field': 'stamina3', 'size': 4},
-    {'offset': 0x98, 'type': 'i', 'field': 'vitality', 'size': 4},
-    {'offset': 0xa0, 'type': 'i', 'field': 'attunement', 'size': 4},
-    {'offset': 0xa8, 'type': 'i', 'field': 'endurance', 'size': 4},
-    {'offset': 0xb0, 'type': 'i', 'field': 'strength', 'size': 4},
-    {'offset': 0xb8, 'type': 'i', 'field': 'dexterity', 'size': 4},
-    {'offset': 0xc0, 'type': 'i', 'field': 'intelligence', 'size': 4},
-    {'offset': 0xc8, 'type': 'i', 'field': 'faith', 'size': 4},
-    {'offset': 0xd0, 'type': 'i', 'field': '0xd4', 'size': 4},
-    {'offset': 0xd8, 'type': 'i', 'field': 'humanity', 'size': 4},
-    {'offset': 0xe0, 'type': 'i', 'field': 'resistance', 'size': 4},
-    {'offset': 0xe8, 'type': 'i', 'field': 'level', 'size': 4},
-    {'offset': 0xec, 'type': 'i', 'field': 'souls', 'size': 4},
+    {'offset': 0x88, 'type': 'I', 'field': 'stamina', 'size': 4},
+    {'offset': 0x8c, 'type': 'I', 'field': 'stamina2', 'size': 4},
+    {'offset': 0x90, 'type': 'I', 'field': 'stamina3', 'size': 4},
+    {'offset': 0x98, 'type': 'I', 'field': 'vitality', 'size': 4},
+    {'offset': 0xa0, 'type': 'I', 'field': 'attunement', 'size': 4},
+    {'offset': 0xa8, 'type': 'I', 'field': 'endurance', 'size': 4},
+    {'offset': 0xb0, 'type': 'I', 'field': 'strength', 'size': 4},
+    {'offset': 0xb8, 'type': 'I', 'field': 'dexterity', 'size': 4},
+    {'offset': 0xc0, 'type': 'I', 'field': 'intelligence', 'size': 4},
+    {'offset': 0xc8, 'type': 'I', 'field': 'faith', 'size': 4},
+    {'offset': 0xd0, 'type': 'I', 'field': '0xd4', 'size': 4},
+    {'offset': 0xd8, 'type': 'I', 'field': 'humanity', 'size': 4},
+    {'offset': 0xe0, 'type': 'I', 'field': 'resistance', 'size': 4},
+    {'offset': 0xe8, 'type': 'I', 'field': 'level', 'size': 4},
+    {'offset': 0xec, 'type': 'I', 'field': 'souls', 'size': 4},
     # could be exp
-    {'offset': 0xf0, 'type': 'i', 'field': 'earned', 'size': 4},
+    {'offset': 0xf0, 'type': 'I', 'field': 'earned', 'size': 4},
     # 28 bytes, 2*13 + finishing zero for char name
 
     {'offset': 0x100, 'type': 'c', 'field': 'name', 'size': 14*2},
@@ -100,7 +88,7 @@ DATA_MAP = [
     {'offset': 0x16c, 'type': 'B', 'field': 'face', 'size': 1},
     {'offset': 0x16d, 'type': 'B', 'field': 'hairs', 'size': 1},
     {'offset': 0x16e, 'type': 'B', 'field': 'color', 'size': 1},
-    {'offset': 0x1f128, 'type': 'i', 'field': 'deaths', 'size': 4},
+    {'offset': 0x1f128, 'type': 'I', 'field': 'deaths', 'size': 4},
 ]
 
 ITEMS_MAP = [
@@ -123,19 +111,12 @@ class SlotHeaderStructure(Structure):
     _fields_ = [
         ('block_metadata_high', c_uint32),    # hex(0x50000000)
         ('block_metadata_low', c_uint32),     # hex(0xFFFFFFFF)
-        ('block_size', c_uint32),
-        ('block_space_separator', c_uint32),  # \x00 sequence
+        ('block_size', c_ulong),
         ('block_start_offset', c_uint32),
-        ('block_unknown_data_1', c_uint32),
-        ('block_unknown_data_2', c_uint32),
+        ('block_unknown_data_1', c_uint32),  # random
+        ('block_unknown_data_2', c_uint32),  # 0x4
         ('end_of_block', c_uint32),
     ]
-
-
-class FileTypeException(Exception):
-    """ not a DarkSouls save file exception """
-    def __init__(self, *args):
-        self.args = args
 
 
 class DSSaveFileParser(object):
@@ -188,21 +169,22 @@ class DSSaveFileParser(object):
         """ get save file blocks metadata metadata
 
         :param update: runs re-read blocks metadata process, if False returns
-        back cached list
+            back cached list
         :return: list of ``SlotHeaderStructure`` instances
         """
-        if self._block_slots_metadata:
+        if self._block_slots_metadata and not update:
             return self._block_slots_metadata
 
         self._fo.seek(SLOTS_AMOUNT_OFFSET)
-        self._block_slots_amount = struct.unpack('i', self._fo.read(4))[0]
+        self._block_slots_amount = struct.unpack('I', self._fo.read(4))[0]
 
         self._fo.seek(SLOTS_METADATA_OFFSET)
-        blocks_amount = len(SlotHeaderStructure._fields_)
+
+        fmt, block_size = get_structure_fmt(SlotHeaderStructure)
 
         for slot in range(0, self._block_slots_amount):
-            encoded = struct.unpack('i' * blocks_amount,
-                                    self._fo.read(4 * blocks_amount))
+            encoded = struct.unpack(fmt,
+                                    self._fo.read(block_size))
             slot = SlotHeaderStructure(*encoded)
             self._block_slots_metadata.append(slot)
         return self._block_slots_metadata
@@ -211,6 +193,11 @@ class DSSaveFileParser(object):
         """ get active slots count, could be 0 up to 9
 
         :return: active characters' slots amount
+        .. code-block:: python
+
+            >>> instance = DSSaveFileParser('saves/DRAKS0005.sl2')
+            >>> instance.get_active_slots_amount()
+            2 # means that only 2 active characters stored in save file
         """
         slots = 0
         for idx, header in enumerate(self.get_blocks_metadata()):
@@ -226,6 +213,20 @@ class DSSaveFileParser(object):
         """ get character stats data
 
         :return: list of dicts
+
+        .. code-block:: python
+
+            >>> ds = DSSaveFileParser('saves/DRAKS0005.sl2')
+            >>> ds.get_stats()[0]
+            {'attunement': 11, 'body': 0, 'class': 2, 'color': 7,
+             'deaths': 155, 'dexterity': 21, 'earned': 4037210,
+             'endurance': 54, 'face': 1, 'faith': 9, 'gift': 1, 'hairs': 5,
+             'hp': 1100, 'hp2': 1100, 'hp_current': 1100, 'humanity': 2,
+             'intelligence': 11, 'level': 115, 'male': True,
+             'name': u'\u041a\u0430\u0440\u043b', 'resistance': 12,
+             'souls': 39848, 'stamina': 160, 'stamina2': 160, 'stamina3': 160,
+             'strength': 50, 'time': 218834, 'vitality': 30}]
+
         """
         fo = self._fo
         fo.seek(BLOCK_INDEX, 0)
@@ -242,7 +243,7 @@ class DSSaveFileParser(object):
                 data = fo.read(item['size'])
                 if item['type'] == 'c':
                     encoded = data.decode('utf-16').split('\00')[0]
-                elif item['type'] == 'i':
+                elif item['type'] == 'I':
                     encoded = struct.unpack(item['type'], data)[0]
                 else:
                     encoded = struct.unpack(item['type'], data)[0]
@@ -250,7 +251,7 @@ class DSSaveFileParser(object):
             # process time
             fo.seek(_time_offset, 0)
             storage.update({
-                'time': struct.unpack('i', fo.read(4))[0]
+                'time': struct.unpack('I', fo.read(4))[0]
             })
             slots.append(storage)
         self.slots = slots
@@ -278,22 +279,24 @@ class DSSaveFileParser(object):
             items.append(item)
         return items
 
-    def __store_data(self, slot, data={}):
+    def __store_data(self, slot, data=None):
         """ store data in DarkSouls save file.
 
         Please not that you should control write process because you can
         easily spoil save file with wrong store data on right address or vise
         versa.
 
-         :param slot: slot number, could be 0 up to 9
-         :param data: dict of data should be stored
+        :param slot: slot number, could be 0 up to 9
+        :param data: dict of data should be stored
 
-         ``data`` param example:
+        ``data`` param example:
 
-         .. code-block:: python
+        .. code-block:: python
 
             data = {"offset": 0xec, "type": "i", "data": 666}
         """
+        if not data:
+            data = {}
         if 0 < slot > 9:  # slot < 0 and slot > 9
             raise IndexError(self._errors['slot_error'])
         offset = BLOCK_INDEX + BLOCK_SIZE * slot

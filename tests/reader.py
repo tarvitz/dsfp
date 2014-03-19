@@ -1,4 +1,12 @@
 # coding: utf-8
+""" DSFP core file
+
+.. module:: dsfp.dsfp
+    :platform: Linux, Windows, MacOS X
+    :synopsis: utils for routines
+.. moduleauthor:: Tarvitz<tarvitz@blacklibrary.ru>
+"""
+
 from unittest import TestCase
 from dsfp import DSSaveFileParser
 import bz2

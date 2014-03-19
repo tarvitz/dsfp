@@ -6,3 +6,6 @@ DSFP
 ----
 .. automodule:: tests.reader
     :members:
+
+.. automodule:: tests.utils
+    :members:
