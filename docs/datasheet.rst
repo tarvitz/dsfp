@@ -216,7 +216,7 @@ Items store structure
 .. include:: data/items.rst
 
 
-Weapons store structore
+Weapons store structure
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
