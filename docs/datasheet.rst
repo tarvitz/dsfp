@@ -2,6 +2,7 @@ Datasheet
 =========
 ``Base File Index`` equals to :ref:`start-block` **0x2c0** (**BFI**)
 
+
 Headers format and structures
 -----------------------------
 .. note::
@@ -213,3 +214,14 @@ Items store structure
 
 
 .. include:: data/items.rst
+
+
+Weapons store structore
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    from ctypes import
+    weapon_proto_structure = {'ffff': c_unit32, 'type': c_unit32, 'have', c_unit32, 'xxx': c_unit32}
+
+.. include:: data/weapons.rst

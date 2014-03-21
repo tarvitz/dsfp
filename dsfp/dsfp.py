@@ -190,9 +190,10 @@ class DSSaveFileParser(object):
         return self._block_slots_metadata
 
     def get_active_slots_amount(self):
-        """ get active slots count, could be 0 up to 9
+        """get active slots count, could be 0 up to 9
 
         :return: active characters' slots amount
+
         .. code-block:: python
 
             >>> instance = DSSaveFileParser('saves/DRAKS0005.sl2')
@@ -278,6 +279,14 @@ class DSSaveFileParser(object):
             }
             items.append(item)
         return items
+
+    def read_slot_data(self, slot=0):
+        """ read raw data of given slot """
+        if not self._block_slots_metadata:
+            self.get_blocks_metadata()
+        slot_block = self._block_slots_metadata[slot]
+        self._fo.seek(slot_block.block_start_offset)
+        return self._fo.read(slot_block.block_size)
 
     def __store_data(self, slot, data=None):
         """ store data in DarkSouls save file.
