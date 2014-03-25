@@ -259,11 +259,13 @@ def main(ns):
     skip_table = None
     start_offset = ns.start_offset
     end_offset = ns.end_offset
-    try:
-        start_offset = int(start_offset, 16)
-        end_offset = int(end_offset, 16)
-    except ValueError:
-        raise ImproperlyConfigured("start should be int instance compatible")
+
+    if all([start_offset, end_offset]):
+        try:
+            start_offset = int(start_offset, 16)
+            end_offset = int(end_offset, 16)
+        except ValueError:
+            raise ImproperlyConfigured("start should be int instance compatible")
 
     if ns.insert_json:
         load = json.loads(ns.insert_json.read())
@@ -283,12 +285,16 @@ def main(ns):
         path = 'backups/draks0005.sl2_backup'
         open(path, 'wb').write(open(filename, 'rb').read())
 
+    keywords = {}
+    if all([start_offset, end_offset]):
+        keywords.update({
+            'start_offset': start_offset, 'end_offset': end_offset})
+
     watcher = SimpleWatcher(slot=slot, filename=filename,
                             use_dumping=use_dumping, namespace_load=load,
                             namespace_skip=skip,
                             skip_table=skip_table,
-                            use_curses=use_curses,
-                            start_offset=start_offset, end_offset=end_offset)
+                            use_curses=use_curses,)
     try:
         watcher.run()
     except KeyboardInterrupt:
