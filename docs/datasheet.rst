@@ -71,7 +71,7 @@ Headers format and structures
 | **0x54**        | 4 bytes | c_uint32   | Unknown data, could be an some    |                     |
 |                 |         |            | sort of offsets ?                 |                     |
 +-----------------+---------+------------+-----------------------------------+---------------------+
-| **0x58**        | 4 bytes | c_uint32   | Unknown block of data             | hex: **0x04**       |
+| **0x58**        | 4 bytes | c_uint32   | Skip the amount of bytes block    | hex: **0x04**       |
 |                 |         |            | (4h->4)                           | dec: **04**         |
 +-----------------+---------+------------+-----------------------------------+---------------------+
 | **0x5c**        | 4 bytes | c_uint32   | could be a separator              |**\x00\x00\x00\x00** |

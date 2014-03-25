@@ -6,7 +6,14 @@
 .. moduleauthor:: Tarvitz<tarvitz@blacklibrary.ru>
 """
 
+
 class FileTypeException(Exception):
     """ not a DarkSouls save file exception """
+    def __init__(self, *args):
+        self.args = args
+
+
+class ImproperlyConfigured(Exception):
+    """ Improperly configured exception """
     def __init__(self, *args):
         self.args = args

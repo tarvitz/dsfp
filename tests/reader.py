@@ -42,7 +42,9 @@ class TestDSFPReader(TestCase):
             # but there's a header that contains block offsets inside of
             # meta data block so we should check it
             'start_offsets': [704, 394320, 787936, 1181552, 1575168, 1968784,
-                              2362400, 2756016, 3149632, 3543248, 3936864]
+                              2362400, 2756016, 3149632, 3543248, 3936864],
+            'block_stat_size': [396, 396, 396, 396, 396, 396, 396, 396,
+                                396, 396, 396]
         }
 
     def test_read_ds_file(self):
@@ -63,7 +65,19 @@ class TestDSFPReader(TestCase):
         """ read file metadata """
         ds = DSSaveFileParser(filename=self.filename)
         metadata = ds.get_blocks_metadata()
+
         self.assertEqual(len(metadata), self.metadata['slots'])
+        messages = []
         for idx, header in enumerate(metadata):
             self.assertEqual(header.block_start_offset,
                              self.metadata['start_offsets'][idx])
+            try:
+                self.assertEqual(header.slot_data.block_stat_size,
+                                 self.metadata['block_stat_size'][idx])
+            except AssertionError as err:
+                messages.append({'err': err, 'msg': 'Got error'})
+
+        if messages:
+            for msg in messages:
+                print("%(msg)s: %(err)s" % msg)
+            raise AssertionError

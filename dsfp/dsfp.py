@@ -7,95 +7,7 @@ import struct
 from ctypes import *
 from .utils import *
 from .exceptions import *
-
-CLASSES = {
-    0: 'Warrior', 1: 'Knight', 2: 'Wanderer', 3: 'Thief', 4: 'Bandit',
-    5: 'Hunter', 6: 'Sorcerer', 7: 'Pyromancer', 8: 'Cleric', 9: 'Deprived'
-}
-
-BLOCK_SIZE = 0x60190
-BLOCK_INDEX = 0x2c0
-BLOCK_DATA_OFFSET = 0x14
-SLOTS_AMOUNT_OFFSET = 0xC
-SLOTS_METADATA_OFFSET = 0x40
-DEBUG = True
-
-# time stored as seconds with unsigned int
-# time: 0x3c12c0 (1 slot)
-# time: 0x3c1430 (2 slot) (0x170 offset between game times)
-TIME_INDEX = 0x3c12c0
-TIME_BLOCK_SIZE = 0x170
-
-
-DATA_MAP = [
-    #{'offset': 0x1f, 'type': 'I', 'field': '0x1f', 'size': 4},  # 393216 all
-    #{'offset': 0x14, 'type': 'I', 'field': '0x14', 'size': 4}, # 57 all
-    #{'offset': 0x18, 'type': 'I', 'field': '0x18', 'size': 4},
-    #{'offset': 0x1c, 'type': 'I', 'field': '0x1c', 'size': 4},
-    #{'offset': 0x20, 'type': 'I', 'field': '0x20', 'size': 4},  # 84 all
-    #{'offset': 0x24, 'type': 'I', 'field': '0x24', 'size': 4},  # 127185 all
-    #{'offset': 0x28, 'type': 'I', 'field': '0x28', 'size': 4},  # 84 all
-    #{'offset': 0x2c, 'type': 'I', 'field': '0x2c', 'size': 4},  # 123888 all
-    #{'offset': 0x30, 'type': 'I', 'field': '0x30', 'size': 4},  # 124186 all
-    #{'offset': 0x34, 'type': 'I', 'field': '0x34', 'size': 4},  # 64 all
-    #{'offset': 0x38, 'type': 'I', 'field': '0x38', 'size': 4},  # 124036 all
-    #{'offset': 0x3c, 'type': 'I', 'field': '0x3c', 'size': 4},  # 142 all
-    #{'offset': 0x40, 'type': 'I', 'field': '0x40', 'size': 4},  # 124178 all
-    #{'offset': 0x44, 'type': 'I', 'field': '0x44', 'size': 4},  # 8 all
-    #{'offset': 0x48, 'type': 'I', 'field': '0x48', 'size': 4},  # 127269 all
-    #{'offset': 0x4c, 'type': 'I', 'field': '0x4c', 'size': 4},  # 93441 all
-    #{'offset': 0x50, 'type': 'I', 'field': '0x50', 'size': 4},  # 220710 all
-    {'offset': 0x54, 'type': 'I', 'field': '0x54', 'size': 4},
-    {'offset': 0x58, 'type': 'I', 'field': '0x58', 'size': 4},
-    {'offset': 0x5c, 'type': 'I', 'field': '0x5c', 'size': 4},
-    {'offset': 0x60, 'type': 'I', 'field': '0x60', 'size': 4},
-    #{'offset': 0x64, 'type': 'I', 'field': '0x64', 'size': 4},  # 131076 all
-    {'offset': 0x6c, 'type': 'I', 'field': 'hp_current', 'size': 4},
-    {'offset': 0x70, 'type': 'I', 'field': 'hp', 'size': 4},
-    # what's the difference?
-    {'offset': 0x74, 'type': 'I', 'field': 'hp2', 'size': 4},
-    # unrevealed
-    {'offset': 0x78, 'type': 'I', 'field': '0x78', 'size': 4},
-    #{'offset': 0x7c, 'type': 'I', 'field': '0x7c', 'size': 4},  # same as 0x78
-    #{'offset': 0x80, 'type': 'I', 'field': '0x80', 'size': 4},  # same as 0x78
-    #
-    # 4 bytes space between chars stats
-    {'offset': 0x88, 'type': 'I', 'field': 'stamina', 'size': 4},
-    {'offset': 0x8c, 'type': 'I', 'field': 'stamina2', 'size': 4},
-    {'offset': 0x90, 'type': 'I', 'field': 'stamina3', 'size': 4},
-    {'offset': 0x98, 'type': 'I', 'field': 'vitality', 'size': 4},
-    {'offset': 0xa0, 'type': 'I', 'field': 'attunement', 'size': 4},
-    {'offset': 0xa8, 'type': 'I', 'field': 'endurance', 'size': 4},
-    {'offset': 0xb0, 'type': 'I', 'field': 'strength', 'size': 4},
-    {'offset': 0xb8, 'type': 'I', 'field': 'dexterity', 'size': 4},
-    {'offset': 0xc0, 'type': 'I', 'field': 'intelligence', 'size': 4},
-    {'offset': 0xc8, 'type': 'I', 'field': 'faith', 'size': 4},
-    {'offset': 0xd0, 'type': 'I', 'field': '0xd4', 'size': 4},
-    {'offset': 0xd8, 'type': 'I', 'field': 'humanity', 'size': 4},
-    {'offset': 0xe0, 'type': 'I', 'field': 'resistance', 'size': 4},
-    {'offset': 0xe8, 'type': 'I', 'field': 'level', 'size': 4},
-    {'offset': 0xec, 'type': 'I', 'field': 'souls', 'size': 4},
-    # could be exp
-    {'offset': 0xf0, 'type': 'I', 'field': 'earned', 'size': 4},
-    # 28 bytes, 2*13 + finishing zero for char name
-
-    {'offset': 0x100, 'type': 'c', 'field': 'name', 'size': 14*2},
-    {'offset': 0x122, 'type': '?', 'field': 'male', 'size': 1},
-    # enums
-    {'offset': 0x126, 'type': 'B', 'field': 'class', 'size': 1},
-    {'offset': 0x127, 'type': 'B', 'field': 'body', 'size': 1},
-    {'offset': 0x128, 'type': 'B', 'field': 'gift', 'size': 1},
-    {'offset': 0x16c, 'type': 'B', 'field': 'face', 'size': 1},
-    {'offset': 0x16d, 'type': 'B', 'field': 'hairs', 'size': 1},
-    {'offset': 0x16e, 'type': 'B', 'field': 'color', 'size': 1},
-    {'offset': 0x1f128, 'type': 'I', 'field': 'deaths', 'size': 4},
-]
-
-ITEMS_MAP = [
-    # 0x448 - items start offset
-    #{'offset': 0xba4, 'type': 'ii', 'size': 8, 'name': 'estus'}
-    #{'offset': 0xb1c, 'type': 'ii', 'size': 8, 'name': 'estus'}
-]
+from .constants import *
 
 
 class ItemStructure(Structure):
@@ -106,16 +18,38 @@ class ItemStructure(Structure):
     ]
 
 
+class SlotDataHeaderStructure(Structure):
+    _fields_ = [
+        ('block_stat_size', c_uint32),
+        ('block_data_size', c_uint32)
+    ]
+
+
 class SlotHeaderStructure(Structure):
     """ Characters containers slots header structure """
+    #_anonymous_ = ("slot_data",)
     _fields_ = [
         ('block_metadata_high', c_uint32),    # hex(0x50000000)
         ('block_metadata_low', c_uint32),     # hex(0xFFFFFFFF)
         ('block_size', c_ulong),
         ('block_start_offset', c_uint32),
         ('block_unknown_data_1', c_uint32),  # random
-        ('block_unknown_data_2', c_uint32),  # 0x4
+        ('block_skip_bytes', c_uint32),  # byte skipping amount
         ('end_of_block', c_uint32),
+        ('slot_data', SlotDataHeaderStructure)
+    ]
+
+
+class ItemStructure(Structure):
+    _fields_ = [
+        ('stored', c_uint32),       # 0xFFFFFF or 0x0, 0x0 - presents
+        ('type', c_uint32),         # item type
+        ('have', c_uint32),         # item is stored in inventory 1 or 0
+        ('position', c_uint32),     # inventory position
+        ('have2', c_uint32),        # item is stored in inventory 1 or 0
+        ('durability', c_uint32),   # item durability
+        ('durability2', c_uint32),  # 0->9 than -1 of durability
+        #('spacer', c_uint32)
     ]
 
 
@@ -123,7 +57,7 @@ class DSSaveFileParser(object):
     """ Dark Souls save file parser
     original gist: https://gist.github.com/infuasto/8382836
 
-    :param filename: basestring, bz2.BZ2File or StringIO instances
+    :param str filename: bz2.BZ2File or StringIO instances
     """
     _errors = {
         "slot_error": (
@@ -159,18 +93,22 @@ class DSSaveFileParser(object):
         return self._fo.read(size)
 
     def _seek(self, slot=0):
-        """ seek dark souls file handler to slot position in the file
-        """
+        """ seek dark souls file handler to slot position in the file """
         offset = BLOCK_INDEX + BLOCK_SIZE * slot
         self._fo.seek(offset)
         return offset
 
-    def get_blocks_metadata(self, update=False):
-        """ get save file blocks metadata metadata
+    def close(self):
+        self._fo.close()
 
-        :param update: runs re-read blocks metadata process, if False returns
-            back cached list
-        :return: list of ``SlotHeaderStructure`` instances
+    def get_blocks_metadata(self, update=False):
+        """ Get save file blocks metadata
+
+        :keyword bool update: runs re-read blocks metadata process,
+            if False returns back cached list
+        :return: ``SlotHeaderStructure`` instances
+        :rtype: list
+
         """
         if self._block_slots_metadata and not update:
             return self._block_slots_metadata
@@ -183,16 +121,28 @@ class DSSaveFileParser(object):
         fmt, block_size = get_structure_fmt(SlotHeaderStructure)
 
         for slot in range(0, self._block_slots_amount):
-            encoded = struct.unpack(fmt,
-                                    self._fo.read(block_size))
-            slot = SlotHeaderStructure(*encoded)
+            encoded = struct.unpack(fmt, self._fo.read(block_size))
+            slot = SlotHeaderStructure()
+            for idx, field in enumerate(SlotHeaderStructure._fields_):
+                if field[1] in (c_uint32, c_ulong,):
+                    setattr(slot, field[0], encoded[idx])
             self._block_slots_metadata.append(slot)
+
+        # update slot data
+        for slot in self._block_slots_metadata:
+            self._fo.seek(slot.block_start_offset + slot.block_skip_bytes * 4)
+            block_size = struct.unpack('I', self._fo.read(4))[0]
+            slot_data = SlotDataHeaderStructure()
+            slot_data.block_stat_size = slot.block_size - block_size
+            slot_data.block_data_size = block_size
+            slot.slot_data = slot_data
         return self._block_slots_metadata
 
     def get_active_slots_amount(self):
         """get active slots count, could be 0 up to 9
 
         :return: active characters' slots amount
+        :rtype: int
 
         .. code-block:: python
 
@@ -213,7 +163,8 @@ class DSSaveFileParser(object):
     def get_stats(self):
         """ get character stats data
 
-        :return: list of dicts
+        :return: dicts
+        :rtype: list
 
         .. code-block:: python
 
@@ -281,7 +232,12 @@ class DSSaveFileParser(object):
         return items
 
     def read_slot_data(self, slot=0):
-        """ read raw data of given slot """
+        """ read raw data of given slot
+
+        :keyword int slot: character slot
+        :return: character block bytes
+        :rtype: str
+        """
         if not self._block_slots_metadata:
             self.get_blocks_metadata()
         slot_block = self._block_slots_metadata[slot]
@@ -295,8 +251,10 @@ class DSSaveFileParser(object):
         easily spoil save file with wrong store data on right address or vise
         versa.
 
-        :param slot: slot number, could be 0 up to 9
-        :param data: dict of data should be stored
+        :param int slot: slot number, could be 0 up to 9
+        :keyword dict data: dict of data should be stored
+        :return: None
+        :rtype: None
 
         ``data`` param example:
 

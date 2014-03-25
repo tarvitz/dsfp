@@ -41,6 +41,8 @@ def get_structure_fmt(structure_class):
         elif _type[1] == c_ulong:
             fmt += 'Q'
             block_size += 8
+        elif issubclass(_type[1], (Union, Structure)):
+            pass
         else:
             fmt += 'I'
             block_size += 4
