@@ -192,9 +192,6 @@ and so on
 | **0x2c0**       | 4 Bytes | c_uint32   | First quick slot item type        | Any accessible item |
 |                 |         |            |                                   | type (203 for ex.)  |
 +-----------------+---------+------------+-----------------------------------+---------------------+
-| **0x2c0**       | 4 Bytes | c_uint32   | First quick slot item type        | Any accessible item |
-|                 |         |            |                                   | type (203 for ex.)  |
-+-----------------+---------+------------+-----------------------------------+---------------------+
 | **0x2c4**       | 4 Bytes | c_uint32   | Second quick slot item type       | Any accessible item |
 |                 |         |            |                                   | type (203 for ex.)  |
 +-----------------+---------+------------+-----------------------------------+---------------------+

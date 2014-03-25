@@ -63,6 +63,11 @@ DATA_MAP = [
     {'offset': 0x16c, 'type': 'B', 'field': 'face', 'size': 1},
     {'offset': 0x16d, 'type': 'B', 'field': 'hairs', 'size': 1},
     {'offset': 0x16e, 'type': 'B', 'field': 'color', 'size': 1},
+    {'offset': 0x2c0, 'type': 'I', 'field': 'slot_1', 'size': 4},
+    {'offset': 0x2c4, 'type': 'I', 'field': 'slot_2', 'size': 4},
+    {'offset': 0x2c8, 'type': 'I', 'field': 'slot_3', 'size': 4},
+    {'offset': 0x2cc, 'type': 'I', 'field': 'slot_4', 'size': 4},
+    {'offset': 0x2d0, 'type': 'I', 'field': 'slot_5', 'size': 4},
     {'offset': 0x1f128, 'type': 'I', 'field': 'deaths', 'size': 4},
 ]
 

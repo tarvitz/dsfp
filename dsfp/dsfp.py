@@ -5,6 +5,7 @@ from StringIO import StringIO
 import sys
 import struct
 from ctypes import *
+
 from .utils import *
 from .exceptions import *
 from .constants import *
@@ -271,41 +272,3 @@ class DSSaveFileParser(object):
         self._fo.seek(data['offset'], 1)
         store_data = struct.pack(data['type'], data['data'])
         self._fo.write(store_data)
-
-
-def usage():
-    print("%s <filename.sl2>" % sys.argv[0])
-    sys.exit(0)
-
-
-def main():
-    filename = sys.argv[1]
-    ds = DSSaveFileParser(filename)
-    for slot in ds.get_stats():
-        slot['skill'] = (
-            1
-            #300 / (slot['deaths'] or 1) +
-            #slot['level']
-            #3600 * 3 / float(slot['time']) +
-            #850.0 / slot['hp']
-
-        )
-        print("Name: %(name)s, deaths: %(deaths)s, skill: %(skill)s" % slot)
-        if DEBUG:
-            print(slot)
-            for key, value in slot.items():
-                if key.startswith('smth'):
-                    print("%s: %s" % (key, value))
-    items = ds.get_items(1)
-    for item in items:
-        print("name: %(name)s, %(type)s:%(amount)s" % {
-            'name': item['name'],
-            'type': item['data'].type,
-            'amount': item['data'].amount
-        })
-
-
-if __name__ == '__main__':
-    if len(sys.argv) <= 1:
-        usage()
-    main()
