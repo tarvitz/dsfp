@@ -1,2 +1,3 @@
 *.py[co]
 docs/_build
+*.bin

@@ -211,7 +211,7 @@ class DSSaveFileParser(object):
         return self.slots
 
     def get_items(self, slot=0):
-        """ get character's item list
+        """ get character's item list, don't work proper for now
 
         :param slot: character save slot (0 up to 9)
         :return: list of dicts
