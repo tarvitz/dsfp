@@ -219,7 +219,7 @@ Start block
     **0x2c** starts with first character data. Character data is under heavily
     process of reverse engineering, so there is only some simple bunch of data
     represented withing different blocks/structures such like as :ref:`stats`,
-    :ref:`items`
+    :ref:`items`.
 
 .. _stats:
 
@@ -334,6 +334,14 @@ Weapons store structure
 .. code-block:: python
 
     from ctypes import
-    weapon_proto_structure = {'ffff': c_uint32, 'type': c_uint32, 'have', c_uint32, 'xxx': c_uint32}
+    weapon_proto_structure = {
+        'stored': c_uint32,           # '\xff'*4 or '\x00'
+        'type': c_uint32,             # item type
+        'have', c_uint32,             # have
+        'position': c_uint32,         # position?
+        'have2': c_uint32,            # have
+        'durability': c_uint32,       # item durability
+        'durability_hits': c_uint32,  # 0->9
+    }
 
 .. include:: data/weapons.rst
