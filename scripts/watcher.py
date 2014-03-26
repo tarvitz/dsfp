@@ -28,19 +28,17 @@ class SimpleWatcher(object):
     """ Simple watcher
 
     :param str filename: path inspected filename
-    :param int slot: character slot
-    :param bool dumping: dump snapshots of inspected slot data
-    :param dict namespace_load: namespace load
+    :keyword int slot: character slot
+    :keyword dict skip_table: skip some data which is represented in table
+        stored in dict
+    :keyword bool use_curses: use curses interface instead of standard cli
+    :keyword int start_offset: start inspections with given offset
+    :keyword int start_offset: end inspections with given offset
     """
-    def __init__(self, filename, slot=0, dumping=False, namespace_load=None,
-                 namespace_skip=None, skip_table=None, use_curses=False,
-                 start_offset=0x0, end_offset=127384,
-                 *args, **kwargs):
+    def __init__(self, filename, slot=0, skip_table=None, use_curses=False,
+                 start_offset=0x0, end_offset=127384):
         self.filename = filename
         self.slot = slot
-        self.dumping = dumping
-        self.namespace_load = namespace_load
-        self.namespace_skip = namespace_skip
         self.skip_table = skip_table
         self.use_curses = use_curses
         self.start_offset = start_offset
@@ -176,86 +174,14 @@ class SimpleWatcher(object):
                 old_data = data
                 # process stat smth
                 modified += 1
-
-            #stat = os.stat(self.filename)
-
-    def old_run(self):
-        """ run watcher """
-        self.show_windows()
-
-        stat = os.stat(self.filename)
-        old_time = stat.st_mtime
-        snapshot = 1
-        modified = 0
-
-        while 1:
-            sleep(1)
-            stat = os.stat(self.filename)
-            if stat.st_mtime != old_time:
-                old_time = stat.st_mtime
-                fmt = datetime.now().strftime('%H:%M:%S')
-                #print("%(time)s modified" % {'time': fmt})
-                self.console_log(
-                    "%(time)s modified (%(amount)s)" % {
-                        'time': fmt, 'amount': modified},
-                    clean=True
-                )
-
-                ds = DSSaveFileParser(self.filename)
-
-                snapshot_filename = (
-                    'slot_%(slot)s_snapshot_%(snapshot)s.bin' % {
-                        'slot': self.slot,
-                        'snapshot': snapshot
-                    }
-                )
-
-                data = ds.read_slot_data(self.slot)
-                stream = StringIO(data)
-                if self.dumping:
-                    open(
-                        os.path.join(
-                            SNAPSHOT_DIR, snapshot_filename), 'wb'
-                    ).write(data)
-
-                if self.namespace_load:
-                    x = 1
-                    old_value = None
-                    for offset in self.namespace_load['WATCH_OFFSETS']:
-                        stream.seek(offset['offset'])
-                        value = struct.unpack(offset['type'],
-                                              stream.read(offset['size']))[0]
-
-                        if old_value != value:
-                            old_value = value
-                        addr = '0x%(offset)08x' % {'offset': offset['offset']}
-                        dec_value = '%(value)10s'
-                        hex_value = '0x%(value)08x'
-
-                        #print(out)
-                        self.log(addr, x=x)
-                        self.log(dec_value % {"value": value}, y=10, x=x)
-                        self.log(hex_value % {"value": value}, y=25, x=x)
-                        self.log(dec_value % {"value": old_value}, y=40, x=x)
-                        self.log(hex_value % {"value": old_value}, y=55, x=x)
-                        x += 1
-
-                if self.skip_table:
-                    pass
-
-                modified += 1
-                snapshot += 1
-                ds._fo.close()
+        # end of run
 
 
 def main(ns):
     slot = ns.slot[0] - 1
     filename = ns.filename[0]
-    use_dumping = ns.use_snapshots
     use_curses = ns.use_curses
     backup = ns.backup
-    load = None
-    skip = None
     skip_table = None
     start_offset = ns.start_offset
     end_offset = ns.end_offset
@@ -265,19 +191,12 @@ def main(ns):
             start_offset = int(start_offset, 16)
             end_offset = int(end_offset, 16)
         except ValueError:
-            raise ImproperlyConfigured("start should be int instance compatible")
-
-    if ns.insert_json:
-        load = json.loads(ns.insert_json.read())
-
-    if ns.skip_json:
-        skip = json.loads(ns.skip_json.read())
+            raise ImproperlyConfigured(
+                "start should be int instance compatible"
+            )
 
     if ns.skip_table:
         skip_table = json.loads(ns.skip_table.read())
-
-    if use_dumping:
-        print("Using snapshot dumping to `%s`" % SNAPSHOT_DIR)
 
     if not os.path.exists(SNAPSHOT_DIR):
         os.makedirs(SNAPSHOT_DIR)
@@ -291,8 +210,6 @@ def main(ns):
             'start_offset': start_offset, 'end_offset': end_offset})
 
     watcher = SimpleWatcher(slot=slot, filename=filename,
-                            use_dumping=use_dumping, namespace_load=load,
-                            namespace_skip=skip,
                             skip_table=skip_table,
                             use_curses=use_curses,)
     try:
@@ -313,17 +230,6 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--slot', metavar='N', type=int, nargs=1,
                         default=1,
                         help='character slot')
-    parser.add_argument('-u', '--use-snapshots',
-                        action='store_true',
-                        help='use dumping slot block if on')
-    parser.add_argument('-i', '--insert-json', metavar='params.json',
-                        type=file,
-                        help='use whole data from json file',
-                        required=False)
-    parser.add_argument('-S', '--skip-json', metavar='params.json',
-                        type=file,
-                        help='use data inside of json file for skipping',
-                        required=False)
     parser.add_argument('-T', '--skip-table', metavar='table.json',
                         type=file,
                         help=(
