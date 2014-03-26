@@ -1,14 +1,22 @@
 # -*- coding: utf-8 -*
+""" DSFP tools
+
+.. module:: dsfp.tools
+    :platform: Linux, Windows, MacOS X
+    :synopsis: general exceptions for inner routines
+.. moduleauthor:: Tarvitz<tarvitz@blacklibrary.ru>
+"""
+
 from StringIO import StringIO
-from .exceptions import ImproperlyConfigured
 
 
 class BinDiff(object):
     """ Binary difference class """
 
-    def __init__(self, stream_a, stream_b, skip_table=[], start_offset=0x0,
+    def __init__(self, stream_a, stream_b, skip_table=None,
+                 start_offset=0x0,
                  end_offset=None):
-        self.skip_table = skip_table
+        self.skip_table = skip_table or []
         self.stream_a = self.patch_table(
             StringIO(stream_a)
             if isinstance(stream_a, basestring)
@@ -30,14 +38,16 @@ class BinDiff(object):
         :return: dict of difference
         :rtype: dict
         """
-        diff = map(lambda x, y: x is y, item_a, item_b)
+        # 0 if items are equal to each other
+        # other values mean items are not equal: [0, -1, 0, 5]
+        diff = map(cmp, item_a, item_b)
 
         difference = {
             'offset': offset,
             'diff': []
         }
         for idx, item in enumerate(diff):
-            if not item:
+            if item:
                 difference['diff'].append(idx)
         return difference
 
@@ -58,7 +68,7 @@ class BinDiff(object):
                 stream.write('\x00' * item['size'])
         return stream
 
-    def process_diff(self, start_offset=0x0, alignment=0x4):
+    def process_diff(self, alignment=0x4):
         """ process difference between old and new stream
 
         :param int start_offset: start offset reading file
