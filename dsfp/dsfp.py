@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import bz2
 from StringIO import StringIO
-import sys
 import struct
 from ctypes import *
 
@@ -11,15 +10,8 @@ from .exceptions import *
 from .constants import *
 
 
-class ItemStructure(Structure):
-    """ Characters items structure """
-    _fields_ = [
-        ('type', c_uint32),
-        ('amount', c_uint32)
-    ]
-
-
 class SlotDataHeaderStructure(Structure):
+    """ Character Slot Data possible container"""
     _fields_ = [
         ('block_stat_size', c_uint32),
         ('block_data_size', c_uint32)
@@ -42,6 +34,7 @@ class SlotHeaderStructure(Structure):
 
 
 class ItemStructure(Structure):
+    """ Character item storage structure """
     _fields_ = [
         ('stored', c_uint32),       # 0xFFFFFF or 0x0, 0x0 - presents
         ('type', c_uint32),         # item type
@@ -89,10 +82,6 @@ class DSSaveFileParser(object):
             raise FileTypeException("Not an Dark Souls save file")
         self.slots = []
 
-    def _read(self, offset=0x0, size=4):
-        self._fo.seek(offset)
-        return self._fo.read(size)
-
     def _seek(self, slot=0):
         """ seek dark souls file handler to slot position in the file """
         offset = BLOCK_INDEX + BLOCK_SIZE * slot
@@ -100,6 +89,7 @@ class DSSaveFileParser(object):
         return offset
 
     def close(self):
+        """ close all instances """
         self._fo.close()
 
     def get_blocks_metadata(self, update=False):

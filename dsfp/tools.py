@@ -40,6 +40,7 @@ class BinDiff(object):
         """
         # 0 if items are equal to each other
         # other values mean items are not equal: [0, -1, 0, 5]
+        # pylint: disable=W0141
         diff = map(cmp, item_a, item_b)
 
         difference = {
@@ -94,4 +95,4 @@ class BinDiff(object):
             if end_block:
                 if offset >= end_block:
                     break
-        return filter(lambda x: x['diff'], indexes)
+        return [item for item in indexes if item['diff']]

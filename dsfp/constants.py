@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+""" DSFP constants and routines
+
+.. module:: dsfp.constants
+    :platform: Linux, Windows, MacOS X
+    :synopsis: utils for routines
+.. moduleauthor:: Tarvitz<tarvitz@blacklibrary.ru>
+"""
 
 CLASSES = {
     0: 'Warrior', 1: 'Knight', 2: 'Wanderer', 3: 'Thief', 4: 'Bandit',
