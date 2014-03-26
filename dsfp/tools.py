@@ -19,12 +19,12 @@ class BinDiff(object):
         self.skip_table = skip_table or []
         self.stream_a = self.patch_table(
             StringIO(stream_a)
-            if isinstance(stream_a, basestring)
+            if isinstance(stream_a, (str, unicode))
             else stream_a
         )
         self.stream_b = self.patch_table(
             StringIO(stream_b)
-            if isinstance(stream_b, basestring)
+            if isinstance(stream_b, (str, unicode))
             else stream_b
         )
         self.end_offset = end_offset
@@ -72,7 +72,6 @@ class BinDiff(object):
     def process_diff(self, alignment=0x4):
         """ process difference between old and new stream
 
-        :param int start_offset: start offset reading file
         :keyword alignment: alignment read
         :return: modified stream with patched data
         :rtype: file stream
