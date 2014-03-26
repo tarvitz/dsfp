@@ -38,7 +38,7 @@ class ItemStructure(Structure):
     _fields_ = [
         ('stored', c_uint32),       # 0xFFFFFF or 0x0, 0x0 - presents
         ('type', c_uint32),         # item type
-        ('have', c_uint32),         # item is stored in inventory 1 or 0
+        ('amount', c_uint32),       # item amount stored in your backpack
         ('position', c_uint32),     # inventory position
         ('have2', c_uint32),        # item is stored in inventory 1 or 0
         ('durability', c_uint32),   # item durability
