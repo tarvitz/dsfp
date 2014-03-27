@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*
+""" DSFP watcher, looks for save file modifications
+
+.. module:: watcher
+    :platform: Linux, Windows, MacOS X
+    :synopsis: watches for dark souls save file modifications and prints
+        any modified data in console
+.. moduleauthor:: Tarvitz<tarvitz@blacklibrary.ru>
+"""
+
 import sys
 import os
 import struct
