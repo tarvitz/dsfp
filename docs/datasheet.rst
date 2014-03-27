@@ -317,7 +317,7 @@ General items and weapons/armour structure
     weapon_proto_structure = {
         'stored': c_uint32,           # see table below
         'type': c_uint32,             # item type
-        'amount', c_uint32,           # have
+        'amount', c_uint32,           # have amount
         'position': c_uint32,         # position?
         'have': c_uint32,             # have
         'durability': c_uint32,       # item durability
