@@ -308,40 +308,59 @@ Stats
 Items
 -----
 
-+-------------------+--------------------------+-------------------------+
-| Item              | Amount of memory entries | Amount of store entries |
-|                   | (ingame)                 | (save file)             |
-+===================+==========================+=========================+
-| Flask of estus    | 3 slot, 1 active -> 2    | 1 slot: 0x60FF8(random) |
-|                   | depends on active        |                         |
-+-------------------+--------------------------+-------------------------+
-
-
-Items store structure
-~~~~~~~~~~~~~~~~~~~~~
-.. code-block:: python
-
-    from ctypes import *
-    item_proto_structure = {'type': c_uint32, 'amount': c_uint32}
-
-
-.. include:: data/items.rst
-
-
-Weapons store structure
-~~~~~~~~~~~~~~~~~~~~~~~
+General items and weapons/armour structure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
     from ctypes import
     weapon_proto_structure = {
-        'stored': c_uint32,           # '\xff'*4 or '\x00'
+        'stored': c_uint32,           # see table below
         'type': c_uint32,             # item type
-        'have', c_uint32,             # have
+        'amount', c_uint32,           # have
         'position': c_uint32,         # position?
-        'have2': c_uint32,            # have
+        'have': c_uint32,             # have
         'durability': c_uint32,       # item durability
         'durability_hits': c_uint32,  # 0->9
     }
 
++-------------------+--------------------------+-------------------------+
+| Field             | Possible values          | Explanation             |
++===================+==========================+=========================+
+| stored            | * 0xFFFFFFFF             | * clean slot            |
+|                   | * 0x10000000             | * weapons stored        |
+|                   | * 0x20000000             | * armour stored         |
+|                   | * 0x30000000             | * unknown data          |
+|                   | * 0x40000000             | * items/bolts stored    |
++-------------------+--------------------------+-------------------------+
+| type              | see :ref:`items-type`    |item/weapon/armour type  |
+|                   | and so on                |                         |
++-------------------+--------------------------+-------------------------+
+| amount            | 0x00000000 to 0xFFFFFFFF | how much do you have it?|
+|                   | probably                 |                         |
++-------------------+--------------------------+-------------------------+
+| position          | some big numbers         | could be some pointer or|
+|                   | (didn't parsed for till  | address for backpack    |
+|                   | moment)                  | navigation              |
++-------------------+--------------------------+-------------------------+
+| have              | 0x00000001 or 0x00000000 | do you have it?         |
+|                   | yes or no                |                         |
++-------------------+--------------------------+-------------------------+
+| durability        | Depends on weapon or     | Depends on item if it   |
+|                   | armour                   | has dur. statement      |
++-------------------+--------------------------+-------------------------+
+| durability_hits   | 0x00000000 to 0x00000009 | Stack counter from 0 to |
+|                   |                          | 9 each circle weapon    |
+|                   |                          | or armour losts its     |
+|                   |                          | ``durability`` point    |
++-------------------+--------------------------+-------------------------+
+
+.. _items-type:
+
+Items type
+~~~~~~~~~~
+.. include:: data/items.rst
+
+Weapons and armour type
+~~~~~~~~~~~~~~~~~~~~~~~
 .. include:: data/weapons.rst

@@ -36,14 +36,19 @@ class SlotHeaderStructure(Structure):
 class ItemStructure(Structure):
     """ Character item storage structure """
     _fields_ = [
-        ('stored', c_uint32),       # 0xFFFFFF or 0x0, 0x0 - presents
-        ('type', c_uint32),         # item type
-        ('amount', c_uint32),       # item amount stored in your backpack
-        ('position', c_uint32),     # inventory position
-        ('have2', c_uint32),        # item is stored in inventory 1 or 0
-        ('durability', c_uint32),   # item durability
-        ('durability2', c_uint32),  # 0->9 than -1 of durability
-        #('spacer', c_uint32)
+        # stored, 0xFFFFFFFF - not in inventory
+        # 0x00000000 - weapon, bolts/arrows, stored in inventory
+        # 0x10000000 - armour, you know what ;)
+        # 0x20000000 - rings
+        # 0x30000000 - ?
+        # 0x40000000 - item, stored in inventory
+        ('stored', c_uint32),
+        ('type', c_uint32),             # item type
+        ('amount', c_uint32),           # item amount stored in your backpack
+        ('position', c_uint32),         # inventory position
+        ('have', c_uint32),             # item is stored in inventory 1 or 0
+        ('durability', c_uint32),       # item durability
+        ('durability_hits', c_uint32),  # 0->9 than -1 of durability
     ]
 
 
