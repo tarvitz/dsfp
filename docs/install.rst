@@ -18,7 +18,7 @@ Python 2.7
 
    user@localhost$ pip install -r requirements/docs.txt
 
-Python 3.x
+Python 3.3
 ``````````
 document build requirements stored in py3.txt
 
@@ -31,7 +31,7 @@ document build requirements stored in py3.txt
 Dependencies
 ------------
 * python 2.7+
-* python 3.x (tested on python 3.3)
+* python 3.3+
 
 
 Tests
