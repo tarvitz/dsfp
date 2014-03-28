@@ -25,7 +25,7 @@ def get_structure_fmt(structure_class):
                 ('data', c_ulong), # 8 bytes
                 ('amount', c_uint32) # 4 bytes
             ]
-        >>> get_format_fmt(SomeStructure)
+        >>> get_structure_fmt(SomeStructure)
         ('QI', 12)
     """
     fmt = ''

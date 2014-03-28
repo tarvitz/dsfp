@@ -57,7 +57,7 @@ class DSSaveFileParser(object):
     """ Dark Souls save file parser
     original gist: https://gist.github.com/infuasto/8382836
 
-    :param str filename: bz2.BZ2File or StringIO instances
+    :param filename: bz2.BZ2File or StringIO instances
     """
     _errors = {
         "slot_error": (
@@ -184,7 +184,7 @@ class DSSaveFileParser(object):
         slots = []
         if self._active_slots is None:
             self.get_active_slots_amount()
-        for slot in range(self._active_slots):
+        for slot in range(self._active_slots or 0):
             _offset = BLOCK_INDEX + BLOCK_SIZE * slot
             _time_offset = TIME_INDEX + TIME_BLOCK_SIZE * slot
             fo.seek(_offset, 0)
