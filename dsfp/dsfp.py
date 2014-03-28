@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import bz2
-from StringIO import StringIO
+import six
+
 import struct
 from ctypes import *
 
@@ -65,11 +66,11 @@ class DSSaveFileParser(object):
 
     def __init__(self, filename):
         self.filename = filename
-        if isinstance(self.filename, basestring):
+        if isinstance(self.filename, six.string_types):
             self._fo = open(self.filename, 'r+b')
         elif isinstance(self.filename, bz2.BZ2File):
             self._fo = self.filename
-        elif isinstance(self.filename, StringIO):
+        elif isinstance(self.filename, six.StringIO):
             self._fo = self.filename
         else:
             raise FileTypeException("Not supported file format")
@@ -83,7 +84,8 @@ class DSSaveFileParser(object):
         self._fo.seek(0x18)
         version = self._fo.read(8)
         self._fo.seek(0)
-        if fmt != 'BND4' and version != '000000001':
+
+        if fmt != six.b('BND4') and version != six.b('000000001'):
             raise FileTypeException("Not an Dark Souls save file")
         self.slots = []
 
@@ -146,11 +148,12 @@ class DSSaveFileParser(object):
             >>> instance.get_active_slots_amount()
             2 # means that only 2 active characters stored in save file
         """
+
         slots = 0
         for idx, header in enumerate(self.get_blocks_metadata()):
             self._fo.seek(header.block_start_offset + BLOCK_DATA_OFFSET, 0)
             data = self._fo.read(1)
-            if data == '\x00':
+            if data == six.b('\x00'):
                 break
             slots += 1
         self._active_slots = slots
@@ -190,7 +193,7 @@ class DSSaveFileParser(object):
                 fo.seek(_offset + item['offset'], 0)
                 data = fo.read(item['size'])
                 if item['type'] == 'c':
-                    encoded = data.decode('utf-16').split('\00')[0]
+                    encoded = data.decode('utf-16').split('\x00')[0]
                 elif item['type'] == 'I':
                     encoded = struct.unpack(item['type'], data)[0]
                 else:

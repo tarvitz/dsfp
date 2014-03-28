@@ -1,2 +1,5 @@
 ipdb==0.7
 ipython==0.13.2
+simplejson==3.3.3
+six==1.6.1
+wsgiref==0.1.2

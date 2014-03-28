@@ -6,6 +6,7 @@
     :synopsis: utils for routines
 .. moduleauthor:: Tarvitz<tarvitz@blacklibrary.ru>
 """
+import six
 
 from unittest import TestCase
 from dsfp import DSSaveFileParser
@@ -25,7 +26,7 @@ class TestDSFPReader(TestCase):
         self.slots = [
             {
                 'deaths': 155,
-                'name': u'Карл',
+                'name': u'Карл'
             },
             {
                 'deaths': 0,
@@ -33,7 +34,7 @@ class TestDSFPReader(TestCase):
             },
             {
                 'deaths': 0,
-                'name': 'Smithy'
+                'name': u'Smithy'
             }
         ]
         self.metadata = {

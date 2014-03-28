@@ -6,8 +6,8 @@
     :synopsis: general exceptions for inner routines
 .. moduleauthor:: Tarvitz<tarvitz@blacklibrary.ru>
 """
-
-from StringIO import StringIO
+import sys
+import six
 
 
 class BinDiff(object):
@@ -17,14 +17,15 @@ class BinDiff(object):
                  start_offset=0x0,
                  end_offset=None):
         self.skip_table = skip_table or []
+
         self.stream_a = self.patch_table(
-            StringIO(stream_a)
-            if isinstance(stream_a, (str, unicode))
+            six.BytesIO(stream_a)
+            if isinstance(stream_a, (six.string_types, six.binary_type))
             else stream_a
         )
         self.stream_b = self.patch_table(
-            StringIO(stream_b)
-            if isinstance(stream_b, (str, unicode))
+            six.BytesIO(stream_b)
+            if isinstance(stream_b, (six.string_types, six.binary_type))
             else stream_b
         )
         self.end_offset = end_offset
@@ -40,9 +41,12 @@ class BinDiff(object):
         """
         # 0 if items are equal to each other
         # other values mean items are not equal: [0, -1, 0, 5]
-        # pylint: disable=W0141
-        diff = map(cmp, item_a, item_b)
-
+        if sys.version_info.major == 2:
+            # pylint: disable=W0141
+            # noinspection PyUnresolvedReferences
+            diff = map(cmp, item_a, item_b)
+        else:
+            diff = map(lambda x, y: x != y, item_a, item_b)
         difference = {
             'offset': offset,
             'diff': []
@@ -56,7 +60,7 @@ class BinDiff(object):
         """replace data in stream with \x00 sequence according to
         skip table records for diff issues
 
-        :param stream: file or cStringIO compatible object with seek, write
+        :param stream: file or StringIO compatible object with seek, write
             methods
         :keyword int offset: fixed offset in the stream
         :return: stream
@@ -66,7 +70,7 @@ class BinDiff(object):
         if self.skip_table:
             for item in self.skip_table:
                 stream.seek(item['offset'] + offset)
-                stream.write('\x00' * item['size'])
+                stream.write(six.b('\x00' * item['size']))
         return stream
 
     def process_diff(self, alignment=0x4):

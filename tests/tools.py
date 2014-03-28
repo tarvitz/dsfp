@@ -1,4 +1,5 @@
 # coding: utf-8
+import six
 from unittest import TestCase
 from dsfp.tools import BinDiff
 
@@ -8,8 +9,8 @@ __all__ = ['TestBinDiff', ]
 class TestBinDiff(TestCase):
     """Tools tests """
     maxDiff = None
-    diff_a = '\x00\x01\x00\x04\x44\x53\x60\x34\x90\x88\x13\x08'
-    diff_b = '\x01\x00\x00\x04\x42\x53\x61\x34\x93\x88\x13\x08'
+    diff_a = six.b('\x00\x01\x00\x04\x44\x53\x60\x34\x90\x88\x13\x08')
+    diff_b = six.b('\x01\x00\x00\x04\x42\x53\x61\x34\x93\x88\x13\x08')
     skip_table = {}
     diff = [
         {'diff': [0, 1], 'offset': 0},

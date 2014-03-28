@@ -19,8 +19,9 @@ def rel(path):
 
 sys.path.insert(0, os.path.join(PROJECT_ROOT, 'dsfp'))
 
+import six
 from datetime import datetime
-from cStringIO import StringIO
+
 from time import sleep
 from dsfp import DSSaveFileParser
 from dsfp.constants import *
@@ -31,7 +32,11 @@ import argparse
 import curses
 
 
-SNAPSHOT_DIR = os.path.join(os.getcwdu(), 'snapshots')
+SNAPSHOT_DIR = os.path.join(
+    os.getcwdu()
+    if hasattr(os, 'getcwdu') else os.getcwd(),
+    'snapshots'
+)
 
 
 class SimpleWatcher(object):
@@ -149,8 +154,8 @@ class SimpleWatcher(object):
                 data = ds.read_slot_data(self.slot)
                 ds.close()
 
-                data_stream = StringIO(data)
-                old_data_stream = StringIO(old_data)
+                data_stream = six.BytesIO(data)
+                old_data_stream = six.BytesIO(old_data)
 
                 diff = BinDiff(data, old_data,
                                skip_table=self.skip_table['SKIP_TABLE'],
@@ -241,7 +246,7 @@ if __name__ == '__main__':
                         default=1,
                         help='character slot')
     parser.add_argument('-T', '--skip-table', metavar='table.json',
-                        type=file,
+                        type=argparse.FileType('r'),
                         help=(
                             'use data inside of json file for skipping diff'
                             'check inside of block with given offsets'),
