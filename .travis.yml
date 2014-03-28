@@ -11,4 +11,4 @@ install:
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then pip install -r requirements/py3.txt; fi"
 
 script:
-  - coverage "./run_tests.sh tests"
+  - coverage "./run_tests.sh dsfp.tests"
