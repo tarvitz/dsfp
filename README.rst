@@ -1,5 +1,8 @@
 Darksouls Save File Parser
 ==========================
+.. image:: https://travis-ci.org/tarvitz/dsfp.svg?branch=master
+    :target: https://travis-ci.org/tarvitz/dsfp
+
 
 * DSFP means Darksouls Save File Parser.
 * `Dark Souls <http://darksouls.wikia.com/wiki/Dark_Souls>`_ is game of
