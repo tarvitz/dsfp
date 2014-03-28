@@ -3,7 +3,5 @@ MarkupSafe==0.19
 Pygments==1.6
 Sphinx==1.2.2
 docutils==0.11
-ipdb==0.7
-ipython==1.2.1
 simplejson==3.3.3
 six==1.6.1
