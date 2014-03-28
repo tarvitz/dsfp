@@ -3,10 +3,13 @@ Installation
 For general installation you would probably need virtual environment with pip
 installed:
 
+Python 2.7
+``````````
+
 .. code-block:: bash
 
    user@localhost$ virtualenv --no-site-packages venv
-   user@localhost$ source ve/bin/activate
+   user@localhost$ source venv/bin/activate
    user@localhost$ pip install -r requirements/base.txt
 
 *optional*
@@ -15,9 +18,20 @@ installed:
 
    user@localhost$ pip install -r requirements/docs.txt
 
+Python 3.x
+``````````
+document build requirements stored in py3.txt
+
+.. code-block:: bash
+
+   user@localhost$ virtualenv --no-site-packages venv3
+   user@localhost$ source venv3/bin/activate
+   user@localhost$ pip install -r requirements/py3.txt
+
 Dependencies
 ------------
 * python 2.7+
+* python 3.x (tested on python 3.3)
 
 
 Tests
