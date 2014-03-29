@@ -145,35 +145,38 @@ and so on. Char data offset means offsets from character start block.
 | **0x8c**        | 4 Bytes   | Stamina 2                | Depends on stats    |
 |                 | c_uint32  |                          | max: **160**        |
 +-----------------+-----------+--------------------------+---------------------+
-| **0x90**        | 4 Bytes   | Stamina 3                | Depends on stats    |
-|                 | c_uint32  |                          | max: **160**        |
+| **0x90**        | 8 Bytes   | Stamina 3                | Depends on stats    |
+|                 | c_long    |                          | max: **160**        |
 +-----------------+-----------+--------------------------+---------------------+
-| **0x98**        | 4 Bytes   | Vitality                 | Depends on level    |
-|                 | c_uint32  |                          | and so on (**30**)  |
+| **0x98**        | 8 Bytes   | Vitality                 | Depends on level    |
+|                 | c_long    |                          | and so on (**30**)  |
 +-----------------+-----------+--------------------------+---------------------+
-| **0xa0**        | 4 Bytes   | Attunement               | Depends on level    |
-|                 | c_uint32  |                          | and so on (**10**)  |
+| **0xa0**        | 8 Bytes   | Attunement               | Depends on level    |
+|                 | c_ulong   |                          | and so on (**10**)  |
 +-----------------+-----------+--------------------------+---------------------+
-| **0xa8**        | 4 Bytes   | Endurance                | Depends on level    |
-|                 | c_uint32  |                          | and so on (**50**)  |
+| **0xa8**        | 8 Bytes   | Endurance                | Depends on level    |
+|                 | c_ulong   |                          | and so on (**50**)  |
 +-----------------+-----------+--------------------------+---------------------+
-| **0xb0**        | 4 Bytes   | Strength                 | Depends on level    |
-|                 | c_uint32  |                          | and so on (**50**)  |
+| **0xb0**        | 8 Bytes   | Strength                 | Depends on level    |
+|                 | c_ulong   |                          | and so on (**50**)  |
 +-----------------+-----------+--------------------------+---------------------+
-| **0xb8**        | 4 Bytes   | Dextirity                | Depends on level    |
-|                 | c_uint32  |                          | and so on (**20**)  |
+| **0xb8**        | 8 Bytes   | Dextirity                | Depends on level    |
+|                 | c_ulong   |                          | and so on (**20**)  |
 +-----------------+-----------+--------------------------+---------------------+
-| **0xc0**        | 4 Bytes   | Intelligence             | Depends on level    |
-|                 | c_uint32  |                          | and so on (**10**)  |
+| **0xc0**        | 8 Bytes   | Intelligence             | Depends on level    |
+|                 | c_ulong   |                          | and so on (**10**)  |
 +-----------------+-----------+--------------------------+---------------------+
-| **0xc8**        | 4 Bytes   | Faith                    | Depends on level    |
-|                 | c_uint32  |                          | and so on (**10**)  |
+| **0xc8**        | 8 Bytes   | Faith                    | Depends on level    |
+|                 | c_ulong   |                          | and so on (**10**)  |
 +-----------------+-----------+--------------------------+---------------------+
-| **0xd8**        | 4 Bytes   | Humanity                 | Depends on level    |
-|                 | c_uint32  |                          | and so on (**00**)  |
+| **0xd0**        | 8 Bytes   | Unknown data             |                     |
+|                 | c_ulong   |                          |                     |
 +-----------------+-----------+--------------------------+---------------------+
-| **0xe0**        | 4 Bytes   | Resistance               | Depends on level    |
-|                 | c_uint32  |                          | and so on (**11**)  |
+| **0xd8**        | 8 Bytes   | Humanity                 | Depends on level    |
+|                 | c_ulong   |                          | and so on (**00**)  |
++-----------------+-----------+--------------------------+---------------------+
+| **0xe0**        | 8 Bytes   | Resistance               | Depends on level    |
+|                 | c_long    |                          | and so on (**11**)  |
 +-----------------+-----------+--------------------------+---------------------+
 | **0xe8**        | 4 Bytes   | Level                    | Depends on level    |
 |                 | c_uint32  |                          | and so on (**11**)  |
@@ -182,13 +185,14 @@ and so on. Char data offset means offsets from character start block.
 |                 | c_uint32  |                          | and so on (**9312**)|
 +-----------------+-----------+--------------------------+---------------------+
 | **0xf0**        | 8 Bytes   | Earned souls             | Depends on level    |
-|                 | c_uint32  |                          | and so on (**9991**)|
+|                 | c_ulong   |                          | and so on (**9991**)|
 +-----------------+-----------+--------------------------+---------------------+
-| **0xf8**        | 4 Bytes   | Unknown data             |                     |
-|                 | c_uint32  |                          |                     |
+| **0xf8**        | 4 Bytes   | Unknown data             | 0x00000000          |
+|                 | c_uint32  | Could be separator       |                     |
 +-----------------+-----------+--------------------------+---------------------+
-| **0xfc**        | 4 Bytes   | Earned souls             | Depends on level    |
-|                 | c_uint32  |                          | and so on (**9991**)|
+| **0xfc**        | 4 Bytes   | Soul statement: hollow,  | 0x00000000 - human  |
+|                 | c_uint32  | human (could be other    | 0x00000008 - hollow |
+|                 |           | state statuses)          |                     |
 +-----------------+-----------+--------------------------+---------------------+
 | **0x100**       | 28 Bytes  | Character's name         | Depends on your     |
 |                 | c_char_p  |                          | imagination         |
@@ -404,6 +408,9 @@ and so on. Char data offset means offsets from character start block.
 +-----------------+-----------+--------------------------+---------------------+
 | **0x2d0**       | 4 Bytes   | Fifth quick slot item    | Any accessible item |
 |                 | c_uint32  | type                     | type (203 for ex.)  |
++-----------------+-----------+--------------------------+---------------------+
+| **0x2d4**       | 4 Bytes   | Backpack items amount    | Depends             |
+|                 | c_uint32  |                          | 34                  |
 +-----------------+-----------+--------------------------+---------------------+
 | skip                                                                         |
 +-----------------+-----------+--------------------------+---------------------+
