@@ -53,6 +53,27 @@ class ItemStructure(Structure):
     ]
 
 
+class MPlayerAccountStructure(Structure):
+    """ Multi player account structure data store """
+    _fields_ = [
+        ('marker1', c_uint32),       # (0x100) flag
+        ('marker2', c_uint32),       # (0x3400) flag
+        ('byte_1', c_byte),          # probably flag
+        ('profile_name', c_char_p),  # char's name 14 + \x00 * 2
+        ('byte_2', c_byte),          # probably flag
+        ('byte_3', c_byte),          # probably flag
+        ('byte_4', c_byte),          # probably flag
+        ('statement_1', c_uint32),   # player's data
+        ('statement_2', c_uint32),   # player's data
+        ('statement_3', c_uint32),   # player's data
+        ('statement_4', c_uint32),   # player's data
+        ('statement_5', c_uint32),   # player's data
+        ('statement_6', c_uint32),   # player's data
+        ('statement_7', c_uint32),   # player's data
+        ('statement_8', c_uint32)    # player's data
+    ]
+
+
 class DSSaveFileParser(object):
     """ Dark Souls save file parser
     original gist: https://gist.github.com/infuasto/8382836

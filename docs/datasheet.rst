@@ -114,9 +114,12 @@ Headers format and structures
 Slot block
 ----------
 
-Slot block data contains very useful information, stats, items, deaths count
-and so on. Char data offset means offsets from character start block.
-0x2c0 + offset for 1 slot character
+.. note::
+
+    Slot block data contains very useful information, stats, items, deaths count
+    and so on. Char data offset means offsets from character start block.
+    0x2c0 + ``offset`` for 1 slot character and so on.
+
 
 +-----------------+-----------+--------------------------+---------------------+
 | Char data offset| Size/Type | Explain                  | Value               |
@@ -277,7 +280,7 @@ and so on. Char data offset means offsets from character start block.
 | **0x16e**       | 1 Bytes   | Color                    | Depends on your     |
 |                 | c_uint8   |                          | choice (**6**)      |
 +-----------------+-----------+--------------------------+---------------------+
-| skip                                                                         |
+| *skip*                                                                       |
 +-----------------+-----------+--------------------------+---------------------+
 | **0x228**       | 4 Bytes   | Left arrows slot         | Unknown data type   |
 |                 | c_uint32  |                          |                     |
@@ -327,8 +330,8 @@ and so on. Char data offset means offsets from character start block.
 | **0x264**       | 4 Bytes   | Fifth quick slot item    | Unknown data        |
 |                 | c_uint32  | type                     |                     |
 +-----------------+-----------+--------------------------+---------------------+
-| **0x268**       | 4 Bytes   | Unknown data?            | 0x00000001 or       |
-|                 | c_uint32  | (Could be spell)         | 0x00000000          |
+| **0x268**       | 4 Bytes   | One hand/Double hand     | 0x00000001 - 1 hand |
+|                 | c_uint32  | switcher weapon use      | 0x00000003 - doubled|
 +-----------------+-----------+--------------------------+---------------------+
 | **0x26c**       | 4 Bytes   | Left hand weapon/shield  | 0x00000001 or       |
 |                 | c_uint32  | flag                     | 0x00000000          |
@@ -412,7 +415,24 @@ and so on. Char data offset means offsets from character start block.
 | **0x2d4**       | 4 Bytes   | Backpack items amount    | Depends             |
 |                 | c_uint32  |                          | 34                  |
 +-----------------+-----------+--------------------------+---------------------+
-| skip                                                                         |
+| **0x2d8**       | 4 Bytes   | Unknown data             |                     |
+|                 | c_uint32  |                          |                     |
++-----------------+-----------+--------------------------+---------------------+
+| **0x2dc**       | 4 Bytes   | Unknown data             |                     |
+|                 | c_uint32  |                          |                     |
++-----------------+-----------+--------------------------+---------------------+
+|                 | **End of stats block**                                     |
++-----------------+-----------+--------------------------+---------------------+
+| **0x2e0**       | **Start block for your backpack**                          |
+|                 |                                                            |
++-----------------+-----------+--------------------------+---------------------+
+|                 | skip (each storage item allocates 4 * 7 bytes of space)    |
+|                 | see item storage block description below                   |
++-----------------+-----------+--------------------------+---------------------+
+| **0xe2e0**      | **End block of your backpack**                             |
+|                 | last item storage points on **0xe2c4**                     |
++-----------------+-----------+--------------------------+---------------------+
+| *skip*                                                                       |
 +-----------------+-----------+--------------------------+---------------------+
 | **0xe344**      | 4 Bytes   | Active spell slot        | Depends on your     |
 |                 | c_uint32  |                          | sorcery slots amount|
@@ -421,7 +441,7 @@ and so on. Char data offset means offsets from character start block.
 | **0xe35c**      | 4 Bytes   | Active slot of something | Unknown type of data|
 |                 | c_uint32  |                          |                     |
 +-----------------+-----------+--------------------------+---------------------+
-| skip                                                                         |
+| *skip*                                                                       |
 +-----------------+-----------+--------------------------+---------------------+
 | **0x1f128**     | 4 Bytes   | Deaths                   | Depends on your     |
 |                 | c_uint32  |                          | skill :D (**155**)  |
@@ -532,6 +552,8 @@ Items
 General items and weapons/armour structure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. _back-pack:
+
 .. code-block:: python
 
     from ctypes import
@@ -585,3 +607,29 @@ Items type
 Weapons and armour type
 ~~~~~~~~~~~~~~~~~~~~~~~
 .. include:: data/weapons.rst
+
+
+Multiplayer data
+~~~~~~~~~~~~~~~~
+60 bytes each account entry
+
+.. code-block:: python
+
+    from ctypes import
+    weapon_proto_structure = {
+        'marker1': c_uint32,      # (0x100) flag
+        'marker2': c_uint32,      # (0x3400) flag
+        'byte_1': c_byte,         # probably flag
+        'name': c_char_p(16),     # char's name 14 + \x00 * 2
+        'byte_2': c_byte,         # probably flag
+        'byte_3': c_byte,         # probably flag
+        'byte_4': c_byte,         # probably flag
+        'statement_1': c_uint32,  # player's data
+        'statement_2': c_uint32,  # player's data
+        'statement_3': c_uint32,  # player's data
+        'statement_4': c_uint32,  # player's data
+        'statement_5': c_uint32,  # player's data
+        'statement_6': c_uint32,  # player's data
+        'statement_7': c_uint32,  # player's data
+        'statement_8': c_uint32,  # player's data
+    }

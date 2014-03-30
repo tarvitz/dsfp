@@ -64,7 +64,7 @@ if __name__ == '__main__':
                         type=str, nargs=1,
                         help='save file', required=True)
     parser.add_argument('-s', '--slot', metavar='N', type=int, nargs=1,
-                        default=1,
+                        default=1, required=True,
                         help='character slot')
     parser.add_argument('-B', '--start-offset',
                         type=str, required=False,
