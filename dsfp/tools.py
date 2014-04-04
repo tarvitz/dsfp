@@ -13,10 +13,10 @@ import six
 class BinDiff(object):
     """ Binary difference class """
 
-    def __init__(self, stream_a, stream_b, skip_table=None,
+    def __init__(self, stream_a, stream_b, skip_tables=None,
                  start_offset=0x0,
                  end_offset=None):
-        self.skip_table = skip_table or []
+        self.skip_tables = skip_tables or []
 
         self.stream_a = self.patch_table(
             six.BytesIO(stream_a)
@@ -67,10 +67,12 @@ class BinDiff(object):
         :rtype: stream
         """
 
-        if self.skip_table:
-            for item in self.skip_table:
-                stream.seek(item['offset'] + offset)
-                stream.write(six.b('\x00' * item['size']))
+        if self.skip_tables:
+            for tbl in self.skip_tables:
+                for item in tbl['SKIP_TABLE']:
+                #for item in self.skip_tables:
+                    stream.seek(item['offset'] + offset)
+                    stream.write(six.b('\x00' * item['size']))
         return stream
 
     def process_diff(self, alignment=0x4):

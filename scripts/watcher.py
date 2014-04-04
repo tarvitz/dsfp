@@ -50,11 +50,11 @@ class SimpleWatcher(object):
     :keyword int start_offset: start inspections with given offset
     :keyword int start_offset: end inspections with given offset
     """
-    def __init__(self, filename, slot=0, skip_table=None, use_curses=False,
+    def __init__(self, filename, slot=0, skip_tables=None, use_curses=False,
                  start_offset=0x0, end_offset=127384):
         self.filename = filename
         self.slot = slot
-        self.skip_table = skip_table
+        self.skip_tables = skip_tables or []
         self.use_curses = use_curses
         self.start_offset = start_offset
         self.end_offset = end_offset
@@ -158,7 +158,7 @@ class SimpleWatcher(object):
                 old_data_stream = six.BytesIO(old_data)
 
                 diff = BinDiff(data, old_data,
-                               skip_table=self.skip_table['SKIP_TABLE'],
+                               skip_tables=self.skip_tables,
                                start_offset=self.start_offset,
                                end_offset=self.end_offset,)
                 diff_log = diff.process_diff()
@@ -197,7 +197,7 @@ def main(ns):
     filename = ns.filename[0]
     use_curses = ns.use_curses
     backup = ns.backup
-    skip_table = None
+    skip_tables = None
     start_offset = ns.start_offset
     end_offset = ns.end_offset
 
@@ -211,7 +211,10 @@ def main(ns):
             )
 
     if ns.skip_table:
-        skip_table = json.loads(ns.skip_table.read())
+        skip_tables = []
+        for json_file in ns.skip_table:
+            load = json.loads(json_file.read())
+            skip_tables.append(load)
 
     if not os.path.exists(SNAPSHOT_DIR):
         os.makedirs(SNAPSHOT_DIR)
@@ -225,7 +228,7 @@ def main(ns):
             'start_offset': start_offset, 'end_offset': end_offset})
 
     watcher = SimpleWatcher(slot=slot, filename=filename,
-                            skip_table=skip_table,
+                            skip_tables=skip_tables,
                             use_curses=use_curses,)
     try:
         watcher.run()
@@ -245,7 +248,9 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--slot', metavar='N', type=int, nargs=1,
                         default=1,
                         help='character slot')
-    parser.add_argument('-T', '--skip-table', metavar='table.json',
+    parser.add_argument('-T', '--skip-table',
+                        metavar='table.json,table2.json',
+                        nargs='+',
                         type=argparse.FileType('r'),
                         help=(
                             'use data inside of json file for skipping diff'
