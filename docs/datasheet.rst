@@ -446,8 +446,8 @@ Slot block
 | **0x1f128**     | 4 Bytes   | Deaths                   | Depends on your     |
 |                 | c_uint32  |                          | skill :D (**155**)  |
 +-----------------+-----------+--------------------------+---------------------+
-| **0x1f138**     | 4 Bytes   | Something really tasty,  |                     |
-|                 | c_uint32  | could be boss deaths     |                     |
+| **0x1f138**     | 4 Bytes   | Phantom encounters       |                     |
+|                 | c_uint32  | (PVP/Co-op/the likes)    |                     |
 |                 |           | (may be)                 |                     |
 +-----------------+-----------+--------------------------+---------------------+
 
