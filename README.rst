@@ -109,3 +109,25 @@ Documentation
 ~~~~~~~~~~~~~
 Whole bunch of the docs you can read by clicking this link
 `dsfp.readthedocs.org <http://dsfp.readthedocs.org>`_
+
+
+Development
+~~~~~~~~~~~
+
+.. note::
+
+    Huge buch of data now represented in datasheets and still not covered in
+    dsfp "api" just cause whole fileformat and its datasheet is the main priority.
+    You can use it for build your own parser or just read some non-random data
+    from *.sl2 file format.
+    Though dsfp is not complete as it should, please search/read information in
+    the docs mentioned above.
+
+Roadmap
+~~~~~~~
+I have no certain roadmap for this project and I inspect the data whenever I want
+to do it. In general this moments could be very short/long from time to time. So don't
+expect me finishing this work to some certain moment or something.
+
+Use ``./scripts/watcher.py`` and the other scripts (or may be another methods) to inspect
+data you need, contact me if you want to share them and have fun ;).
