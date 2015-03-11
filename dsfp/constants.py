@@ -38,8 +38,10 @@ DATA_MAP = [
     {'offset': 0x74, 'type': 'I', 'field': 'hp2', 'size': 4},
     # unrevealed
     {'offset': 0x78, 'type': 'I', 'field': '0x78', 'size': 4},
-    #{'offset': 0x7c, 'type': 'I', 'field': '0x7c', 'size': 4},  # same as 0x78
-    #{'offset': 0x80, 'type': 'I', 'field': '0x80', 'size': 4},  # same as 0x78
+    # same as 0x78
+    # {'offset': 0x7c, 'type': 'I', 'field': '0x7c', 'size': 4},
+    # same as 0x78
+    # {'offset': 0x80, 'type': 'I', 'field': '0x80', 'size': 4},
 
     # 4 bytes space between chars stats
     {'offset': 0x88, 'type': 'I', 'field': 'stamina', 'size': 4},
@@ -61,7 +63,7 @@ DATA_MAP = [
     {'offset': 0xf0, 'type': 'I', 'field': 'earned', 'size': 4},
     # 28 bytes, 2*13 + finishing zero for char name
 
-    {'offset': 0x100, 'type': 'c', 'field': 'name', 'size': 14*2},
+    {'offset': 0x100, 'type': 'c', 'field': 'name', 'size': 14 * 2},
     {'offset': 0x122, 'type': '?', 'field': 'male', 'size': 1},
     # enums
     {'offset': 0x126, 'type': 'B', 'field': 'class', 'size': 1},
@@ -80,6 +82,6 @@ DATA_MAP = [
 
 ITEMS_MAP = [
     # 0x448 - items start offset
-    #{'offset': 0xba4, 'type': 'ii', 'size': 8, 'name': 'estus'}
-    #{'offset': 0xb1c, 'type': 'ii', 'size': 8, 'name': 'estus'}
+    # {'offset': 0xba4, 'type': 'ii', 'size': 8, 'name': 'estus'}
+    # {'offset': 0xb1c, 'type': 'ii', 'size': 8, 'name': 'estus'}
 ]

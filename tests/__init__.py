@@ -1,3 +1,3 @@
-from .reader import *
-from .tools import *
-from .utils import *
+from .test_reader import *
+from .test_tools import *
+from .test_utils import *

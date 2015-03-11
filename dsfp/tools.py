@@ -70,7 +70,6 @@ class BinDiff(object):
         if self.skip_tables:
             for tbl in self.skip_tables:
                 for item in tbl['SKIP_TABLE']:
-                #for item in self.skip_tables:
                     stream.seek(item['offset'] + offset)
                     stream.write(six.b('\x00' * item['size']))
         return stream

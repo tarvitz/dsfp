@@ -7,7 +7,7 @@
 .. moduleauthor:: Tarvitz<tarvitz@blacklibrary.ru>
 """
 
-from ctypes import *
+from ctypes import Structure, c_uint32, c_ulong, Union
 
 __all__ = ['get_structure_fmt', ]
 

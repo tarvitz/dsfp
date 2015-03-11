@@ -1,14 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import bz2
 import six
 
 import struct
-from ctypes import *
+from ctypes import c_uint32, c_ulong, c_char_p, Structure
 
-from .utils import *
-from .exceptions import *
-from .constants import *
+from .utils import get_structure_fmt
+from .exceptions import FileTypeException
+from .constants import (
+    BLOCK_SIZE, BLOCK_INDEX, BLOCK_DATA_OFFSET, SLOTS_METADATA_OFFSET,
+    SLOTS_AMOUNT_OFFSET, TIME_BLOCK_SIZE, TIME_INDEX, DATA_MAP, ITEMS_MAP
+)
 
 
 class SlotDataHeaderStructure(Structure):
@@ -21,7 +26,7 @@ class SlotDataHeaderStructure(Structure):
 
 class SlotHeaderStructure(Structure):
     """ Characters containers slots header structure """
-    #_anonymous_ = ("slot_data",)
+    # _anonymous_ = ("slot_data",)
     _fields_ = [
         ('block_metadata_high', c_uint32),    # hex(0x50000000)
         ('block_metadata_low', c_uint32),     # hex(0xFFFFFFFF)
