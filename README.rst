@@ -58,8 +58,9 @@ document build requirements stored in py3.txt
 
 Dependencies
 ------------
-* python 2.7+
-* python 3.3+
+* python 2.7
+* python 3.3
+* python 3.4
 
 
 Tests
