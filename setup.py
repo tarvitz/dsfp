@@ -34,8 +34,10 @@ setup(
     name='dsfp',
     author='Nickolas Fox <tarvitz@blacklibrary.ru>',
     version=version,
+
     author_email='tarvitz@blacklibrary.ru',
     #url='http://pypi.python.org/pypi/dsfp',
+
     download_url='https://github.com/tarvitz/dsfp/archive/master.zip',
     description='Darksouls Save File Parser for fetching data issues',
     long_description=open(readme).read(),
@@ -43,6 +45,7 @@ setup(
     platforms=['OS Independent'],
     classifiers=CLASSIFIERS,
     install_requires=install_requires,
-    packages=find_packages(exclude=[]),
+    packages=find_packages(exclude=['tests', 'docs']),
+    test_suite='tests',
     include_package_data=True,
     zip_safe=False)

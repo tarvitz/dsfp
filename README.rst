@@ -64,11 +64,12 @@ Dependencies
 
 Tests
 ~~~~~
+Simply run ``python setup.py test`` or
 You could run tests via `python -m unittest module` or via `run_tests.sh` script
 
 .. code-block:: bash
 
-   user@localhost$ ./run_tests.sh dsfp.tests.TestDSFPReader
+   user@localhost$ ./run_tests.sh tests.TestDSFPReader
 
 Fast Usage
 ~~~~~~~~~~
