@@ -10,12 +10,14 @@ version = ".".join([str(i) for i in __import__('dsfp').__VERSION__])
 readme = os.path.join(os.path.dirname(__file__), 'README.rst')
 
 CLASSIFIERS = [
-    'Development Status :: 1 - Alpha',
-    'Environment :: Darksouls Save File Parser',
+    'Development Status :: 2 - Pre-Alpha',
+    'Environment :: Console',
     'Intended Audience :: Developers',
     'License :: OSI Approved :: MIT License',
     'Operating System :: OS Independent',
     'Programming Language :: Python',
+    'Natural Language :: English',
+    'Topic :: Utilities'
 ]
 
 install_requires = [

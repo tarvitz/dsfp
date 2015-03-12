@@ -1,7 +1,10 @@
-Darksouls Save File Parser
+DarkSouls Save File Parser
 ==========================
 .. image:: https://travis-ci.org/tarvitz/dsfp.svg?branch=master
     :target: https://travis-ci.org/tarvitz/dsfp
+
+.. image:: https://badge.fury.io/py/dsfp.svg
+  :target: http://badge.fury.io/py/dsfp
 
 
 * DSFP means Darksouls Save File Parser.
