@@ -1,10 +1,16 @@
 DarkSouls Save File Parser
 ==========================
+.. _badges:
+
 .. image:: https://travis-ci.org/tarvitz/dsfp.svg?branch=master
     :target: https://travis-ci.org/tarvitz/dsfp
 
 .. image:: https://badge.fury.io/py/dsfp.svg
   :target: http://badge.fury.io/py/dsfp
+
+.. image:: https://pypip.in/implementation/dsfp/badge.svg
+    :target: https://pypi.python.org/pypi/dsfp/
+    :alt: Supported Python implementations
   
 .. image:: https://pypip.in/license/dsfp/badge.svg
   :target: https://pypi.python.org/pypi/dsfp/
