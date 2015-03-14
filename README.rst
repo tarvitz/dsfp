@@ -6,8 +6,8 @@ DarkSouls Save File Parser
 .. image:: https://badge.fury.io/py/dsfp.svg
   :target: http://badge.fury.io/py/dsfp
   
-.. image:: https://pypip.in/license/<PYPI_PKG_NAME>/badge.svg
-  :target: https://pypi.python.org/pypi/<PYPI_PKG_NAME>/
+.. image:: https://pypip.in/license/dsfp/badge.svg
+  :target: https://pypi.python.org/pypi/dsfp/
   :alt: License
 
 * DSFP means Darksouls Save File Parser.
