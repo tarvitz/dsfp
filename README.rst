@@ -16,6 +16,10 @@ DarkSouls Save File Parser
   :target: https://pypi.python.org/pypi/dsfp/
   :alt: License
 
+.. image:: https://pypip.in/status/dsfp/badge.svg
+    :target: https://pypi.python.org/pypi/dsfp/
+    :alt: Development Status
+
 * DSFP means Darksouls Save File Parser.
 * `Dark Souls <http://darksouls.wikia.com/wiki/Dark_Souls>`_ is game of
   Namco Bandai with pretty hard to get it finished without being killed.
