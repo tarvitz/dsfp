@@ -1,0 +1,224 @@
+//--------------------------------------
+//--- 010 Editor v5.0 Binary Template
+//
+// File: DRAKS0005.sl2
+// Author: Tarvitz
+// Revision: 0.0.1
+// Purpose: 4 fun
+//--------------------------------------
+
+// META
+typedef struct{
+    int unknown;
+    int unknown2;
+    uint64 block_size;
+    uint start <bgcolor=cLtGreen>;
+    uint marker <comment="each next marker has +26d to its prev value">;
+    uint space_size <bgcolor=cLtAqua>;
+    uint end;
+} SlotMeta;
+
+typedef struct{
+    char slot[26] <bgcolor=cLtBlue>;
+} DSSaveMeta;
+
+// END OF META
+
+// UNKNOWN
+
+typedef struct{
+    BYTE unknown[108];
+} StatsUnknown1;
+
+typedef struct{
+    BYTE unknown[48] <comment="don't event know what it possible be">;
+    // uint unknown_11;
+    // uint unknown_12;
+    // uint unknown_13;
+    // uint unknown_14;
+    // uint unknown_15;
+    // uint unknown_16;
+    // uint unknown_17;
+    // uint unknown_18;
+    // uint unknown_19;
+    // uint unknown_20;
+    // uint unknown_21;
+    // uint unknown_22;
+} StatsUnknown2;
+
+// Character stats
+typedef enum <uint> {
+    HUMAN = 0, HOLLOW = 8
+} CharState;
+
+typedef enum<BYTE>{
+   warrior = 0, knight = 1, wanderer = 2,  thief = 3, bandit = 4,
+   hunter = 5, sorcerer = 6, pyromancer = 7, cleric = 8, deprived = 9
+} CharClass;
+
+typedef enum<BYTE>{
+    average = 0, slim = 1, very_slim = 2, large = 3, very_large = 4,
+    large_upper_body = 5, large_lower_body = 6, top_heavy = 7, tiny_head = 8
+} CharBody;
+
+typedef enum<BYTE>{
+  commoner = 0, delta_farmer = 1, astora_noble = 2, dragon_scholar = 3,
+  thorolund_cleric = 4, jubilant_catarina = 5, dubious_carim = 6,
+  classic_zena = 7, ferie_great_swamp = 8, far_east_traveler = 9
+} CharFace;
+
+typedef enum<BYTE>{
+    shaved = 0, receding = 1, short_h = 2, swept_black = 3, ponytail = 4,
+    wild = 5, pared_center = 6, semi_long = 7, curly = 8, bobbed = 9
+} CharHair;
+
+typedef enum<BYTE>{
+    black = 0, dark_brown = 1, light_brown = 2, dark_red = 3, dark_blue = 4,
+    gray = 5, gold = 6, silver = 7, dark_purple = 8, red = 9   
+} CharHairColor;
+
+typedef enum<BYTE>{
+   none = 0, blessing = 1, firebomb = 2, twin_humanities = 3, binoculars = 4,
+   pendant = 5, master_key = 6, tiny_being_ring = 7, old_witch_ring = 8
+} CharGift;
+
+typedef struct{
+    uint current;
+    uint total;
+    uint total_2;
+} HP;
+
+typedef struct{
+    uint current;
+    uint total;
+    uint total_2;
+} STAMINA;
+
+typedef enum<BYTE>{
+    FEMALE = 0,
+    MALE = 1
+} GENDER;
+
+
+typedef struct{
+    uint64 vitality;
+    uint64 attuentment;
+    uint64 endurance;
+    uint64 strength;
+    uint64 dextirity;
+    uint64 intelligence;
+    uint64 faith;
+    uint64 humanity;
+    uint64 unknow;
+    uint64 resistance;
+
+    uint level;
+    uint souls;
+    uint64 earned_souls;
+    uint unknown_8 <comment="could be coventant">;
+    CharState state;
+    wchar_t name[14] <comment="utf-8 using">; // 3c0
+    BYTE unkown_9[6];
+    GENDER gender; //3e2
+    CharClass klass;
+    CharBody body;
+    CharGift gift;
+} CharStats;
+
+typedef struct{
+    uint def;
+    uint def_1;
+    uint def_2;
+} MAGIC_DEF;
+
+
+typedef struct{
+    HP hp <bgcolor=cLtRed>;
+    MAGIC_DEF magic_def <comment="it could be probably no magical defence">;
+    uint unknown_1;
+    STAMINA stamina <bgcolor=cLtGreen>;
+    uint unknown_2;
+    CharStats body;
+
+    BYTE unknown_3;
+    BYTE unknown_4;
+   
+    StatsUnknown2 unknown_;
+  
+    uint poison_resistance;
+    uint bleeding_resistence;
+    uint poison_resistance_2;
+    uint curse_resistence;
+
+    CharFace face;
+    CharFace face2;
+    CharHair hair;
+    CharHairColor hair_color;
+    // 7 bytes
+    BYTE skip_0[186];
+
+} Stats;
+
+typedef struct {
+    // Header for the file
+    char     dsSignature[8] <comment="BND4 file format">;    //0x424e4434 0x00000000
+    char     dsUnkwn1[4];
+    int      dsContainersAmount <bgcolor=cLtBlue, 
+                                 comment="Amount of file save slots 10 available + 1 hidden">; // container size
+    char     dsUnkwn2[8];
+    char     dsVersion[16] <comment="Probably a version">;
+    uint     dsSize <bgcolor=cLtRed,
+                     comment="Meta size">;  // it points for a first readable file slot block (end of metadata block)\
+    uint     ds_reserved1;
+    uint     ds_uint_unknown1;
+    char     ds_char_unknown2[12];
+    SlotMeta chunks[dsContainersAmount];
+    DSSaveMeta file_slots[dsContainersAmount];
+    char      end_meta[2];
+    
+    local uint i;
+    // at least parse only first slot, remove "/ dsContainersAmount to identify other data"
+    for (i = 0; i < (dsContainersAmount / dsContainersAmount); i++){
+    struct {
+          local int unknown_size_1 = sizeof(StatsUnknown1);
+          local int stats_size = sizeof(Stats);
+          local int space = unknown_size_1 + stats_size;
+
+          StatsUnknown1 unknown <comment="unknown data">;
+          Stats stats;
+          BYTE data[chunks[i].block_size - space] <bgcolor=cLtYellow>;
+          BYTE offset[chunks[i].space_size] <bgcolor=cLtRed>;
+        } SaveSlot;
+    }
+
+} DSSaveFile <read=ReadDSMETA>;
+
+string ReadDSMETA(DSSaveFile &file )
+{
+    if( exists( file.dsSignature ) )
+        return file.dsSignature;
+    else
+        return "";
+}
+
+local uint tag;
+LittleEndian(); 
+//while( !FEof() )
+//{
+    // Read a tag
+    tag = ReadUInt( FTell() );
+
+    // Read data depending upon tag - should start with 'PK'.
+    // Note that when duplicate variables are defined, they
+    // are made into an array (see 'Using Templates and Structs'
+    // in the help file).
+    if( tag == 0x34444e42 )
+    {
+        SetBackColor( cLtGray );
+        DSSaveFile record;
+    }
+    else{
+        Warning("Not a Dark Souls prepare to die edition file save format");
+        return -1;
+    }
+//}
