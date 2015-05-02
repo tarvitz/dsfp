@@ -19,7 +19,7 @@ typedef struct{
 } SlotMeta;
 
 typedef struct{
-    char slot[26] <bgcolor=cLtBlue>;
+    wchar_t slot[13] <bgcolor=cLtBlue>;
 } DSSaveMeta;
 
 // END OF META
@@ -27,11 +27,16 @@ typedef struct{
 // UNKNOWN
 
 typedef struct{
-    BYTE unknown[108];
+    byte unknown[16];      
+} Unknown1;
+
+typedef struct{
+    Unknown1 unknown_data;
+    BYTE unknown[92];
 } StatsUnknown1;
 
 typedef struct{
-    BYTE unknown[48] <comment="don't event know what it possible be">;
+    BYTE unknown[47] <comment="don't event know what it possible be">;
     // uint unknown_11;
     // uint unknown_12;
     // uint unknown_13;
@@ -78,7 +83,7 @@ typedef enum<BYTE>{
 } CharHairColor;
 
 typedef enum<BYTE>{
-   none = 0, blessing = 1, firebomb = 2, twin_humanities = 3, binoculars = 4,
+   none = 0, blessing = 1, black_firebomb = 2, twin_humanities = 3, binoculars = 4,
    pendant = 5, master_key = 6, tiny_being_ring = 7, old_witch_ring = 8
 } CharGift;
 
@@ -117,9 +122,13 @@ typedef struct{
     uint64 earned_souls;
     uint unknown_8 <comment="could be coventant">;
     CharState state;
-    wchar_t name[14] <comment="utf-8 using">; // 3c0
+    wchar_t name[14] <comment="utf-8 using">;
     BYTE unkown_9[6];
-    GENDER gender; //3e2
+    GENDER gender;
+
+    byte unknown_3 <comment="not class">;
+    byte unknown_4;
+    byte unknown_5;
     CharClass klass;
     CharBody body;
     CharGift gift;
@@ -139,39 +148,36 @@ typedef struct{
     STAMINA stamina <bgcolor=cLtGreen>;
     uint unknown_2;
     CharStats body;
-
-    BYTE unknown_3;
-    BYTE unknown_4;
-   
     StatsUnknown2 unknown_;
   
     uint poison_resistance;
     uint bleeding_resistence;
     uint poison_resistance_2;
     uint curse_resistence;
+    uint unknown_3 <comment="could be resistence">;
 
     CharFace face;
-    CharFace face2;
-    CharHair hair;
     CharHairColor hair_color;
+    CharHair hair_2;
     // 7 bytes
-    BYTE skip_0[186];
+    BYTE skip_0[187];
 
 } Stats;
 
 typedef struct {
     // Header for the file
     char     dsSignature[8] <comment="BND4 file format">;    //0x424e4434 0x00000000
-    char     dsUnkwn1[4];
-    int      dsContainersAmount <bgcolor=cLtBlue, 
+    uint     dsUnknown <comment="May be revision">;
+    uint     dsContainersAmount <bgcolor=cLtBlue, 
                                  comment="Amount of file save slots 10 available + 1 hidden">; // container size
-    char     dsUnkwn2[8];
+    uint     dsUnknown2;
+    uint     dsUnkwown3;
     char     dsVersion[16] <comment="Probably a version">;
     uint     dsSize <bgcolor=cLtRed,
                      comment="Meta size">;  // it points for a first readable file slot block (end of metadata block)\
     uint     ds_reserved1;
     uint     ds_uint_unknown1;
-    char     ds_char_unknown2[12];
+    byte     ds_char_unknown2[12];
     SlotMeta chunks[dsContainersAmount];
     DSSaveMeta file_slots[dsContainersAmount];
     char      end_meta[2];
