@@ -1,0 +1,40 @@
+//--------------------------------------
+//--- 010 Editor v5.0 Binary Template
+//
+// File: Item types
+// Author: Tarvitz
+// Revision: 0.0.1
+// Purpose: for DarkSouls_PTDE.bt
+//--------------------------------------
+typedef enum<uint>{
+    white_chalk = 0x65,
+    red_chalk = 0x66,
+    // boxes
+    box_1 = 0xa2a,
+    box_2 = 0xa30,
+    // keys
+    key_1 = 0x7d1,
+    key_2 = 0x7d2,
+    key_3 = 0x7d3,
+    key_4 = 0x7d4,
+    key_5 = 0x7d5,
+    key_6 = 0x7d6,
+    key_7 = 0x7d7,
+    key_8 = 0x7d8,
+    key_9 = 0x7d9,
+    key_10 = 0x7da,
+    key_11 = 0x7db,
+    key_12 = 0x7dc,
+    key_13 = 0x7dd,
+    key_14 = 0x7de,
+    key_15 = 0x7df,
+    key_16 = 0x7e0,
+    key_17 = 0x7e1,
+    key_18 = 0x7e2,
+    key_19 = 0x7e3,
+    key_20 = 0x7e4,
+    key_21 = 0x7e5,
+    key_22 = 0x7e6,
+    // blank
+    blank = 0xffffffff
+} Item;

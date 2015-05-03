@@ -1,0 +1,21 @@
+//--------------------------------------
+//--- 010 Editor v5.0 Binary Template
+//
+// File: Unknown.bt
+// Author: Tarvitz
+// Revision: 0.0.1
+// Purpose: for DarkSouls_PTDE.bt
+//--------------------------------------
+// UNKNOWN
+typedef struct{
+    byte unknown[16];      
+} Unknown1;
+
+typedef struct{
+    Unknown1 unknown_data<fgcolor=cLtRed>;
+    BYTE unknown[92];
+} StatsUnknown1;
+
+typedef struct{
+    BYTE unknown[47] <comment="don't event know what it possible be">;
+} StatsUnknown2;

@@ -1,0 +1,22 @@
+//--------------------------------------
+//--- 010 Editor v5.0 Binary Template
+//
+// File: Meta.br
+// Author: Tarvitz
+// Revision: 0.0.1
+// Purpose: for DarkSouls_PTDE.bt
+//--------------------------------------
+
+typedef struct{
+    int unknown;
+    int unknown2;
+    uint64 block_size;
+    uint start <bgcolor=cLtGreen>;
+    uint marker <comment="each next marker has +26d to its prev value">;
+    uint space_size <bgcolor=cLtAqua>;
+    uint end;
+} SlotMeta;
+
+typedef struct{
+    wchar_t slot[13] <bgcolor=cLtBlue>;
+} DSSaveMeta;

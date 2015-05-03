@@ -1,0 +1,75 @@
+//--------------------------------------
+//--- 010 Editor v5.0 Binary Template
+//
+// File: Char.bt
+// Author: Tarvitz
+// Revision: 0.0.1
+// Purpose: for DarkSouls_PTDE.bt
+//--------------------------------------
+// Character stats
+typedef enum <uint> {
+    HUMAN = 0, HOLLOW = 8
+} CharState;
+
+typedef enum<BYTE>{
+   warrior = 0, knight = 1, wanderer = 2,  thief = 3, bandit = 4,
+   hunter = 5, sorcerer = 6, pyromancer = 7, cleric = 8, deprived = 9
+} CharClass;
+
+typedef enum<BYTE>{
+    average = 0, slim = 1, very_slim = 2, large = 3, very_large = 4,
+    large_upper_body = 5, large_lower_body = 6, top_heavy = 7, tiny_head = 8
+} CharBody;
+
+typedef enum<BYTE>{
+  commoner = 0, delta_farmer = 1, astora_noble = 2, dragon_scholar = 3,
+  thorolund_cleric = 4, jubilant_catarina = 5, dubious_carim = 6,
+  classic_zena = 7, ferie_great_swamp = 8, far_east_traveler = 9
+} CharFace;
+
+typedef enum<BYTE>{
+    shaved = 0, receding = 1, short_h = 2, swept_black = 3, ponytail = 4,
+    wild = 5, pared_center = 6, semi_long = 7, curly = 8, bobbed = 9
+} CharHair;
+
+typedef enum<BYTE>{
+    black = 0, dark_brown = 1, light_brown = 2, dark_red = 3, dark_blue = 4,
+    gray = 5, gold = 6, silver = 7, dark_purple = 8, red = 9   
+} CharHairColor;
+
+typedef enum<BYTE>{
+   none = 0, blessing = 1, black_firebomb = 2, twin_humanities = 3, binoculars = 4,
+   pendant = 5, master_key = 6, tiny_being_ring = 7, old_witch_ring = 8
+} CharGift;
+
+typedef struct{ uint current; uint total; uint total_2; } HP;
+typedef struct{ uint current; uint total; uint total_2; } STAMINA;
+typedef enum<BYTE>{ FEMALE = 0, MALE = 1} GENDER;
+
+typedef struct{
+    uint64 vitality; uint64 attuentment; uint64 endurance;
+    uint64 strength; uint64 dextirity; uint64 intelligence;
+    uint64 faith; uint64 humanity; uint64 unknow; uint64 resistance;
+
+    uint level; uint souls;
+    uint64 earned_souls;
+    uint unknown_8 <comment="could be coventant">;
+    CharState state;
+    wchar_t name[14] <comment="utf-8 using">;
+    BYTE unkown_9[6];
+    GENDER gender;
+
+    byte unknown_3 <comment="not class">;
+    byte unknown_4; byte unknown_5;
+    
+    CharClass klass;
+    CharBody body;
+    CharGift gift;
+    byte unknown_5;
+} CharStats;
+
+typedef struct{
+    uint def;
+    uint def_1;
+    uint def_2;
+} MAGIC_DEF;
