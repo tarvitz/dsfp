@@ -30,3 +30,16 @@ typedef struct{
     // the accumulator blanks and durability losts 1 point.
     uint durability_hits <name="durability hits">;
 } Backpack;
+
+typedef struct{
+    //ItemType type<name="type">;
+    // Item item<name="item">;
+    uint blank;
+    uint item_type_item; // <-- ItemType | item
+    uint unknown1;
+    uint unknown2;
+    uint durability;
+    uint unknown4;
+    uint unknown5;
+    uint unknown6;
+} BottomlessBox;
