@@ -80,7 +80,8 @@ Headers format and structures
 |                 | c_uint32  | an some sort of offsets |                     |
 +-----------------+-----------+-------------------------+---------------------+
 | **0x58**        | 4 bytes   | Skip the amount of bytes| hex: **0x04**       |
-|                 | c_uint32  | block (4h->4)           | dec: **04**         |
+|                 | c_uint32  | when end of slot block  |                     |
+|                 |           | has reached (4h->4)     | dec: **04**         |
 +-----------------+-----------+-------------------------+---------------------+
 | **0x5c**        | 4 bytes   | could be a separator    |**\x00\x00\x00\x00** |
 |                 | c_uint32  | useless block or just 8 |                     |
@@ -111,8 +112,8 @@ Headers format and structures
 
 .. _slot-block:
 
-Slot block
-----------
+File save slot block
+--------------------
 
 .. note::
 
@@ -200,6 +201,8 @@ Slot block
 | **0x100**       | 28 Bytes  | Character's name         | Depends on your     |
 |                 | c_char_p  |                          | imagination         |
 |                 |           |                          | (**Nick**)          |
++-----------------+-----------+--------------------------+---------------------+
+| skipped data (0x10e->0x121)                                                  |
 +-----------------+-----------+--------------------------+---------------------+
 | **0x122**       | 1 Bytes   | Male                     | Depends on your     |
 |                 | c_bool    |                          | choice (**1**)      |
@@ -336,7 +339,7 @@ Slot block
 | **0x26c**       | 4 Bytes   | Left hand weapon/shield  | 0x00000001 or       |
 |                 | c_uint32  | flag                     | 0x00000000          |
 +-----------------+-----------+--------------------------+---------------------+
-| **0x270**       | 4 Bytes   | Right hand weapon/sheild | 0x00000001 or       |
+| **0x270**       | 4 Bytes   | Right hand weapon/shield | 0x00000001 or       |
 |                 | c_uint32  | flag                     | 0x00000000          |
 +-----------------+-----------+--------------------------+---------------------+
 | **0x274**       | 4 Bytes   | Unknown flag, could      | 0x00000001 or       |

@@ -44,6 +44,14 @@ Whole bunch of reversed stats you can see in datasheet document which is placed
 
 (*Help for reverse engineering DarkSouls save file is appreciated*).
 
+Binary Templates
+~~~~~~~~~~~~~~~~
+Since May 02 2015 I use binary templates for further save format investigations
+and to make reverse engineering work much easier. Common documentation that
+have been written in 2014 has some wrong information about different places.
+Use `010editor<http://www.sweetscape.com/010editor/>`_ to process Dark Souls
+save file with given templates.
+
 Installation
 ~~~~~~~~~~~~
 For general installation you would probably need virtual environment with pip
