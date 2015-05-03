@@ -10,21 +10,20 @@
 
 typedef enum<uint>{
     clean      = 0xFFFFFFFF,
-    weapon     = 0x00000000,    
-    weapon_2   = 0x10000000,
-    armour     = 0x20000000,
+    weapon     = 0x00000000,
+    armour     = 0x10000000,
+    rings      = 0x20000000,
     unknown    = 0x30000000,
     items      = 0x40000000,
-    
-} BackpackStored;
+} ItemType;
 
 typedef struct{
-    BackpackStored stored;
-    Item type;
-    uint amount;
-    uint position;
-    uint have;
-    uint durability;
+    ItemType type<name="type">;
+    Item item<name="item">;
+    uint amount<name="amount">;
+    uint unknown;
+    uint have<name="have">;
+    uint durability<name="item durability">;
     // durability hits treats logic: each hit that have been reach its target
     // for example it could be event wall or enemy accumulates 1/2/etc points
     // int durability_hits accumulator. Then durability hits reaches 10

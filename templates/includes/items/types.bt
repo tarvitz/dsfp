@@ -56,11 +56,11 @@ typedef enum<uint>{
     humanity = 350,
     // utilities
     prism_stone = 370,
-    binoculars = 371,
+    item_binoculars = 371,
     indictment = 373,
     souvenir_of_reprisal = 374,
     sunlight_medal = 375,
-    pendant = 376,
+    item_pendant = 376,
     dragon_head_stone = 377,
     dragon_torso_stone = 378,
     rubbish = 380,
@@ -78,18 +78,18 @@ typedef enum<uint>{
     soul_of_proud_knight = 404,
     large_soul_of_proud_knight = 405,
     soul_of_brave_warrior = 406,
-    large_soul_of_proud_knight = 407,
+    large_soul_of_brave_warrior = 407,
     soul_of_hero = 408,
     soul_of_great_hero = 409,
     // humanity that restores hp
     humanity_2 = 500, //500
-    twin_humanities = 501,
+    item_twin_humanities = 501,
     // carvings
     hello_carving = 510,
     thank_you_carving = 511,
     very_good_carving = 512,
     im_sorry_carving = 513,
-    help_me_carving = 514
+    help_me_carving = 514,
     // great souls
     soul_of_quelaag = 700,
     soul_of_sif = 701,
