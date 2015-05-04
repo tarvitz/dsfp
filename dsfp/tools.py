@@ -16,6 +16,17 @@ class BinDiff(object):
     def __init__(self, stream_a, stream_b, skip_tables=None,
                  start_offset=0x0,
                  end_offset=None):
+        """
+        Simple binary difference between two streams
+
+        :param stream_a: source stream to process
+        :param stream_b: dest stream to process
+        :param skip_tables: skip tables param
+        :param start_offset: start offset (deprecated)
+        :param end_offset:  end offset (deprecated)
+        :rtype: None
+        :return: None
+        """
         self.skip_tables = skip_tables or []
 
         self.stream_a = self.patch_table(
@@ -31,8 +42,7 @@ class BinDiff(object):
         self.end_offset = end_offset
         self.start_offset = start_offset
 
-    @staticmethod
-    def index(item_a, item_b, offset=0x0):
+    def index(self, item_a, item_b, offset=0x0):
         """ item_a item_b simple difference
         :param str item_a:
         :param str item_b:
@@ -41,12 +51,15 @@ class BinDiff(object):
         """
         # 0 if items are equal to each other
         # other values mean items are not equal: [0, -1, 0, 5]
+        def _cmp(a, b):
+            return a != b
+
         if sys.version_info.major == 2:
             # pylint: disable=W0141
             # noinspection PyUnresolvedReferences
             diff = map(cmp, item_a, item_b)
         else:
-            diff = map(lambda x, y: x != y, item_a, item_b)
+            diff = map(_cmp, item_a, item_b)
         difference = {
             'offset': offset,
             'diff': []
