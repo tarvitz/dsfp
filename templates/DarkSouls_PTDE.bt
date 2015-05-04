@@ -120,7 +120,10 @@ typedef struct {
           local int pack_size = sizeof(Pack);
           local int backpack_amount = 2048; // is this hard code constant?
           local int backpack_size = sizeof(Backpack) * backpack_amount;
-          local int space = unknown_size_1 + stats_size + pack_size + backpack_size;
+          local int space = (
+                unknown_size_1 + stats_size + pack_size + backpack_size
+                + 12 // backpack: items amount, keys amount, size
+          );
 
           StatsUnknown1 unknown <comment="unknown data">;
           Stats stats;

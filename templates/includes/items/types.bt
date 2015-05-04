@@ -11,6 +11,18 @@ typedef enum<uint>{
     red_sign_soapstone = 101,
     red_eye_orb = 102,
     black_separation_crystal = 103,
+    orage_guidance_soapstone = 106,
+    book_of_guilty = 108,
+    eye_of_death = 109,
+    cracked_red_eye_orb = 111,
+    servant_roster = 112,
+    blue_eye_orb = 113,
+    dragon_eye = 114,
+    // special black eye orb
+    black_eye_orb_firekeeper = 115,
+    black_eye_orb = 116,
+    dark_sign = 117,
+    purple_coward_crystal = 118,
     // rings
     hawk_ring = 119,
     ring_of_steal_protection = 120,
@@ -206,6 +218,9 @@ typedef enum<uint>{
     vow_of_silence = 5810,
     sunlight_blade = 5900,
     darkmoon_blade = 5910,
+    /*************************************
+    *          End of spells             *
+    *************************************/
     // emotions
     emo_backon = 9000,
     emo_point_forward = 9001,
