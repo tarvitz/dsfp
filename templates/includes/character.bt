@@ -7,6 +7,8 @@
 // Purpose: for DarkSouls_PTDE.bt
 //--------------------------------------
 // Character stats
+#include "unknown.bt";
+
 typedef enum <uint> {
     HUMAN = 0, HOLLOW = 8
 } CharState;
@@ -47,11 +49,19 @@ typedef struct{ uint current; uint total; uint total_2; } STAMINA;
 typedef enum<BYTE>{ FEMALE = 0, MALE = 1} GENDER;
 
 typedef struct{
-    uint64 vitality; uint64 attuentment; uint64 endurance;
-    uint64 strength; uint64 dextirity; uint64 intelligence;
-    uint64 faith; uint64 humanity; uint64 unknow; uint64 resistance;
+    uint64 vitality;
+    uint64 attuentment;
+    uint64 endurance;
+    uint64 strength;
+    uint64 dextirity;
+    uint64 intelligence;
+    uint64 faith;
+    uint64 humanity;
+    uint64 unknow;
+    uint64 resistance;
 
-    uint level; uint souls;
+    uint level;
+    uint souls;
     uint64 earned_souls;
     uint unknown_8 <comment="could be coventant">;
     CharState state;
@@ -73,3 +83,23 @@ typedef struct{
     uint def_1;
     uint def_2;
 } MAGIC_DEF;
+
+typedef struct{
+    HP hp <fgcolor=cLtRed>;
+    MAGIC_DEF magic_def <comment="it could be probably no magical defence">;
+    uint unknown_1;
+    STAMINA stamina <fgcolor=cLtBlue>;
+    uint unknown_2;
+    CharStats body;
+    StatsUnknown2 unknown_stats;
+  
+    uint poison_resistance;
+    uint bleeding_resistence;
+    uint poison_resistance_2;
+    uint curse_resistence;
+    uint unknown_3 <comment="could be resistence">;
+
+    CharFace face;
+    CharHairColor hair_color;
+    CharHair hair_2;
+} Stats;

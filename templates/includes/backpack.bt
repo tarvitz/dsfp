@@ -8,6 +8,16 @@
 //--------------------------------------
 #include "items/types.bt"
 
+string ReadBoxTypeAndItem(uint type_and_item){
+    string result;
+    // (type_and_item & ~0xF0000000); // <-- only item id, without type mask
+    SPrintf(result, "%d", type_and_item);
+    if (type_and_item == 0xFFFFFFFF){
+        result = "---clean---";
+    }
+    return result;
+}
+
 typedef enum<uint>{
     clean      = 0xFFFFFFFF,
     weapon     = 0x00000000,
@@ -32,10 +42,8 @@ typedef struct{
 } Backpack;
 
 typedef struct{
-    //ItemType type<name="type">;
-    // Item item<name="item">;
     uint blank;
-    uint item_type_item; // <-- ItemType | item
+    uint type_and_item<read=ReadBoxTypeAndItem>;
     uint unknown1;
     uint unknown2;
     uint durability;

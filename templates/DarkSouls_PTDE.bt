@@ -9,28 +9,7 @@
 
 #include "meta.bt";
 #include "character.bt";
-#include "unknown.bt";
 #include "backpack.bt"
-
-typedef struct{
-    HP hp <fgcolor=cLtRed>;
-    MAGIC_DEF magic_def <comment="it could be probably no magical defence">;
-    uint unknown_1;
-    STAMINA stamina <fgcolor=cLtBlue>;
-    uint unknown_2;
-    CharStats body;
-    StatsUnknown2 unknown_;
-  
-    uint poison_resistance;
-    uint bleeding_resistence;
-    uint poison_resistance_2;
-    uint curse_resistence;
-    uint unknown_3 <comment="could be resistence">;
-
-    CharFace face;
-    CharHairColor hair_color;
-    CharHair hair_2;
-} Stats;
 
 typedef struct{
     uint first;
@@ -120,8 +99,9 @@ typedef struct {
           local int pack_size = sizeof(Pack);
           local int backpack_amount = 2048; // is this hard code constant?
           local int backpack_size = sizeof(Backpack) * backpack_amount;
+          local int bottomless_size = sizeof(BottomlessBox) * backpack_amount;
           local int space = (
-                unknown_size_1 + stats_size + pack_size + backpack_size
+                unknown_size_1 + stats_size + pack_size + backpack_size + bottomless_size
                 + 12 // backpack: items amount, keys amount, size
           );
 
@@ -136,7 +116,12 @@ typedef struct {
           local uint itembox_size = backpack_size - utilbox_size;
           Backpack util_box[utilbox_size] <name="util box">;
           Backpack item_box[itembox_size] <name="item box">;
-          BYTE data[chunks[i].block_size - space] <bgcolor=cLtYellow>;
+          local uint investigate = 304;
+          BYTE _investigate[investigate] <bgcolor=cLtPurple>;
+          // uint bottomless_size;
+          // BYTE _investigate_[168];
+          BottomlessBox box[backpack_amount];
+          BYTE data[chunks[i].block_size - space - investigate] <bgcolor=cLtYellow>;
           BYTE offset[chunks[i].space_size] <bgcolor=cLtRed>;
         } SaveSlot;
     }
