@@ -138,7 +138,8 @@ class SimpleWatcher(object):
         old_stat = os.lstat(self.filename)
         stat = os.lstat(self.filename)
         fo = open(self.filename, 'rb')
-        fo.seek(BLOCK_INDEX + self.slot * BLOCK_SIZE)
+        slot_offset = BLOCK_INDEX + self.slot * BLOCK_SIZE
+        fo.seek(slot_offset)
         old_data = fo.read(BLOCK_SIZE)
         fo.close()
 
@@ -148,7 +149,8 @@ class SimpleWatcher(object):
             if stat.st_mtime != old_stat.st_mtime:
                 old_stat = stat
                 t_modify = "%s modified (%s)" % (
-                    datetime.now().strftime('%H:%M:%S'), modified)
+                    datetime.now().strftime('%H:%M:%S'), modified
+                )
                 self.console_log(t_modify, clean=True)
                 ds = DSSaveFileParser(self.filename)
                 data = ds.read_slot_data(self.slot)
@@ -160,7 +162,8 @@ class SimpleWatcher(object):
                 diff = BinDiff(data, old_data,
                                skip_tables=self.skip_tables,
                                start_offset=self.start_offset,
-                               end_offset=self.end_offset,)
+                               end_offset=self.end_offset,
+                               )
                 diff_log = diff.process_diff()
 
                 self.console_log("Differences: %i" % len(diff_log), x=2)
@@ -175,8 +178,8 @@ class SimpleWatcher(object):
                     fmt = (
                         "0x%(addr)08x[%(saddr)10s] %(value)10s 0x%(hex)08x "
                         "%(follow)5s %(old)10s 0x%(old_hex)08x" % {
-                            'addr': log['offset'],
-                            'saddr': log['offset'],
+                            'addr': log['offset'] + slot_offset,
+                            'saddr': log['offset'] + slot_offset,
                             'value': diff_data,
                             'hex': diff_data,
                             'old': diff_data_old,

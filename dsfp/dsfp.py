@@ -90,7 +90,7 @@ class DSSaveFileParser(object):
     def __init__(self, filename):
         self.filename = filename
         if isinstance(self.filename, six.string_types):
-            self._fo = open(self.filename, 'r+b')
+            self._fo = open(self.filename, 'rb')
         elif isinstance(self.filename, bz2.BZ2File):
             self._fo = self.filename
         elif isinstance(self.filename, six.StringIO):
