@@ -37,22 +37,22 @@ typedef enum<uint>{
 } Wargear;
 
 typedef struct{
-    BYTE skip_0[184] <bgcolor=cLtBlue>;
+    BYTE unknown_block[184] <bgcolor=cLtPurple>;
     uint left_arrow_slot;
     uint left_bolts_slot;
     uint right_arrows_slot;
     uint right_blots_slot;
-    byte _unknown[5*4]; // 5 uint?
+    byte _unknown[5*4] <bgcolor=cLtPurple>; // 5 uint?
     uint left_ring_slot;
     uint right_ring_slot;
     QuickItems quick_items_slots <comment="item types in item quick slots">;
     WeildType weild_type;
     Switch left_hand;
     Switch right_hand;
-    Switch _unknown1;
-    Switch _unknown2;
-    Switch _unknown3;
-    Switch _unknown4;
+    Switch _unknown1 <bgcolor=cLtPurple>;
+    Switch _unknown2 <bgcolor=cLtPurple>;
+    Switch _unknown3 <bgcolor=cLtPurple>;
+    Switch _unknown4 <bgcolor=cLtPurple>;
     Wargear left_hand_first;
     Wargear left_hand_second;
     Wargear right_hand_first;
@@ -65,68 +65,77 @@ typedef struct{
     Wargear body;
     Wargear hands;
     Wargear legs;
-    Item _unknown_item;
+    Item _unknown_item <bgcolor=cLtPurple>;
     Item left_ring;
     Item right_ring;
-    QuickItems quick_items <bgcolor=cLtPurple>;
+    QuickItems quick_items <bgcolor=cLtBlue>;
 } Pack;
 
 typedef struct {
     // Header for the file
     char     dsSignature[8] <comment="BND4 file format">;    //0x424e4434 0x00000000
-    uint     dsUnknown <comment="May be revision">;
+    uint     dsRevision <comment="May be revision">; // 0x00000100
+    // container size
     uint     dsContainersAmount <bgcolor=cLtBlue, 
-                                 comment="Amount of file save slots 10 available + 1 hidden">; // container size
-    uint     dsUnknown2;
-    uint     dsUnkwown3;
+                                 comment="Amount of file save slots 10 available + 1 hidden">;
+    uint     dsUnknown2 <bgcolor=cLtPurple>;
+    uint     dsUnkwown3 <bgcolor=cLtPurple>;
     char     dsVersion[16] <comment="Probably a version">;
+    // it points for a first readable file slot block (end of metadata block)
     uint     dsSize <bgcolor=cLtRed,
                      name="block size",
-                     comment="Meta size">;  // it points for a first readable file slot block (end of metadata block)\
+                     comment="Meta size">;
     uint     ds_reserved1;
-    uint     ds_uint_unknown1;
-    byte     ds_char_unknown2[12];
+    uint     ds_uint_unknown1 <bgcolor=cLtPurple>;
+    byte     ds_char_unknown2[12] <bgcolor=cLtPurple>;
     SlotMeta chunks[dsContainersAmount];
-    DSSaveMeta file_slots[dsContainersAmount];
-    char      end_meta[2];
-    
-    local uint i;
-    // at least parse only first slot, remove "/ dsContainersAmount to identify other data"
-    for (i = 0; i < (dsContainersAmount / dsContainersAmount); i++){
-    struct {
-          local int unknown_size_1 = sizeof(StatsUnknown1);
-          local int stats_size = sizeof(Stats);
-          local int pack_size = sizeof(Pack);
-          local int backpack_amount = 2048; // is this hard code constant?
-          local int backpack_size = sizeof(Backpack) * backpack_amount;
-          local int bottomless_size = sizeof(BottomlessBox) * backpack_amount;
-          local int space = (
-                unknown_size_1 + stats_size + pack_size + backpack_size + bottomless_size
-                + 12 // backpack: items amount, keys amount, size
-          );
-
-          StatsUnknown1 unknown <comment="unknown data">;
-          Stats stats;
-          Pack pack;
-          uint backpack_items_amount;
-          uint backpack_keys_amount;
-          uint backpack_size;
-          // 0-63 indexes for utils box
-          local uint utilbox_size = 64;
-          local uint itembox_size = backpack_size - utilbox_size;
-          Backpack util_box[utilbox_size] <name="util box">;
-          Backpack item_box[itembox_size] <name="item box">;
-          local uint investigate = 304;
-          BYTE _investigate[investigate] <bgcolor=cLtPurple>;
-          // uint bottomless_size;
-          // BYTE _investigate_[168];
-          BottomlessBox box[backpack_amount];
-          BYTE data[chunks[i].block_size - space - investigate] <bgcolor=cLtYellow>;
-          BYTE offset[chunks[i].space_size] <bgcolor=cLtRed>;
-        } SaveSlot;
-    }
-
+    DSSaveMeta file_name_slots[dsContainersAmount];
+    BYTE end_padding[2] <name="end padding", fgcolor=cLtYellow>;
 } DSSaveFile <read=ReadDSSaveFile>;
+
+local uint i;
+
+// at least parse only first slot, remove "/ dsContainersAmount to identify other data"
+// for (i = 0; i < (dsContainersAmount / dsContainersAmount); i++){
+typedef struct {
+   local int unknown_size_1 = sizeof(StatsUnknown1);
+   local int stats_size = sizeof(Stats);
+   local int pack_size = sizeof(Pack);
+   local int backpack_amount = 2048; // is this hard code constant?
+   local int one_more_box_size = 64;
+   local int backpack_size = sizeof(Backpack) * backpack_amount;
+   local int bottomless_size = sizeof(BottomlessBox) * backpack_amount;
+   local int onemorebox_size = sizeof(UnknownBox) * one_more_box_size;
+   local int space = (
+       unknown_size_1 + stats_size + pack_size + backpack_size + bottomless_size +
+       onemorebox_size
+       + 12 // backpack: items amount, keys amount, size
+   );
+
+   StatsUnknown1 unknown <comment="unknown data", bgcolor=cLtPurple>;
+   Stats stats;
+   Pack pack;
+
+   uint backpack_items_amount;
+   uint backpack_keys_amount;
+   uint backpack_size;
+   // 0-63 indexes for utils box
+   local uint utilbox_size = 64;
+   local uint itembox_size = backpack_size - utilbox_size;
+   Backpack util_box[utilbox_size] <name="util box">;
+   Backpack item_box[itembox_size] <name="item box">;
+   local uint investigate_1 = 304;
+   local uint investigate_2 = 288;
+   local uint investigate = investigate_1 + investigate_2;
+   BYTE _investigate_block_1[investigate_1] <bgcolor=cLtPurple>;
+   BottomlessBox box[backpack_amount];
+   BYTE _investigate_block_2[investigate_2] <bgcolor=cLtPurple>;
+   UnknownBox unknown_box[one_more_box_size];
+
+   BYTE data[record.chunks[i].block_size - space - investigate] <bgcolor=cLtYellow>;
+   BYTE offset[record.chunks[i].space_size] <bgcolor=cLtRed>;
+} SaveSlot;
+
 
 string ReadDSSaveFile(DSSaveFile &file )
 {
@@ -144,10 +153,12 @@ LittleEndian();
     tag = ReadUInt( FTell() );
 
     // IDENTIFY BND4 token
-    if( tag == 0x34444e42 )
+    if( tag == 0x34444e42)
     {
         SetBackColor( cLtGray );
         DSSaveFile record;
+        // slots should be configurated according to record's dsContainersAmount
+        SaveSlot slot_1;
     }
     else{
         Warning("Not a Dark Souls prepare to die edition file save format");

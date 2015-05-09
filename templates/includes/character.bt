@@ -56,48 +56,52 @@ typedef struct{
     uint64 dextirity;
     uint64 intelligence;
     uint64 faith;
-    uint64 humanity;
-    uint64 unknow;
+
+    uint64 unknown <bgcolor=cLtPurple>;
+    uint unknow;
+    uint humanity;
     uint64 resistance;
 
     uint level;
     uint souls;
     uint64 earned_souls;
-    uint unknown_8 <comment="could be coventant">;
+    uint unknown_8 <comment="could be coventant", bgcolor=cLtPurple>;
     CharState state;
     wchar_t name[14] <comment="utf-8 using">;
     BYTE unkown_9[6];
     GENDER gender;
 
-    byte unknown_3 <comment="not class">;
-    byte unknown_4; byte unknown_5;
+    byte unknown_3 <comment="not class", bgcolor=cLtPurple>;
+    byte unknown_4 <bgcolor=cLtPurple>;
+    byte unknown_5 <bgcolor=cLtPurple>;
     
     CharClass klass;
     CharBody body;
     CharGift gift;
-    byte unknown_5;
+    byte unknown_5 <bgcolor=cLtPurple>;
 } CharStats;
 
 typedef struct{
-    uint def;
-    uint def_1;
-    uint def_2;
-} MAGIC_DEF;
+    uint unknown_current;
+    uint unknown_total_1;
+    uint unknown_total;
+} UnknownCharStat <bgcolor=cLtPurple>;
 
 typedef struct{
     HP hp <fgcolor=cLtRed>;
-    MAGIC_DEF magic_def <comment="it could be probably no magical defence">;
-    uint unknown_1;
+    UnknownCharStat unknown_stat <comment="could be some other player resource such like as hp/stamina",
+                                  bgcolor=cLtPurple>;
+    uint unknown_1 <bgcolor=cLtPurple>;
     STAMINA stamina <fgcolor=cLtBlue>;
-    uint unknown_2;
+    uint unknown_2 <bgcolor=cLtPurple>;
     CharStats body;
-    StatsUnknown2 unknown_stats;
+    StatsUnknown2 unknown_stats <bgcolor=cLtPurple>;
   
     uint poison_resistance;
     uint bleeding_resistence;
     uint poison_resistance_2;
     uint curse_resistence;
-    uint unknown_3 <comment="could be resistence">;
+    uint unknown_3 <comment="could be resistence", bgcolor=cLtPurple>;
 
     CharFace face;
     CharHairColor hair_color;

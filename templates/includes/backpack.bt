@@ -51,3 +51,14 @@ typedef struct{
     uint unknown5;
     uint unknown6;
 } BottomlessBox;
+
+typedef struct{
+    uint unknown1;
+    uint unknown2;
+    uint unknown3;
+    uint unknown4;
+    uint unknown5;
+    uint unknown6;
+    uint unknown7;
+    uint unknown8;
+} UnknownBox;
