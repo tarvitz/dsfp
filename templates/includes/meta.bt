@@ -6,17 +6,3 @@
 // Revision: 0.0.1
 // Purpose: for DarkSouls_PTDE.bt
 //--------------------------------------
-
-typedef struct{
-    int unknown <bgcolor=cLtPurple>;
-    int unknown2 <bgcolor=cLtPurple>;
-    uint64 block_size;
-    uint start <bgcolor=cLtGreen>;
-    uint marker <comment="each next marker has +26d to its prev value">;
-    uint space_size <bgcolor=cLtAqua>;
-    uint end;
-} SlotMeta;
-
-typedef struct{
-    wchar_t slot[13];
-} DSSaveMeta;

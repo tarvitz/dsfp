@@ -365,6 +365,13 @@ typedef enum<uint>{
     scimitar_14 = 400014,
     scimitar_15 = 400015,
 
+    great_sword_of_artorias = 307100,
+    great_sword_of_artorias_1 = 307101,
+    great_sword_of_artorias_2 = 307102,
+    great_sword_of_artorias_3 = 307103,
+    great_sword_of_artorias_4 = 307104,
+    great_sword_of_artorias_5 = 307105,
+
     bare_hands = 900000,
     // blank
     blank = 0xffffffff

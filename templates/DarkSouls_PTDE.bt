@@ -6,8 +6,7 @@
 // Revision: 0.0.1
 // Purpose: 4 fun
 //--------------------------------------
-
-#include "meta.bt";
+#include "bnd4.bt";
 #include "character.bt";
 #include "backpack.bt"
 
@@ -71,27 +70,6 @@ typedef struct{
     QuickItems quick_items <bgcolor=cLtBlue>;
 } Pack;
 
-typedef struct {
-    // Header for the file
-    char     dsSignature[8] <comment="BND4 file format">;    //0x424e4434 0x00000000
-    uint     dsRevision <comment="May be revision">; // 0x00000100
-    // container size
-    uint     dsContainersAmount <bgcolor=cLtBlue, 
-                                 comment="Amount of file save slots 10 available + 1 hidden">;
-    uint     dsUnknown2 <bgcolor=cLtPurple>;
-    uint     dsUnkwown3 <bgcolor=cLtPurple>;
-    char     dsVersion[16] <comment="Probably a version">;
-    // it points for a first readable file slot block (end of metadata block)
-    uint     dsSize <bgcolor=cLtRed,
-                     name="block size",
-                     comment="Meta size">;
-    uint     ds_reserved1;
-    uint     ds_uint_unknown1 <bgcolor=cLtPurple>;
-    byte     ds_char_unknown2[12] <bgcolor=cLtPurple>;
-    SlotMeta chunks[dsContainersAmount];
-    DSSaveMeta file_name_slots[dsContainersAmount];
-    BYTE end_padding[2] <name="end padding", fgcolor=cLtYellow>;
-} DSSaveFile <read=ReadDSSaveFile>;
 
 local uint i;
 
@@ -132,18 +110,9 @@ typedef struct {
    BYTE _investigate_block_2[investigate_2] <bgcolor=cLtPurple>;
    UnknownBox unknown_box[one_more_box_size];
 
-   BYTE data[record.chunks[i].block_size - space - investigate] <bgcolor=cLtYellow>;
-   BYTE offset[record.chunks[i].space_size] <bgcolor=cLtRed>;
+   BYTE data[meta.chunks[i].block_size - space - investigate] <bgcolor=cLtYellow>;
+   BYTE offset[meta.chunks[i].space_size] <bgcolor=cLtRed>;
 } SaveSlot;
-
-
-string ReadDSSaveFile(DSSaveFile &file )
-{
-    if( exists( file.dsSignature ) )
-        return file.dsSignature;
-    else
-        return "";
-}
 
 local uint tag;
 LittleEndian(); 
@@ -156,7 +125,7 @@ LittleEndian();
     if( tag == 0x34444e42)
     {
         SetBackColor( cLtGray );
-        DSSaveFile record;
+        BND4 meta;
         // slots should be configurated according to record's dsContainersAmount
         SaveSlot slot_1;
     }

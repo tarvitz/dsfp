@@ -1,0 +1,52 @@
+//--------------------------------------
+//--- 010 Editor v5.0 Binary Template
+//
+// File: BND4
+// Author: Tarvitz
+// Revision: 0.5
+// Purpose: BND4 file container read
+//--------------------------------------
+
+typedef struct{
+    int unknown <bgcolor=cLtPurple>;
+    int unknown2 <bgcolor=cLtPurple>;
+    uint64 block_size;
+    uint start <bgcolor=cLtGreen>;
+    uint marker <comment="each next marker has +26d to its prev value">;
+    uint space_size <bgcolor=cLtAqua>;
+    uint end;
+} SlotMeta;
+
+typedef struct{
+    wchar_t slot[13];
+} NameMeta;
+
+typedef struct {
+    // Header for the file
+    char     dsSignature[8] <comment="BND4 file format">;    //0x424e4434 0x00000000
+    uint     dsRevision <comment="May be revision">; // 0x00000100
+    // container size
+    uint     dsContainersAmount <bgcolor=cLtBlue, 
+                                 comment="Amount of file save slots 10 available + 1 hidden">;
+    uint     dsUnknown2 <bgcolor=cLtPurple>;
+    uint     dsUnkwown3 <bgcolor=cLtPurple>;
+    char     dsVersion[16] <comment="Probably a version">;
+    // it points for a first readable file slot block (end of metadata block)
+    uint     dsSize <bgcolor=cLtRed,
+                     name="block size",
+                     comment="Meta size">;
+    uint     ds_reserved1;
+    uint     ds_uint_unknown1 <bgcolor=cLtPurple>;
+    byte     ds_char_unknown2[12] <bgcolor=cLtPurple>;
+    SlotMeta chunks[dsContainersAmount];
+    NameMeta file_name_slots[dsContainersAmount];
+    BYTE EOFBNDMeta[dsSize - FTell()] <name="end of meta", fgcolor=cLtYellow>;
+} BND4 <read=ReadBND4>;
+
+string ReadBND4(BND4 &file )
+{
+    if( exists( file.dsSignature ) )
+        return file.dsSignature;
+    else
+        return "";
+}
