@@ -6,42 +6,64 @@
 // Revision: 0.5
 // Purpose: BND4 file container read
 //--------------------------------------
-
-typedef struct{
-    int unknown <bgcolor=cLtPurple>;
-    int unknown2 <bgcolor=cLtPurple>;
-    uint64 block_size;
+struct SlotMeta(int slotSize){
+    uint block_id <bgcolor=cLtAqua, fgcolor=cDkGreen>;
+    uint unknown_1 <bgcolor=cLtPurple>;
+    uint block_size <fgcolor=cDkGreen>;
+    uint unknown_2 <bgcolor=cLtPurple>;
     uint start <bgcolor=cLtGreen>;
-    uint marker <comment="each next marker has +26d to its prev value">;
-    uint space_size <bgcolor=cLtAqua>;
-    uint end;
-} SlotMeta;
+    // don't know why, but save file with block size 0x20 has title offset
+    // this position, but other files with 0x24 block size
+    if (slotSize == 0x20){
+        uint title_offset <comment="size of given slot's name",
+                           bgcolor=cGray>;
+        uint space_size <bgcolor=cLtAqua>;
+        uint end <comment="end of block size?">;
+    } else if (slotSize == 0x24){
+        uint unknown_3;
+        uint space_size <bgcolor=cLtAqua>;
+        uint unknown_4;
+        uint title_offset <bgcolor=cGray>;
+    }
+};
 
-typedef struct{
-    wchar_t slot[13];
-} NameMeta;
+wstring ReadSlotMeta(SlotMeta &meta){
+    return ReadWString(meta.title_offset);
+}
 
 typedef struct {
     // Header for the file
-    char     dsSignature[8] <comment="BND4 file format">;    //0x424e4434 0x00000000
-    uint     dsRevision <comment="May be revision">; // 0x00000100
+    char     Signature[8] <comment="BND4 file format">;    //0x424e4434 0x00000000
+    uint     Revision <comment="May be revision">; // 0x00000100
     // container size
-    uint     dsContainersAmount <bgcolor=cLtBlue, 
-                                 comment="Amount of file save slots 10 available + 1 hidden">;
-    uint     dsUnknown2 <bgcolor=cLtPurple>;
-    uint     dsUnkwown3 <bgcolor=cLtPurple>;
-    char     dsVersion[16] <comment="Probably a version">;
+    uint     ContainersAmount <bgcolor=cLtBlue, 
+                                 comment="Containers amount">;
+    uint     Unknown2 <bgcolor=cLtPurple>;
+    uint     Unkwown3 <bgcolor=cLtPurple>;
+    char     Version[8] <comment="Probably a version">;
+    uint     SlotMetaBlockSize <fgcolor=cLtRed, bgcolor=cLtBlue,
+                                comment="each slot meta block size">;
+    uint     Unknwon4;
     // it points for a first readable file slot block (end of metadata block)
-    uint     dsSize <bgcolor=cLtRed,
-                     name="block size",
-                     comment="Meta size">;
-    uint     ds_reserved1;
-    uint     ds_uint_unknown1 <bgcolor=cLtPurple>;
-    byte     ds_char_unknown2[12] <bgcolor=cLtPurple>;
-    SlotMeta chunks[dsContainersAmount];
-    NameMeta file_name_slots[dsContainersAmount];
-    BYTE EOFBNDMeta[dsSize - FTell()] <name="end of meta", fgcolor=cLtYellow>;
+    uint     MetaSize <bgcolor=cLtRed,
+                       name="Meta Size",
+                       comment="Meta size">;
+    uint     reserved1;
+    uint     uint_unknown1 <bgcolor=cLtPurple>;
+    byte     char_unknown2[12] <bgcolor=cLtPurple>;
+    // SlotMeta chunks[ContainersAmount];
+    SlotMeta chunks(SlotMetaBlockSize)[ContainersAmount]<optimize=true>;
+    // slot title structure
+    local uint i, name_block_size = 0;
+    for (i = 0; i < ContainersAmount; i++){
+        name_block_size = ReadWStringLength(chunks[i].title_offset);
+        struct {
+            wchar_t title[name_block_size];
+        } SlotTitle;
+    }
+    BYTE EOFBNDMeta[MetaSize - FTell()] <name="end of meta", fgcolor=cLtYellow>;
 } BND4 <read=ReadBND4>;
+
 
 string ReadBND4(BND4 &file )
 {

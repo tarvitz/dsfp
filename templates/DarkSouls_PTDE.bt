@@ -127,7 +127,9 @@ LittleEndian();
         SetBackColor( cLtGray );
         BND4 meta;
         // slots should be configurated according to record's dsContainersAmount
-        SaveSlot slot_1;
+        if (meta.SlotMetaBlockSize == 0x20){
+            SaveSlot slot_1;
+        }
     }
     else{
         Warning("Not a Dark Souls prepare to die edition file save format");
