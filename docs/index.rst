@@ -11,6 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   parsing
    datasheet
    dsfp
    tests
