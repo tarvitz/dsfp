@@ -4,8 +4,8 @@ Here represented documents about tests covered agains dsfp
 
 DSFP
 ----
-.. automodule:: dsfp.tests.reader
+.. automodule:: tests.reader
     :members:
 
-.. automodule:: dsfp.tests.utils
+.. automodule:: tests.utils
     :members:
