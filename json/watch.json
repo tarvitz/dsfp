@@ -1,0 +1,5 @@
+{
+  "WATCH": [
+    {"start": "0x2c0", "size": "0x10", "comment": "something"}
+  ]
+}

@@ -157,3 +157,16 @@ expect me finishing this work to some certain moment or something clear enough.
 
 Use ``./scripts/watcher.py`` and the other scripts (or may be another methods) to inspect
 data you need, contact me if you want to share them and have fun ;).
+
+Watching
+~~~~~~~~
+Use ``scripts/spy.py`` for watching some blocks of data (could be slow for present moment)
+
+.. code-block:: bash
+
+  (ve)tarvitz@mebook dsfp $ python ./scripts/spy.py -f remote/draks0005.sl2 -w json/watch.json
+  modified: 0 [01:41:29]
+  0x000002c0[       704] 1571248212 0x5da75854    <- 3092053692 0xb84cfebc
+  0x000002c4[       708] 1935086728 0x73571488    <- 1146802795 0x445ad26b
+  0x000002c8[       712] 3053911314 0xb606fd12    <- 1220380586 0x48bd87aa
+  0x000002cc[       716]  904361964 0x35e777ec    <- 2331046835 0x8af0f3b3
