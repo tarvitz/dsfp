@@ -21,7 +21,7 @@ typedef struct{
 typedef enum<uint>{
     hand = 1,
     double_hand = 3
-} WeildType;
+} WieldType;
 
 typedef enum<uint>{
     off = 0,
@@ -45,7 +45,7 @@ typedef struct{
     uint left_ring_slot;
     uint right_ring_slot;
     QuickItems quick_items_slots <comment="item types in item quick slots">;
-    WeildType weild_type;
+    WieldType weild_type;
     Switch left_hand;
     Switch right_hand;
     Switch _unknown1 <bgcolor=cLtPurple>;
