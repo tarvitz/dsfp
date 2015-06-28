@@ -133,7 +133,7 @@ LittleEndian();
         BND4 meta;
         // slots should be configurated according to record's dsContainersAmount
         if (meta.SlotMetaBlockSize == 0x20){
-            SaveSlot slot_1;
+			SaveSlot slot_1;
 			SaveSlot slot_2;
         }
     }
