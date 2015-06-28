@@ -45,7 +45,7 @@ typedef struct{
     uint left_ring_slot;
     uint right_ring_slot;
     QuickItems quick_items_slots <comment="item types in item quick slots">;
-    WieldType weild_type;
+    WieldType wield_type;
     Switch left_hand;
     Switch right_hand;
     Switch _unknown1 <bgcolor=cLtPurple>;
