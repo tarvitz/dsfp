@@ -79,7 +79,7 @@ typedef struct{
     uint level;
     uint souls;
     uint64 earned_souls;
-    uint unknown_8 <comment="could be coventant", bgcolor=cLtPurple>;
+    uint unknown_8;
     CharState state;
     wchar_t name[14] <comment="utf-8 using">;
     BYTE unkown_9[6];
@@ -122,9 +122,8 @@ typedef struct{
 	byte unknown3a;
 	byte unknown3b;
 	Covenant covenant;
-	byte unknown3c;
-
     CharFace face;
-    CharHairColor hair_color;
     CharHair hair_2;
+    CharHairColor hair_color;
+	byte unknown3c;
 } Stats;
