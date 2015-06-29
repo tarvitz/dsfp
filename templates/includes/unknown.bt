@@ -19,7 +19,3 @@ typedef struct{
 typedef struct{
     BYTE unknown[88];
 } StatsUnknown1 <bgcolor=cLtPurple>;
-
-typedef struct{
-    BYTE unknown[47] <comment="don't even know what it could possible be">;
-} StatsUnknown2 <bgcolor=cLtPurple>;
