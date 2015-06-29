@@ -31,7 +31,7 @@ typedef enum<BYTE>{
 
 typedef enum<BYTE>{
     shaved = 0, receding = 1, short_h = 2, swept_black = 3, ponytail = 4,
-    wild = 5, pared_center = 6, semi_long = 7, curly = 8, bobbed = 9
+    wild = 5, parted_center = 6, semi_long = 7, curly = 8, bobbed = 9
 } CharHair;
 
 typedef enum<BYTE>{
@@ -75,7 +75,7 @@ typedef struct{
     byte unknown_4 <bgcolor=cLtPurple>;
     byte unknown_5 <bgcolor=cLtPurple>;
     
-    CharClass klass;
+    CharClass class;
     CharBody body;
     CharGift gift;
     byte unknown_5 <bgcolor=cLtPurple>;
@@ -95,8 +95,8 @@ typedef struct{
     STAMINA stamina <fgcolor=cLtBlue>;
     uint unknown_2 <bgcolor=cLtPurple>;
     CharStats body;
-    StatsUnknown2 unknown_stats <bgcolor=cLtPurple>;
-  
+    StatsUnknown2 unknown_stats <bgcolor=cLtPurple>; 
+	
     uint poison_resistance;
     uint bleeding_resistence;
     uint poison_resistance_2;
