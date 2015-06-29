@@ -10,8 +10,9 @@
 
 string ReadBoxTypeAndItem(uint type_and_item){
     string result;
-    // (type_and_item & ~0xF0000000); // <-- only item id, without type mask
-    SPrintf(result, "%d", type_and_item);
+    // ; // <-- only item id, without type mask
+	Item it = (type_and_item & ~0xF0000000);
+    SPrintf(result, "%s", EnumToString( it));
     if (type_and_item == 0xFFFFFFFF){
         result = "---clean---";
     }
@@ -28,11 +29,15 @@ typedef enum<uint>{
 } ItemType;
 
 typedef struct{
-    ItemType type<name="type">;
+     ItemType type<name="type">;
     Item item<name="item">;
     uint amount<name="amount">;
-    uint unknown;
-    uint have<name="have">;
+
+	// index? 12 lsb is index, the 20 msb are used for sorting. is index just another unique identifier?
+    uint sort : 20;
+    uint index:12;
+	
+    uint have<name="have">; // quantity? enabled? have is ambiguous
     uint durability<name="item durability">;
     // durability hits treats logic: each hit that have been reach its target
     // for example it could be event wall or enemy accumulates 1/2/etc points
