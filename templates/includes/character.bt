@@ -57,6 +57,7 @@ typedef enum<BYTE>{
 	chaosservant
 } Covenant;
 
+// is the middle one total or current?
 typedef struct{ uint current; uint total; uint total_2; } HP;
 typedef struct{ uint current; uint total; uint total_2; } STAMINA;
 typedef enum<BYTE>{ FEMALE = 0, MALE = 1} GENDER;
@@ -73,7 +74,7 @@ typedef struct{
     uint64 unknown <bgcolor=cLtPurple>;
     uint unknow;
     uint humanity;
-    uint64 resistance;
+    uint64 resistance; // is this uint64 or uint32?
 
     uint level;
     uint souls;
@@ -108,13 +109,20 @@ typedef struct{
     STAMINA stamina <fgcolor=cLtBlue>;
     uint unknown_2 <bgcolor=cLtPurple>;
     CharStats body;
-    StatsUnknown2 unknown_stats <bgcolor=cLtPurple>; 
-	
+
+
+    BYTE unknown1[34];
+    uint sin;
+    BYTE unknown2[9];
+ 
     uint poison_resistance;
     uint bleeding_resistence;
     uint poison_resistance_2;
     uint curse_resistence;
-    uint unknown_3 <comment="could be resistence", bgcolor=cLtPurple>;
+	byte unknown3a;
+	byte unknown3b;
+	Covenant covenant;
+	byte unknown3c;
 
     CharFace face;
     CharHairColor hair_color;
