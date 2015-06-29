@@ -76,6 +76,17 @@ typedef struct{
 
 
 typedef struct{
+  ubyte flag1 : 1 ;
+  ubyte flag2 : 1 ;
+  ubyte flag3 : 1 ;
+  ubyte flag4 : 1 ;
+  ubyte flag5 : 1 ;
+  ubyte flag6 : 1 ;
+  ubyte flag7 : 1 ;
+  ubyte flag8 : 1 ;
+} BitFlags;
+
+typedef struct{
     float R;
     float G;
     float B;
@@ -123,7 +134,6 @@ typedef struct{
 
 } Bonfires;
 
-
 local uint i;
 
 // at least parse only first slot, remove "/ dsContainersAmount to identify other data"
@@ -138,6 +148,7 @@ typedef struct {
    ChecksumHeader header;
    uint length; //number of bytes that should be included in the checksum, 393216 ( entire slot is 393248 )
    StatsUnknown1 unknown <comment="unknown data", bgcolor=cLtPurple>;
+
    Stats stats;
    Pack pack;
 
@@ -172,11 +183,17 @@ typedef struct {
    uint UnknownData6[2];
 
    UnknownBox unknown_box[64];
-   byte UnknownData7[1056];
+   byte UnknownData7[1014];
+
+   uint deathcount;
+   byte UnknownData8[38];
    
    Bonfires enabledBonfires;
 
-   BYTE data[265902] <bgcolor=cLtYellow>;
+   BYTE data[93668] <bgcolor=cLtYellow>;
+   ubyte onlineprofiles[20350];
+
+   BYTE data2[151884] <bgcolor=cLtYellow>;
 
    Checksum secondary; // this is the md5 checksum of all bytes in this save slot, excluding the header and the length fields
    BYTE offset[12] <bgcolor=cLtRed>;
