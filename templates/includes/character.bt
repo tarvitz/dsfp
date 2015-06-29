@@ -44,6 +44,19 @@ typedef enum<BYTE>{
    pendant = 5, master_key = 6, tiny_being_ring = 7, old_witch_ring = 8
 } CharGift;
 
+typedef enum<BYTE>{
+	nocovenant=0,
+	wayofwhite,
+	princessguard,
+	warriorofsunlight,
+	darkwraith,
+	pathofdragon,
+	gravelordservant,
+	foresthunter,
+	darkmoonblade,
+	chaosservant
+} Covenant;
+
 typedef struct{ uint current; uint total; uint total_2; } HP;
 typedef struct{ uint current; uint total; uint total_2; } STAMINA;
 typedef enum<BYTE>{ FEMALE = 0, MALE = 1} GENDER;
