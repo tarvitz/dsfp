@@ -71,6 +71,56 @@ typedef struct{
 } Pack;
 
 
+typedef struct{
+    float R;
+    float G;
+    float B;
+    float A;
+} Color;
+
+typedef struct{
+    Item magic;
+    uint count;
+} Attuned;
+
+typedef struct{
+  uint bonfireenabled1 : 1 ;
+  uint bonfireenabled2 : 1 ;
+  uint bonfireenabled3 : 1 ;
+  uint bonfireenabled4 : 1 ;
+  uint bonfireenabled5 : 1 ;
+  uint bonfireenabled6 : 1 ;
+  uint bonfireenabled7 : 1 ;
+  uint bonfireenabled8 : 1 ;
+  uint bonfireenabled9 : 1 ;
+  uint bonfireenabled10 : 1 ;
+  uint bonfireenabled11 : 1 ;
+  uint bonfireenabled12 : 1 ;
+  uint bonfireenabled13 : 1 ;
+  uint bonfireenabled14 : 1 ;
+  uint bonfireenabled15 : 1 ;
+  uint bonfireenabled16 : 1 <comment="firelink?">;
+  uint bonfireenabled17 : 1 ;
+  uint bonfireenabled18 : 1 ;
+  uint bonfireenabled19 : 1 ;
+  uint bonfireenabled20 : 1 ;
+  uint bonfireenabled21 : 1 ;
+  uint bonfireenabled22 : 1 ;
+  uint bonfireenabled23 : 1 ;
+  uint bonfireenabled24 : 1 ;
+  uint bonfireenabled25 : 1 ;
+  uint bonfireenabled26 : 1 ;
+  uint bonfireenabled27 : 1 ;
+  uint bonfireenabled28 : 1 ;
+  uint bonfireenabled29 : 1 ;
+  uint bonfireenabled30 : 1 ;
+  uint bonfireenabled31 : 1 ;
+  uint bonfireenabled32 : 1 ;
+
+} Bonfires;
+
+
+
 local uint i;
 
 // at least parse only first slot, remove "/ dsContainersAmount to identify other data"
