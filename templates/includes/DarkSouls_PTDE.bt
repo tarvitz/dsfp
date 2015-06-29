@@ -152,8 +152,12 @@ typedef struct {
    // 0-63 indexes for utils box
    local uint utilbox_size = 64;
    local uint itembox_size = backpack_size - utilbox_size;
-   Backpack util_box[utilbox_size] <name="util box">;
-   Backpack item_box[itembox_size] <name="item box">;
+   
+   Backpack util_box[backpack_keys_amount] <name="util box">; // are these just keys?
+   Backpack empty_util_box[utilbox_size-backpack_keys_amount] <name="empty util box part">;
+   Backpack item_box[backpack_items_amount] <name="item box">;
+   Backpack empty_item_box[itembox_size-backpack_items_amount] <name="empty item box">;
+
    local uint investigate_1 = 304;
    local uint investigate_2 = 272;
    local uint investigate = investigate_1 + investigate_2;
