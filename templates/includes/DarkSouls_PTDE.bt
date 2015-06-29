@@ -28,6 +28,7 @@ typedef enum<uint>{
     on = 1
 } Switch;
 
+// aren't these just items?
 typedef enum<uint>{
     bare_hand = 900000,
     nothing_body = 901000,
@@ -36,12 +37,14 @@ typedef enum<uint>{
 } Wargear;
 
 typedef struct{
-    BYTE unknown_block[184] <bgcolor=cLtPurple>;
+    BYTE unknown_block[168] <bgcolor=cLtPurple>;
+    uint weaponequip[4];// so these are indexes? referring to the index part of item struct?
     uint left_arrow_slot;
     uint left_bolts_slot;
     uint right_arrows_slot;
     uint right_blots_slot;
-    byte _unknown[5*4] <bgcolor=cLtPurple>; // 5 uint?
+    uint armorequip[4];
+    uint unknown6a <bgcolor=cLtPurple>;
     uint left_ring_slot;
     uint right_ring_slot;
     QuickItems quick_items_slots <comment="item types in item quick slots">;
@@ -64,7 +67,8 @@ typedef struct{
     Wargear body;
     Wargear hands;
     Wargear legs;
-    Item _unknown_item <bgcolor=cLtPurple>;
+    Item hairstyle <bgcolor=cLtPurple>; // they gave this map for hair styles, i think the female hair styles are missing
+//	uint[] HairStyleIDs = { 0x000003E8, 0x0000044C, 0x000004B0, 0x00000514, 0x00000578, 0x000005DC, 0x00000640, 0x000006A4, 0x00000708, 0x0000076C };
     Item left_ring;
     Item right_ring;
     QuickItems quick_items <bgcolor=cLtBlue>;
