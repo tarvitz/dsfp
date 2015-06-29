@@ -8,6 +8,7 @@
 //--------------------------------------
 #include "items/types.bt"
 
+
 string ReadBoxTypeAndItem(uint type_and_item){
     string result;
     // ; // <-- only item id, without type mask
@@ -29,8 +30,19 @@ typedef enum<uint>{
 } ItemType;
 
 typedef struct{
-     ItemType type<name="type">;
-    Item item<name="item">;
+    ItemType type<name="type">;
+
+    if( type == 0x40000000 )
+        UsableItem item<name="item">;
+    else if( type == armour )
+        ItemArmor item<name="armor">;
+    else if( type == rings )
+        ItemRing item<name="ring">;
+    else if( type == weapon )
+        ItemWeapon item<name="weapon">;
+    else
+        Item item;
+
     uint amount<name="amount">;
 
 	// index? 12 lsb is index, the 20 msb are used for sorting. is index just another unique identifier?
@@ -44,7 +56,15 @@ typedef struct{
     // int durability_hits accumulator. Then durability hits reaches 10
     // the accumulator blanks and durability losts 1 point.
     uint durability_hits <name="durability hits">;
-} Backpack;
+} Backpack <read=sl>;
+
+
+string sl(Backpack &b) {
+    string result;
+    SPrintf(result, "%s", EnumToString( b.item ));
+    return result;
+}
+
 
 typedef struct{
     uint blank;
@@ -67,3 +87,8 @@ typedef struct{
     uint unknown7;
     uint unknown8;
 } UnknownBox;
+
+typedef struct (uint size, uint used){
+   Backpack used_box[used] <optimize=false>;
+   Backpack empty_box[size-used] <comment="empty box part">;
+} PartiallyUsedBox;
