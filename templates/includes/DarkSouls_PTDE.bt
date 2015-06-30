@@ -134,10 +134,7 @@ typedef struct{
 
 } Bonfires;
 
-local uint i;
 
-// at least parse only first slot, remove "/ dsContainersAmount to identify other data"
-// for (i = 0; i < (dsContainersAmount / dsContainersAmount); i++){
 typedef struct {
    local int unknown_size_1 = sizeof(StatsUnknown1);
    local int stats_size = sizeof(Stats);
@@ -200,27 +197,37 @@ typedef struct {
 
 } SaveSlot;
 
-local uint tag;
 LittleEndian(); 
-//while( !FEof() )
-//{
-    // Read a tag
-    tag = ReadUInt( FTell() );
 
-    // IDENTIFY BND4 token
-	// this is 0x20434f43 for x360 saves (coc?)
-	// another tag for x360 is at 0x360: 3a084d4e (little endian)
-    if( tag == 0x34444e42)
-    {
-        SetBackColor( cLtGray );
-        BND4 meta;
-        // slots should be configurated according to record's dsContainersAmount
-        if (meta.SlotMetaBlockSize == 0x20){
-			SaveSlot slot_1;
-        }
-    }
-    else{
-        Warning("Not a Dark Souls prepare to die edition file save format");
-        return -1;
-    }
-//}
+local uint tag = ReadUInt( FTell() );
+
+// IDENTIFY BND4 token
+// this is 0x20434f43 for x360 saves (coc?)
+// another tag for x360 is at 0x360: 3a084d4e (little endian)
+if( tag != 0x34444e42)
+{
+    Warning("Not a Dark Souls prepare to die edition file save format");
+    return -1;
+}
+
+SetBackColor( cLtGray );
+BND4 meta;
+
+// slots should be configurated according to record's dsContainersAmount // not really, what if you've deleted slot 1 but slot 2 exists?
+if (meta.SlotMetaBlockSize != 0x20)
+{
+    Warning("Not a Dark Souls prepare to die edition file save format");
+    return -1;
+}
+
+local uint slots = 0;
+local uint test = 0;
+for( slots = 0; slots < 10; slots++ )
+{
+    // if totalhp stat is zero, this is not a valid save slot
+    test = ReadUInt( FTell() + 116 );
+    if( test != 0 )
+        SaveSlot slot;
+    else
+        FSeek( FTell() + 0x60020 );
+}
