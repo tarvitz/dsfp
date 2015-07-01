@@ -67,7 +67,7 @@ typedef struct{
     uint64 attunement;
     uint64 endurance;
     uint64 strength;
-    uint64 dextirity;
+    uint64 dexterity;
     uint64 intelligence;
     uint64 faith;
 
@@ -81,7 +81,7 @@ typedef struct{
     uint64 earned_souls;
     uint unknown_8;
     CharState state;
-    wchar_t name[14] <comment="utf-8 using">;
+    wchar_t name[14] <comment="utf-8 using">; // garbage characters after nulls, is length here correct?
     BYTE unkown_9[6];
     GENDER gender;
 

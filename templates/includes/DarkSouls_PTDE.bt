@@ -164,7 +164,7 @@ typedef struct {
    uint UnknownData1;
 
    uint equippedItems[5];
-   byte UnknownData2[40];
+   byte UnknownData2[40]; // gestures?
 
    Color hair; // @ address: 0xE644
    Color eye; 
