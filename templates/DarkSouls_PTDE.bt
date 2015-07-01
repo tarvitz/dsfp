@@ -90,6 +90,8 @@ typedef struct {
        + 12 // backpack: items amount, keys amount, size
    );
 
+   ChecksumHeader header;
+   uint length; //number of bytes that should be included in the checksum, 393216 ( entire slot is 393248 )
    StatsUnknown1 unknown <comment="unknown data", bgcolor=cLtPurple>;
    Stats stats;
    Pack pack;
@@ -103,15 +105,16 @@ typedef struct {
    Backpack util_box[utilbox_size] <name="util box">;
    Backpack item_box[itembox_size] <name="item box">;
    local uint investigate_1 = 304;
-   local uint investigate_2 = 288;
+   local uint investigate_2 = 272;
    local uint investigate = investigate_1 + investigate_2;
    BYTE _investigate_block_1[investigate_1] <bgcolor=cLtPurple>;
    BottomlessBox box[backpack_amount];
    BYTE _investigate_block_2[investigate_2] <bgcolor=cLtPurple>;
    UnknownBox unknown_box[one_more_box_size];
 
-   BYTE data[meta.chunks[i].block_size - space - investigate] <bgcolor=cLtYellow>;
-   BYTE offset[meta.chunks[i].space_size] <bgcolor=cLtRed>;
+   BYTE data[266980] <bgcolor=cLtYellow>;
+   Checksum secondary; // this is the md5 checksum of all bytes in this save slot, excluding the header and the length fields
+   BYTE offset[12] <bgcolor=cLtRed>;
 } SaveSlot;
 
 local uint tag;
@@ -122,6 +125,8 @@ LittleEndian();
     tag = ReadUInt( FTell() );
 
     // IDENTIFY BND4 token
+	// this is 0x20434f43 for x360 saves (coc?)
+	// another tag for x360 is at 0x360: 3a084d4e (little endian)
     if( tag == 0x34444e42)
     {
         SetBackColor( cLtGray );
@@ -129,6 +134,7 @@ LittleEndian();
         // slots should be configurated according to record's dsContainersAmount
         if (meta.SlotMetaBlockSize == 0x20){
             SaveSlot slot_1;
+			SaveSlot slot_2;
         }
     }
     else{

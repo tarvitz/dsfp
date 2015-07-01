@@ -6,16 +6,20 @@
 // Revision: 0.0.1
 // Purpose: for DarkSouls_PTDE.bt
 //--------------------------------------
-// UNKNOWN
+
+// Checksum
 typedef struct{
-    byte unknown[16];      
-} Unknown1 <bgcolor=cLtPurple>;
+    byte md5[16];
+} Checksum <bgcolor=cLtPurple>;
 
 typedef struct{
-    Unknown1 unknown_data<fgcolor=cLtRed>;
-    BYTE unknown[92];
+    Checksum primary; // this is written after the md5 in the footer of the save slot is written, it includes all parts of the save slot except for the ChecksumHeader
+} ChecksumHeader <bgcolor=cLtPurple>;
+
+typedef struct{
+    BYTE unknown[88];
 } StatsUnknown1 <bgcolor=cLtPurple>;
 
 typedef struct{
-    BYTE unknown[47] <comment="don't event know what it possible be">;
+    BYTE unknown[47] <comment="don't even know what it could possible be">;
 } StatsUnknown2 <bgcolor=cLtPurple>;
