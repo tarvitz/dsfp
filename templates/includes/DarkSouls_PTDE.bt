@@ -99,9 +99,36 @@ typedef struct{
 } Color;
 
 typedef struct{
+    uint length;
+    byte data[length];
+    uint containerIndex;
+} UnknownOnline;
+
+typedef struct{
+    byte data[16];
+} UnknownArea;
+
+typedef struct{
     Item magic;
     uint count;
 } Attuned;
+
+typedef struct{
+    uint ChrHeaderLength;
+    byte ChrHeader[ChrHeaderLength]; // enemy death tracker?
+
+    uint ObjHeaderLength;
+    byte ObjHeader[ObjHeaderLength]; // broken objects tracker?
+    byte TrailingData[88];
+
+    // there are more containers inside these containers that follow the
+    // UnknownOnline struct pattern, where the first uint declare their size.
+
+    UnknownOnline unknownContainer[14]<optimize=false>;
+       //the container with index 7: orange soapstone messages?
+       // index 8: bloodstain animations?
+       // index 10 is something as well.
+} OnlineData;
 
 typedef struct{
   uint bonfireenabled1 : 1 ;
@@ -199,11 +226,15 @@ typedef struct {
    
    Bonfires enabledBonfires; // not tested enough
 
-   BYTE data[93668] <bgcolor=cLtYellow>;
-   ubyte onlineprofiles[20350] <bgcolor=cLtYellow>;
+   BYTE data[93660-64-184] <bgcolor=cLtYellow>;
 
-   BYTE data2[151884] <bgcolor=cLtYellow>;
+    local uint mark = FTell();
+    OnlineData online;
+    // Here we have a dynamic length zero pad, skip to next part with numbers
+    FSeek(mark+131242);
 
+    //0x56280 burg bonfire
+   UnknownArea areadata[2578] <bgcolor=cLtYellow>;
    Checksum secondary; // this is the md5 checksum of all bytes in this save slot, excluding the header and the length fields
    BYTE offset[12] <bgcolor=cWhite>;
 
