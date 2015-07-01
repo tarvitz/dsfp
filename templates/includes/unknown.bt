@@ -10,12 +10,8 @@
 // Checksum
 typedef struct{
     byte md5[16];
-} Checksum <bgcolor=cLtPurple>;
+} Checksum <bgcolor=cLtGreen>;
 
 typedef struct{
-    Checksum primary; // this is written after the md5 in the footer of the save slot is written, it includes all parts of the save slot except for the ChecksumHeader
-} ChecksumHeader <bgcolor=cLtPurple>;
-
-typedef struct{
-    BYTE unknown[88];
-} StatsUnknown1 <bgcolor=cLtPurple>;
+    uint unknown[22]; // most of these look like uints?
+} StatsUnknown1 <bgcolor=cLtYellow>;

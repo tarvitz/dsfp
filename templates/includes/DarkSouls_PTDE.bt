@@ -141,10 +141,9 @@ typedef struct {
    local int pack_size = sizeof(Pack);
    local int backpack_amount = 2048; // is this hard code constant?
 
-
-   ChecksumHeader header;
+   Checksum header; // this is written after the md5 in the footer of the save slot is written, it includes all parts of the save slot except for the ChecksumHeader
    uint length; //number of bytes that should be included in the checksum, 393216 ( entire slot is 393248 )
-   StatsUnknown1 unknown <comment="unknown data", bgcolor=cLtPurple>;
+   StatsUnknown1 unknown <comment="unknown data">;
 
    Stats stats;
    Pack pack;
