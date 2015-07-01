@@ -72,14 +72,14 @@ typedef struct{
     uint64 faith;
 
     uint64 unknown <bgcolor=cLtPurple>;
-    uint unknow;
+    uint unknown2;
     uint humanity;
     uint64 resistance; // is this uint64 or uint32?
 
     uint level;
     uint souls;
     uint64 earned_souls;
-    uint unknown_8;
+    uint unknown3  <bgcolor=cLtPurple>;
     CharState state;
     wchar_t name[14] <comment="utf-8 using">; // garbage characters after nulls, is length here correct?
     BYTE unkown_9[6];
