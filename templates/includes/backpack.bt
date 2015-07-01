@@ -46,8 +46,10 @@ typedef struct{
     uint amount<name="amount">;
 
 	// index? 12 lsb is index, the 20 msb are used for sorting. is index just another unique identifier?
-    uint sort : 20;
+	// is the endianness screwing up these fields? because this makes no sense? OH THEY ARE THE WRONG WAY AROUND *FACEDESK*
+	
     uint index:12;
+    uint sort : 20;
 	
     uint have<name="have">; // quantity? enabled? have is ambiguous
     uint durability<name="item durability">;
