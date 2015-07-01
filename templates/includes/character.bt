@@ -112,7 +112,7 @@ typedef struct{
 
 
     BYTE unknown1[34];
-    uint sin;
+    uint sin; // i havent tested this
 
     BYTE unknown2[8];
 

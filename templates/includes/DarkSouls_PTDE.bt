@@ -114,7 +114,7 @@ typedef struct{
   uint bonfireenabled13 : 1 ;
   uint bonfireenabled14 : 1 ;
   uint bonfireenabled15 : 1 ;
-  uint bonfireenabled16 : 1 <comment="firelink?">;
+  uint bonfireenabled16 : 1 <comment="firelink?">; // enables when arriving at firelink first time
   uint bonfireenabled17 : 1 ;
   uint bonfireenabled18 : 1 ;
   uint bonfireenabled19 : 1 ;
@@ -159,12 +159,12 @@ typedef struct {
    PartiallyUsedBox util_box(utilbox_size,backpack_keys_amount);
    PartiallyUsedBox item_box(itembox_size,backpack_items_amount);
    
-   uint lastindex; // the item with the highest index
+   uint lastindex; // the item with the highest index // whatever that means? not tested
    Attuned attunementslots[12];
    uint UnknownData1;
 
    uint equippedItems[5];
-   byte UnknownData2[40]; // gestures?
+   byte UnknownData2[40]; // gestures? not tested
 
    Color hair; // @ address: 0xE644
    Color eye; 
@@ -176,7 +176,7 @@ typedef struct {
    BottomlessBox box[backpack_amount];
    BYTE UnknownData5[280];
 
-   ushort playthrough <comment="ng+ counter?">;
+   ushort playthrough <comment="ng+ counter?">; // not tested
    uint UnknownData6[2];
 
    UnknownBox unknown_box[64];
@@ -185,7 +185,7 @@ typedef struct {
    uint deathcount;
    byte UnknownData8[38];
    
-   Bonfires enabledBonfires;
+   Bonfires enabledBonfires; // not tested enough
 
    BYTE data[93668] <bgcolor=cLtYellow>;
    ubyte onlineprofiles[20350];
