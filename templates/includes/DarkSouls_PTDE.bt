@@ -163,36 +163,42 @@ typedef struct {
    uint UnknownData1;
 
    uint equippedItems[5];
-   byte UnknownData2[40]; // gestures? not tested
+   ushort UnknownData2[20]<bgcolor=cLtYellow>;
 
    Color hair; // @ address: 0xE644
    Color eye; 
-   BYTE UnknownData3[50];
-
-   ubyte skintone;
-   byte UnknownData4[57];
+   CharacterParams creationdata;
 
    BottomlessBox box[backpack_amount];
-   BYTE UnknownData5[280];
 
-   ushort playthrough <comment="ng+ counter?">; // not tested
-   uint UnknownData6[2];
+   ushort UnknownData5a[20] <bgcolor=cLtYellow>;
+   
+	// equipped gestures are stored somewhere else, this is specifically if they are available or not
+	// enabling this wont remove the speak option and vice verse
+   LearnedGestures gestures;
+
+   ushort UnknownData5b[112] <bgcolor=cLtYellow>;
+
+   ushort playthrough <comment="ng+ counter?", bgcolor=cLtRed>; // not tested
+   uint UnknownData6[2] <bgcolor=cLtYellow>;
 
    UnknownBox unknown_box[64];
-   byte UnknownData7[1014];
+
+   UnknownStruct UnknownData7a[120];
+   byte UnknownData7b[54] <bgcolor=cLtYellow>;
 
    uint deathcount;
-   byte UnknownData8[38];
+   byte UnknownData8[38] <bgcolor=cLtYellow>;
    
    Bonfires enabledBonfires; // not tested enough
 
    BYTE data[93668] <bgcolor=cLtYellow>;
-   ubyte onlineprofiles[20350];
+   ubyte onlineprofiles[20350] <bgcolor=cLtYellow>;
 
    BYTE data2[151884] <bgcolor=cLtYellow>;
 
    Checksum secondary; // this is the md5 checksum of all bytes in this save slot, excluding the header and the length fields
-   BYTE offset[12] <bgcolor=cLtRed>;
+   BYTE offset[12] <bgcolor=cWhite>;
 
 } SaveSlot;
 
