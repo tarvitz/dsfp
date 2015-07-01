@@ -113,14 +113,16 @@ typedef struct{
 
     BYTE unknown1[34];
     uint sin;
-    BYTE unknown2[9];
- 
+
+    BYTE unknown2[8];
+
     uint poison_resistance;
     uint bleeding_resistence;
     uint poison_resistance_2;
     uint curse_resistence;
-	byte unknown3a;
-	byte unknown3b;
+
+	byte unknown3[3];
+
 	Covenant covenant;
     CharFace face;
     CharHair hair_2;
