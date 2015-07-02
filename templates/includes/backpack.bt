@@ -8,17 +8,34 @@
 //--------------------------------------
 #include "items/types.bt"
 
-
 string ReadBoxTypeAndItem(uint type_and_item){
     string result;
-    // ; // <-- only item id, without type mask
-	Item it = (type_and_item & ~0xF0000000);
+    Item it = (type_and_item & ~0xF0000000);
     SPrintf(result, "%s", EnumToString( it));
     if (type_and_item == 0xFFFFFFFF){
         result = "---clean---";
     }
     return result;
 }
+
+typedef struct{
+    uint first;
+    uint second;
+    uint third;
+    uint fourth;
+    uint fifth;
+} QuickItems;
+
+typedef enum<uint>{
+    hand = 1,
+    double_hand = 3
+} WieldType;
+
+typedef enum<uint>{
+    off = 0,
+    on = 1
+} Switch;
+
 
 typedef enum<uint>{
     clean      = 0xFFFFFFFF,
@@ -45,12 +62,11 @@ typedef struct{
 
     uint amount<name="amount">;
 
-	// index? 12 lsb is index, the 20 msb are used for sorting. is index just another unique identifier?
-	// is the endianness screwing up these fields? because this makes no sense? OH THEY ARE THE WRONG WAY AROUND *FACEDESK*
-	
+    // index? 12 lsb is index, the 20 msb are used for sorting. is index just another unique identifier?
+    // is the endianness screwing up these fields? because this makes no sense? OH THEY ARE THE WRONG WAY AROUND *FACEDESK*
     uint index:12;
     uint sort : 20;
-	
+
     uint have<name="have">; // quantity? enabled? have is ambiguous
     uint durability<name="item durability">;
     // durability hits treats logic: each hit that have been reach its target
@@ -58,15 +74,14 @@ typedef struct{
     // int durability_hits accumulator. Then durability hits reaches 10
     // the accumulator blanks and durability losts 1 point.
     uint durability_hits <name="durability hits">;
-} Backpack <read=sl>;
+} Backpack <read=ReadItemAsString>;
 
 
-string sl(Backpack &b) {
+string ReadItemAsString(Backpack &b) {
     string result;
     SPrintf(result, "%s", EnumToString( b.item ));
     return result;
 }
-
 
 typedef struct{
     uint blank;
@@ -94,3 +109,47 @@ typedef struct (uint size, uint used){
    Backpack used_box[used] <optimize=false>;
    Backpack empty_box[size-used] <comment="empty box part">;
 } PartiallyUsedBox;
+
+typedef struct{
+    BYTE unknown_block[168] <bgcolor=cLtPurple>;
+
+    // I think these are indexes that remember which items were selected last in the menu,
+    // notice if you unequip an item and then go into the menu again, it remembers which item was equipped.
+    // Anyway these are definitely indexes from the backpack struct
+    uint weaponequip[4];
+
+    uint left_arrow_slot;
+    uint left_bolts_slot;
+    uint right_arrows_slot;
+    uint right_blots_slot;
+    uint armorequip[4];
+    uint unknown6a <bgcolor=cLtPurple>;
+    uint left_ring_slot;
+    uint right_ring_slot;
+    QuickItems quick_items_slots <comment="item types in item quick slots">;
+    WieldType wield_type;
+    Switch left_hand;
+    Switch right_hand;
+    Switch _unknown1 <bgcolor=cLtPurple>;
+    Switch _unknown2 <bgcolor=cLtPurple>;
+    Switch _unknown3 <bgcolor=cLtPurple>;
+    Switch _unknown4 <bgcolor=cLtPurple>;
+    ItemWeapon left_hand_first;
+    ItemWeapon left_hand_second;
+    ItemWeapon right_hand_first;
+    ItemWeapon right_hand_second;
+    ItemWeapon left_item_arrows_slot;
+    ItemWeapon left_item_bolts_slot;
+    ItemWeapon right_item_arrows_slot;
+    ItemWeapon right_item_bolts_slot;
+    ItemArmor head;
+    ItemArmor body;
+    ItemArmor hands;
+    ItemArmor legs;
+    uint hairstyle <bgcolor=cLtPurple>; // they gave this map for hair styles, i think the female hair styles are missing
+//	uint[] HairStyleIDs = { 0x000003E8, 0x0000044C, 0x000004B0, 0x00000514, 0x00000578, 0x000005DC, 0x00000640, 0x000006A4, 0x00000708, 0x0000076C };
+    ItemRing left_ring;
+    ItemRing right_ring;
+    QuickItems quick_items <bgcolor=cLtBlue>; // more indexes?
+} Pack;
+

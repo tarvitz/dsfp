@@ -9,76 +9,7 @@
 #include "bnd4.bt";
 #include "character.bt";
 #include "backpack.bt"
-
-typedef struct{
-    uint first;
-    uint second;
-    uint third;
-    uint fourth;
-    uint fifth;
-} QuickItems;
-
-typedef enum<uint>{
-    hand = 1,
-    double_hand = 3
-} WieldType;
-
-typedef enum<uint>{
-    off = 0,
-    on = 1
-} Switch;
-
-// aren't these just items?
-typedef enum<uint>{
-    bare_hand = 900000,
-    nothing_body = 901000,
-    nothing_hands = 902000,
-    nothing_legs = 903000,
-} Wargear;
-
-typedef struct{
-    BYTE unknown_block[168] <bgcolor=cLtPurple>;
-
-    // I think these are indexes that remember which items were selected last in the menu,
-    // notice if you unequip an item and then go into the menu again, it remembers which item was equipped.
-    // Anyway these are definitely indexes from the backpack struct
-    uint weaponequip[4];
-
-    uint left_arrow_slot;
-    uint left_bolts_slot;
-    uint right_arrows_slot;
-    uint right_blots_slot;
-    uint armorequip[4];
-    uint unknown6a <bgcolor=cLtPurple>;
-    uint left_ring_slot;
-    uint right_ring_slot;
-    QuickItems quick_items_slots <comment="item types in item quick slots">;
-    WieldType wield_type;
-    Switch left_hand;
-    Switch right_hand;
-    Switch _unknown1 <bgcolor=cLtPurple>;
-    Switch _unknown2 <bgcolor=cLtPurple>;
-    Switch _unknown3 <bgcolor=cLtPurple>;
-    Switch _unknown4 <bgcolor=cLtPurple>;
-    Wargear left_hand_first;
-    Wargear left_hand_second;
-    Wargear right_hand_first;
-    Wargear right_hand_second;
-    Item left_item_arrows_slot;
-    Item left_item_bolts_slot;
-    Item right_item_arrows_slot;
-    Item right_item_bolts_slot;
-    Wargear head;
-    Wargear body;
-    Wargear hands;
-    Wargear legs;
-    Item hairstyle <bgcolor=cLtPurple>; // they gave this map for hair styles, i think the female hair styles are missing
-//	uint[] HairStyleIDs = { 0x000003E8, 0x0000044C, 0x000004B0, 0x00000514, 0x00000578, 0x000005DC, 0x00000640, 0x000006A4, 0x00000708, 0x0000076C };
-    Item left_ring;
-    Item right_ring;
-    QuickItems quick_items <bgcolor=cLtBlue>;
-} Pack;
-
+#include "unknown.bt";
 
 typedef struct{
     ubyte flag1 : 1 ;
@@ -99,30 +30,15 @@ typedef struct{
 } Color;
 
 typedef struct{
-    uint length;
-    byte data[length];
-    uint containerIndex;
-} UnknownOnline;
+    byte md5[16];
+} Checksum <bgcolor=cLtGreen>;
 
 typedef struct{
-    uint length;
-    byte data[length];
-} UnknownDynamic;
-
-typedef struct{
-    byte data[16];
-} UnknownArea;
-
-typedef struct{
-    ushort index;
-    ushort id;
-} UnknownTuple <read=WriteTuple>;
-
-string WriteTuple(UnknownTuple &b) {
-    string result;
-    SPrintf(result, "%u : %u", b.index, b.id);
-    return result;
-}
+   ubyte UnknownData3[50] <bgcolor=cLtYellow>;
+// I suspect the character creation options can be found around here
+   ubyte skintone;
+   byte UnknownData4[57] <bgcolor=cLtYellow>;
+} CharacterParams;
 
 typedef struct{
     Item magic;
@@ -208,32 +124,6 @@ typedef struct{
     byte unknown3[224] <bgcolor=cLtYellow>;
     byte filler2[16] <bgcolor=cWhite>;
 } BonfireSection;
-
-typedef struct{
-    uint unknown <bgcolor=cLtYellow>;
-    uint unknown2 <bgcolor=cLtYellow>;
-    uint unknown3 <bgcolor=cWhite>;
-    uint index <bgcolor=cLtPurple>; // there is a pattern here somewhere, i just know it
-    byte marker[112] <bgcolor=cLtYellow>; // this is just to mark area as yellow, to make it easier to find patterns
-    byte unknown_data[1152]; // very rare that this is not zero filled
-} UnknownBulkSection;
-
-typedef struct{
-    uint unknown1;
-    uint investigate1 <bgcolor=cLtPurple>; // bitfield?
-    ushort investigate2; // somewhere here it aligns to 4 again
-    uint unknown2[3];
-    uint investigate3 <bgcolor=cLtPurple>;
-    byte unknown3[28];
-    uint deathcount;
-    uint end_section; // i think this is an end marker?
-} UnknownBlob2;
-
-typedef struct{
-    ushort UnknownData[72] <bgcolor=cLtYellow>;
-    ushort playthrough <comment="ng+ counter?", bgcolor=cLtRed>; // not tested
-    uint   ZeroFill[2] <bgcolor=cLtYellow>;
-} UnknownBlob1;
 
 typedef struct {
     local int unknown_size_1 = sizeof(StatsUnknown1);
