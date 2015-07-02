@@ -2,3 +2,5 @@
 docs/_build
 *.bin
 .idea
+
+util

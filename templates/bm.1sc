@@ -1,0 +1,12 @@
+//--------------------------------------
+//--- 010 Editor v6.0.2 Script File
+//
+// File:
+// Author:
+// Revision:
+// Purpose:
+//--------------------------------------
+
+uint64 curs = GetCursorPos();
+uint length = ReadUInt(curs);
+AddBookmark( curs+4, "bm", "byte", length, cNone, cLtAqua );
