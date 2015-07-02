@@ -81,14 +81,14 @@ typedef struct{
 
 
 typedef struct{
-  ubyte flag1 : 1 ;
-  ubyte flag2 : 1 ;
-  ubyte flag3 : 1 ;
-  ubyte flag4 : 1 ;
-  ubyte flag5 : 1 ;
-  ubyte flag6 : 1 ;
-  ubyte flag7 : 1 ;
-  ubyte flag8 : 1 ;
+    ubyte flag1 : 1 ;
+    ubyte flag2 : 1 ;
+    ubyte flag3 : 1 ;
+    ubyte flag4 : 1 ;
+    ubyte flag5 : 1 ;
+    ubyte flag6 : 1 ;
+    ubyte flag7 : 1 ;
+    ubyte flag8 : 1 ;
 } BitFlags;
 
 typedef struct{
@@ -105,13 +105,47 @@ typedef struct{
 } UnknownOnline;
 
 typedef struct{
+    uint length;
+    byte data[length];
+} UnknownDynamic;
+
+typedef struct{
     byte data[16];
 } UnknownArea;
+
+typedef struct{
+    ushort index;
+    ushort id;
+} UnknownTuple <read=WriteTuple>;
+
+string WriteTuple(UnknownTuple &b) {
+    string result;
+    SPrintf(result, "%u : %u", b.index, b.id);
+    return result;
+}
 
 typedef struct{
     Item magic;
     uint count;
 } Attuned;
+
+// I'm not sure exactly how these map, if they are just shorts or UnknownTuple
+typedef struct{
+    UnknownTuple unknown1 <bgcolor=cLtYellow>;
+    UnknownTuple petrus <comment="shrug - 21, look skyward - 23, unlearned - 20">;
+    UnknownTuple unknown3 <bgcolor=cLtYellow>;
+    UnknownTuple unknown4 <bgcolor=cLtYellow>;
+} LearnedGestures;
+
+typedef struct{
+    UnknownTuple UnknownData5a[10] <bgcolor=cLtYellow>;
+    // equipped gestures are stored somewhere else, this is specifically if they are available or not
+    // enabling this wont remove the speak option and vice verse
+    LearnedGestures gestures;
+    //maybe more gestures?
+    UnknownTuple UnknownData5b[4] <bgcolor=cLtYellow>;
+    uint ZeroPad[16] <bgcolor=cWhite>;
+} Gestures;
 
 typedef struct{
     uint ChrHeaderLength;
@@ -163,81 +197,114 @@ typedef struct{
   uint bonfireenabled30 : 1 ;
   uint bonfireenabled31 : 1 ;
   uint bonfireenabled32 : 1 ;
-
 } Bonfires;
 
+typedef struct{
+    uint unknown[4];
+    byte UnknownData8b[38-20] <bgcolor=cLtYellow>;
+    Bonfires enabledBonfires<bgcolor=cLtGreen>; // not tested enough
+    byte unknown2[214] <bgcolor=cLtYellow>;
+    byte filler[788] <bgcolor=cWhite>;
+    byte unknown3[224] <bgcolor=cLtYellow>;
+    byte filler2[16] <bgcolor=cWhite>;
+} BonfireSection;
+
+typedef struct{
+    uint unknown <bgcolor=cLtYellow>;
+    uint unknown2 <bgcolor=cLtYellow>;
+    uint unknown3 <bgcolor=cWhite>;
+    uint index <bgcolor=cLtPurple>; // there is a pattern here somewhere, i just know it
+    byte marker[112] <bgcolor=cLtYellow>; // this is just to mark area as yellow, to make it easier to find patterns
+    byte unknown_data[1152]; // very rare that this is not zero filled
+} UnknownBulkSection;
+
+typedef struct{
+    uint unknown1;
+    uint investigate1 <bgcolor=cLtPurple>; // bitfield?
+    ushort investigate2; // somewhere here it aligns to 4 again
+    uint unknown2[3];
+    uint investigate3 <bgcolor=cLtPurple>;
+    byte unknown3[28];
+    uint deathcount;
+    uint end_section; // i think this is an end marker?
+} UnknownBlob2;
+
+typedef struct{
+    ushort UnknownData[72] <bgcolor=cLtYellow>;
+    ushort playthrough <comment="ng+ counter?", bgcolor=cLtRed>; // not tested
+    uint   ZeroFill[2] <bgcolor=cLtYellow>;
+} UnknownBlob1;
 
 typedef struct {
-   local int unknown_size_1 = sizeof(StatsUnknown1);
-   local int stats_size = sizeof(Stats);
-   local int pack_size = sizeof(Pack);
-   local int backpack_amount = 2048; // is this hard code constant?
+    local int unknown_size_1 = sizeof(StatsUnknown1);
+    local int stats_size = sizeof(Stats);
+    local int pack_size = sizeof(Pack);
+    local int backpack_amount = 2048; // is this hard code constant? // i dont know, we could try filling the backpack 
+// with 2047 items and se what happens when we try to pick up another. if it refuses its constant, if it dynamically resize the 
+// pack then we know
 
-   Checksum header; // this is written after the md5 in the footer of the save slot is written, it includes all parts of the save slot except for the ChecksumHeader
-   uint length; //number of bytes that should be included in the checksum, 393216 ( entire slot is 393248 )
-   StatsUnknown1 unknown <comment="unknown data">;
 
-   Stats stats;
-   Pack pack;
+    Checksum header; // this is written after the md5 in the footer of the save slot is written, it includes all parts of the save slot except for the ChecksumHeader
+    uint length; //number of bytes that should be included in the checksum, 393216 ( entire slot is 393248 )
+    StatsUnknown1 unknown <comment="unknown data">;
 
-   uint backpack_items_amount;
-   uint backpack_keys_amount;
-   uint backpack_size;
-   // 0-63 indexes for utils box
-   local uint utilbox_size = 64;
-   local uint itembox_size = backpack_size - utilbox_size;
+    Stats stats;
+    Pack pack;
+
+    uint backpack_items_amount;
+    uint backpack_keys_amount;
+    uint backpack_size;
+    // 0-63 indexes for utils box
+    local uint utilbox_size = 64;
+    local uint itembox_size = backpack_size - utilbox_size;
 
     //warning, if you've dropped an item, there may be blank items interleaved among the existing
     //items and some items will be pushed into the empty part of the box display
-   PartiallyUsedBox util_box(utilbox_size,backpack_keys_amount);
-   PartiallyUsedBox item_box(itembox_size,backpack_items_amount);
-   
-   uint lastindex; // the item with the highest index // whatever that means? not tested
-   Attuned attunementslots[12];
-   uint UnknownData1;
+    PartiallyUsedBox util_box(utilbox_size,backpack_keys_amount);
+    PartiallyUsedBox item_box(itembox_size,backpack_items_amount);
 
-   uint equippedItems[5]; // could these also be the index-remember-previous-selection feature?
-   ushort UnknownData2[20]<bgcolor=cLtYellow>;
+    uint lastindex; // the item with the highest index // whatever that means? not tested
+    Attuned attunementslots[12];
+    uint UnknownData1;
 
-   Color hair; // @ address: 0xE644
-   Color eye; 
-   CharacterParams creationdata;
+    uint equippedItems[5]; // could these also be the index-remember-previous-selection feature?
 
-   BottomlessBox box[backpack_amount];
+    UnknownTuple UnknownData2[10]<bgcolor=cLtYellow>;
 
-   ushort UnknownData5a[20] <bgcolor=cLtYellow>;
-   
-	// equipped gestures are stored somewhere else, this is specifically if they are available or not
-	// enabling this wont remove the speak option and vice verse
-   LearnedGestures gestures;
+    Color hair; // @ address: 0xE644
+    Color eye; 
+    CharacterParams creationdata;
 
-   ushort UnknownData5b[112] <bgcolor=cLtYellow>;
+    BottomlessBox box[backpack_amount];
 
-   ushort playthrough <comment="ng+ counter?", bgcolor=cLtRed>; // not tested
-   uint UnknownData6[2] <bgcolor=cLtYellow>;
+    Gestures gestures;
 
-   UnknownBox unknown_box[64];
+    // the end part of the playthrough counter looks like it is almost in a box struct?
+    UnknownBlob1 playthrough_counter;
+    UnknownBox unknown_box[64];
+    UnknownStruct unknown_box_2[120];
 
-   UnknownStruct UnknownData7a[120];
-   byte UnknownData7b[54] <bgcolor=cLtYellow>;
+    UnknownBlob2 counters;
 
-   uint deathcount;
-   byte UnknownData8[38] <bgcolor=cLtYellow>;
-   
-   Bonfires enabledBonfires; // not tested enough
 
-   BYTE data[93660-64-184] <bgcolor=cLtYellow>;
+    // a section has length 0x500
+    BonfireSection firstsection;
+    UnknownBulkSection unknownSections[72];
+
+    byte zerofill2[10] <bgcolor=cWhite,fgcolor=cGreen>;
 
     local uint mark = FTell();
+
     OnlineData online;
+
     // Here we have a dynamic length zero pad, skip to next part with numbers
     FSeek(mark+131242);
 
-    //0x56280 burg bonfire
-   UnknownArea areadata[2578] <bgcolor=cLtYellow>;
-   Checksum secondary; // this is the md5 checksum of all bytes in this save slot, excluding the header and the length fields
-   BYTE offset[12] <bgcolor=cWhite>;
+    //0x56280 burg bonfire?
+    UnknownArea areadata[2578] <bgcolor=cLtYellow>; //Im getting indications that this is just garbage data?
 
+    Checksum secondary; // this is the md5 checksum of all bytes in this save slot, excluding the header and the length fields
+    ubyte offset[12] <bgcolor=cWhite>;
 } SaveSlot;
 
 LittleEndian(); 

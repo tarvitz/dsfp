@@ -24,17 +24,6 @@ typedef struct{
 } CharacterParams;
 
 typedef struct{
-    ushort unknown1 <bgcolor=cLtYellow>;
-	ushort unknown2 <bgcolor=cLtYellow>;
-	ushort petrus <comment="shrug - 21, look skyward - 23, unlearned - 20">;
-	ushort unknown4 <bgcolor=cLtYellow>;
-	ushort unknown5 <bgcolor=cLtYellow>;
-	ushort unknown6 <bgcolor=cLtYellow>;
-	ushort unknown7 <bgcolor=cLtYellow>;
-	ushort unknown8 <bgcolor=cLtYellow>;
-} LearnedGestures;
-
-typedef struct{
 	int zero;
 	int negative;
 } UnknownStruct<bgcolor=cLtYellow>;

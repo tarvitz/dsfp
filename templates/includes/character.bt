@@ -14,8 +14,8 @@ typedef enum <uint> {
 } CharState;
 
 typedef enum<BYTE>{
-   warrior = 0, knight = 1, wanderer = 2,  thief = 3, bandit = 4,
-   hunter = 5, sorcerer = 6, pyromancer = 7, cleric = 8, deprived = 9
+    warrior = 0, knight = 1, wanderer = 2,  thief = 3, bandit = 4,
+    hunter = 5, sorcerer = 6, pyromancer = 7, cleric = 8, deprived = 9
 } CharClass;
 
 typedef enum<BYTE>{
@@ -40,8 +40,8 @@ typedef enum<BYTE>{
 } CharHairColor;
 
 typedef enum<BYTE>{
-   none = 0, blessing = 1, black_firebomb = 2, twin_humanities = 3, binoculars = 4,
-   pendant = 5, master_key = 6, tiny_being_ring = 7, old_witch_ring = 8
+    none = 0, blessing = 1, black_firebomb = 2, twin_humanities = 3, binoculars = 4,
+    pendant = 5, master_key = 6, tiny_being_ring = 7, old_witch_ring = 8
 } CharGift;
 
 typedef enum<BYTE>{
@@ -87,12 +87,12 @@ typedef struct{
 
     byte unknown_3 <comment="not class", bgcolor=cLtPurple>;
     byte unknown_4 <bgcolor=cLtPurple>;
-    byte unknown_5 <bgcolor=cLtPurple>;
+    byte unknown_5a <bgcolor=cLtPurple>;
     
     CharClass class;
     CharBody body;
     CharGift gift;
-    byte unknown_5 <bgcolor=cLtPurple>;
+    byte unknown_5b <bgcolor=cLtPurple>;
 } CharStats;
 
 typedef struct{
