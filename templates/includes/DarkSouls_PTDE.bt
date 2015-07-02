@@ -65,7 +65,8 @@ typedef struct{
 
 typedef struct{
     uint ChrHeaderLength;
-    byte ChrHeader[ChrHeaderLength]; // enemy death tracker?
+    byte ChrHeader[ChrHeaderLength]; // some bytes in here definitely track enemy deaths
+    // the case I tested was writing byte 30 and 34, which made some enemies in the level spawn dead.
 
     uint ObjHeaderLength;
     byte ObjHeader[ObjHeaderLength]; // broken objects tracker?
@@ -180,6 +181,7 @@ typedef struct {
     // a section has length 0x500
     BonfireSection firstsection;
     UnknownBulkSection unknownSections[72];
+    //unknownSection[2].marker[8] includes the bit that unlocks the undead burg ladder shortcut. it is bit 0x08 if my calculations are correct
 
     byte zerofill2[10] <bgcolor=cWhite,fgcolor=cGreen>;
 

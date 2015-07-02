@@ -83,7 +83,7 @@ typedef struct{
     uint unknown_1 <bgcolor=cLtPurple>;
     STAMINA stamina <fgcolor=cLtBlue>;
     uint unknown_2 <bgcolor=cLtPurple>;
-    CharStats body;
+    CharStats stats;
     wchar_t name[14] <comment="utf-8">; // garbage characters after nulls?
     BYTE unknown_3[6] <bgcolor=cLtPurple>;
     GENDER gender;
@@ -92,7 +92,7 @@ typedef struct{
     byte unknown_5[2] <bgcolor=cLtPurple>;
 
     CharClass class;
-    CharBody body;
+    CharBody bodytype;
     CharGift gift;
     byte unknown_6 <bgcolor=cLtPurple>;
 

@@ -73,6 +73,8 @@ typedef struct{
     // for example it could be event wall or enemy accumulates 1/2/etc points
     // int durability_hits accumulator. Then durability hits reaches 10
     // the accumulator blanks and durability losts 1 point.
+
+    // I found that blocking one hit on the plank shield incremented durability_hits one and decremented durability one.
     uint durability_hits <name="durability hits">;
 } Backpack <read=ReadItemAsString>;
 
