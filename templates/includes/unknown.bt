@@ -6,16 +6,35 @@
 // Revision: 0.0.1
 // Purpose: for DarkSouls_PTDE.bt
 //--------------------------------------
-// UNKNOWN
+
+// Checksum
 typedef struct{
-    byte unknown[16];      
-} Unknown1 <bgcolor=cLtPurple>;
+    byte md5[16];
+} Checksum <bgcolor=cLtGreen>;
 
 typedef struct{
-    Unknown1 unknown_data<fgcolor=cLtRed>;
-    BYTE unknown[92];
-} StatsUnknown1 <bgcolor=cLtPurple>;
+    uint unknown[22]; // most of these look like uints?
+} StatsUnknown1 <bgcolor=cLtYellow>;
 
 typedef struct{
-    BYTE unknown[47] <comment="don't event know what it possible be">;
-} StatsUnknown2 <bgcolor=cLtPurple>;
+   ubyte UnknownData3[50] <bgcolor=cLtYellow>;
+// I suspect the character creation options can be found around here
+   ubyte skintone;
+   byte UnknownData4[57] <bgcolor=cLtYellow>;
+} CharacterParams;
+
+typedef struct{
+    ushort unknown1 <bgcolor=cLtYellow>;
+	ushort unknown2 <bgcolor=cLtYellow>;
+	ushort petrus <comment="shrug - 21, look skyward - 23, unlearned - 20">;
+	ushort unknown4 <bgcolor=cLtYellow>;
+	ushort unknown5 <bgcolor=cLtYellow>;
+	ushort unknown6 <bgcolor=cLtYellow>;
+	ushort unknown7 <bgcolor=cLtYellow>;
+	ushort unknown8 <bgcolor=cLtYellow>;
+} LearnedGestures;
+
+typedef struct{
+	int zero;
+	int negative;
+} UnknownStruct<bgcolor=cLtYellow>;

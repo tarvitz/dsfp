@@ -1,0 +1,276 @@
+//--------------------------------------
+//--- 010 Editor v5.0 Binary Template
+//
+// File: DRAKS0005.sl2
+// Author: Tarvitz
+// Revision: 0.0.1
+// Purpose: 4 fun
+//--------------------------------------
+#include "bnd4.bt";
+#include "character.bt";
+#include "backpack.bt"
+
+typedef struct{
+    uint first;
+    uint second;
+    uint third;
+    uint fourth;
+    uint fifth;
+} QuickItems;
+
+typedef enum<uint>{
+    hand = 1,
+    double_hand = 3
+} WieldType;
+
+typedef enum<uint>{
+    off = 0,
+    on = 1
+} Switch;
+
+// aren't these just items?
+typedef enum<uint>{
+    bare_hand = 900000,
+    nothing_body = 901000,
+    nothing_hands = 902000,
+    nothing_legs = 903000,
+} Wargear;
+
+typedef struct{
+    BYTE unknown_block[168] <bgcolor=cLtPurple>;
+
+    // I think these are indexes that remember which items were selected last in the menu,
+    // notice if you unequip an item and then go into the menu again, it remembers which item was equipped.
+    // Anyway these are definitely indexes from the backpack struct
+    uint weaponequip[4];
+
+    uint left_arrow_slot;
+    uint left_bolts_slot;
+    uint right_arrows_slot;
+    uint right_blots_slot;
+    uint armorequip[4];
+    uint unknown6a <bgcolor=cLtPurple>;
+    uint left_ring_slot;
+    uint right_ring_slot;
+    QuickItems quick_items_slots <comment="item types in item quick slots">;
+    WieldType wield_type;
+    Switch left_hand;
+    Switch right_hand;
+    Switch _unknown1 <bgcolor=cLtPurple>;
+    Switch _unknown2 <bgcolor=cLtPurple>;
+    Switch _unknown3 <bgcolor=cLtPurple>;
+    Switch _unknown4 <bgcolor=cLtPurple>;
+    Wargear left_hand_first;
+    Wargear left_hand_second;
+    Wargear right_hand_first;
+    Wargear right_hand_second;
+    Item left_item_arrows_slot;
+    Item left_item_bolts_slot;
+    Item right_item_arrows_slot;
+    Item right_item_bolts_slot;
+    Wargear head;
+    Wargear body;
+    Wargear hands;
+    Wargear legs;
+    Item hairstyle <bgcolor=cLtPurple>; // they gave this map for hair styles, i think the female hair styles are missing
+//	uint[] HairStyleIDs = { 0x000003E8, 0x0000044C, 0x000004B0, 0x00000514, 0x00000578, 0x000005DC, 0x00000640, 0x000006A4, 0x00000708, 0x0000076C };
+    Item left_ring;
+    Item right_ring;
+    QuickItems quick_items <bgcolor=cLtBlue>;
+} Pack;
+
+
+typedef struct{
+  ubyte flag1 : 1 ;
+  ubyte flag2 : 1 ;
+  ubyte flag3 : 1 ;
+  ubyte flag4 : 1 ;
+  ubyte flag5 : 1 ;
+  ubyte flag6 : 1 ;
+  ubyte flag7 : 1 ;
+  ubyte flag8 : 1 ;
+} BitFlags;
+
+typedef struct{
+    float R;
+    float G;
+    float B;
+    float A;
+} Color;
+
+typedef struct{
+    uint length;
+    byte data[length];
+    uint containerIndex;
+} UnknownOnline;
+
+typedef struct{
+    byte data[16];
+} UnknownArea;
+
+typedef struct{
+    Item magic;
+    uint count;
+} Attuned;
+
+typedef struct{
+    uint ChrHeaderLength;
+    byte ChrHeader[ChrHeaderLength]; // enemy death tracker?
+
+    uint ObjHeaderLength;
+    byte ObjHeader[ObjHeaderLength]; // broken objects tracker?
+    byte TrailingData[88];
+
+    // there are more containers inside these containers that follow the
+    // UnknownOnline struct pattern, where the first uint declare their size.
+
+    UnknownOnline unknownContainer[14]<optimize=false>;
+       //the container with index 7: orange soapstone messages?
+       // index 8: bloodstain animations?
+       // index 10 is something as well.
+} OnlineData;
+
+typedef struct{
+  uint bonfireenabled1 : 1 ;
+  uint bonfireenabled2 : 1 ;
+  uint bonfireenabled3 : 1 ;
+  uint bonfireenabled4 : 1 ;
+  uint bonfireenabled5 : 1 ;
+  uint bonfireenabled6 : 1 ;
+  uint bonfireenabled7 : 1 ;
+  uint bonfireenabled8 : 1 ;
+  uint bonfireenabled9 : 1 ;
+  uint bonfireenabled10 : 1 ;
+  uint bonfireenabled11 : 1 ;
+  uint bonfireenabled12 : 1 ;
+  uint bonfireenabled13 : 1 ;
+  uint bonfireenabled14 : 1 ;
+  uint bonfireenabled15 : 1 ;
+  uint bonfireenabled16 : 1 <comment="firelink?">; // enables when arriving at firelink first time
+  uint bonfireenabled17 : 1 ;
+  uint bonfireenabled18 : 1 ;
+  uint bonfireenabled19 : 1 ;
+  uint bonfireenabled20 : 1 ;
+  uint bonfireenabled21 : 1 ;
+  uint bonfireenabled22 : 1 ;
+  uint bonfireenabled23 : 1 ;
+  uint bonfireenabled24 : 1 ;
+  uint bonfireenabled25 : 1 ;
+  uint bonfireenabled26 : 1 ;
+  uint bonfireenabled27 : 1 ;
+  uint bonfireenabled28 : 1 ;
+  uint bonfireenabled29 : 1 ;
+  uint bonfireenabled30 : 1 ;
+  uint bonfireenabled31 : 1 ;
+  uint bonfireenabled32 : 1 ;
+
+} Bonfires;
+
+
+typedef struct {
+   local int unknown_size_1 = sizeof(StatsUnknown1);
+   local int stats_size = sizeof(Stats);
+   local int pack_size = sizeof(Pack);
+   local int backpack_amount = 2048; // is this hard code constant?
+
+   Checksum header; // this is written after the md5 in the footer of the save slot is written, it includes all parts of the save slot except for the ChecksumHeader
+   uint length; //number of bytes that should be included in the checksum, 393216 ( entire slot is 393248 )
+   StatsUnknown1 unknown <comment="unknown data">;
+
+   Stats stats;
+   Pack pack;
+
+   uint backpack_items_amount;
+   uint backpack_keys_amount;
+   uint backpack_size;
+   // 0-63 indexes for utils box
+   local uint utilbox_size = 64;
+   local uint itembox_size = backpack_size - utilbox_size;
+
+    //warning, if you've dropped an item, there may be blank items interleaved among the existing
+    //items and some items will be pushed into the empty part of the box display
+   PartiallyUsedBox util_box(utilbox_size,backpack_keys_amount);
+   PartiallyUsedBox item_box(itembox_size,backpack_items_amount);
+   
+   uint lastindex; // the item with the highest index // whatever that means? not tested
+   Attuned attunementslots[12];
+   uint UnknownData1;
+
+   uint equippedItems[5]; // could these also be the index-remember-previous-selection feature?
+   ushort UnknownData2[20]<bgcolor=cLtYellow>;
+
+   Color hair; // @ address: 0xE644
+   Color eye; 
+   CharacterParams creationdata;
+
+   BottomlessBox box[backpack_amount];
+
+   ushort UnknownData5a[20] <bgcolor=cLtYellow>;
+   
+	// equipped gestures are stored somewhere else, this is specifically if they are available or not
+	// enabling this wont remove the speak option and vice verse
+   LearnedGestures gestures;
+
+   ushort UnknownData5b[112] <bgcolor=cLtYellow>;
+
+   ushort playthrough <comment="ng+ counter?", bgcolor=cLtRed>; // not tested
+   uint UnknownData6[2] <bgcolor=cLtYellow>;
+
+   UnknownBox unknown_box[64];
+
+   UnknownStruct UnknownData7a[120];
+   byte UnknownData7b[54] <bgcolor=cLtYellow>;
+
+   uint deathcount;
+   byte UnknownData8[38] <bgcolor=cLtYellow>;
+   
+   Bonfires enabledBonfires; // not tested enough
+
+   BYTE data[93660-64-184] <bgcolor=cLtYellow>;
+
+    local uint mark = FTell();
+    OnlineData online;
+    // Here we have a dynamic length zero pad, skip to next part with numbers
+    FSeek(mark+131242);
+
+    //0x56280 burg bonfire
+   UnknownArea areadata[2578] <bgcolor=cLtYellow>;
+   Checksum secondary; // this is the md5 checksum of all bytes in this save slot, excluding the header and the length fields
+   BYTE offset[12] <bgcolor=cWhite>;
+
+} SaveSlot;
+
+LittleEndian(); 
+
+local uint tag = ReadUInt( FTell() );
+
+// IDENTIFY BND4 token
+// this is 0x20434f43 for x360 saves (coc?)
+// another tag for x360 is at 0x360: 3a084d4e (little endian)
+if( tag != 0x34444e42)
+{
+    Warning("Not a Dark Souls prepare to die edition file save format");
+    return -1;
+}
+
+SetBackColor( cLtGray );
+BND4 meta;
+
+// slots should be configurated according to record's dsContainersAmount // not really, what if you've deleted slot 1 but slot 2 exists?
+if (meta.SlotMetaBlockSize != 0x20)
+{
+    Warning("Not a Dark Souls prepare to die edition file save format");
+    return -1;
+}
+
+local uint slots = 0;
+local uint test = 0;
+for( slots = 0; slots < 10; slots++ )
+{
+    // if totalhp stat is zero, this is not a valid save slot
+    test = ReadUInt( FTell() + 116 );
+    if( test != 0 )
+        SaveSlot slot;
+    else
+        FSeek( FTell() + 0x60020 );
+}

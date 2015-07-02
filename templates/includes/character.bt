@@ -31,7 +31,7 @@ typedef enum<BYTE>{
 
 typedef enum<BYTE>{
     shaved = 0, receding = 1, short_h = 2, swept_black = 3, ponytail = 4,
-    wild = 5, pared_center = 6, semi_long = 7, curly = 8, bobbed = 9
+    wild = 5, parted_center = 6, semi_long = 7, curly = 8, bobbed = 9
 } CharHair;
 
 typedef enum<BYTE>{
@@ -44,30 +44,44 @@ typedef enum<BYTE>{
    pendant = 5, master_key = 6, tiny_being_ring = 7, old_witch_ring = 8
 } CharGift;
 
+typedef enum<BYTE>{
+	nocovenant=0,
+	wayofwhite,
+	princessguard,
+	warriorofsunlight,
+	darkwraith,
+	pathofdragon,
+	gravelordservant,
+	foresthunter,
+	darkmoonblade,
+	chaosservant
+} Covenant;
+
+// is the middle one total or current?
 typedef struct{ uint current; uint total; uint total_2; } HP;
 typedef struct{ uint current; uint total; uint total_2; } STAMINA;
 typedef enum<BYTE>{ FEMALE = 0, MALE = 1} GENDER;
 
 typedef struct{
     uint64 vitality;
-    uint64 attuentment;
+    uint64 attunement;
     uint64 endurance;
     uint64 strength;
-    uint64 dextirity;
+    uint64 dexterity;
     uint64 intelligence;
     uint64 faith;
 
     uint64 unknown <bgcolor=cLtPurple>;
-    uint unknow;
+    uint unknown2;
     uint humanity;
-    uint64 resistance;
+    uint64 resistance; // is this uint64 or uint32?
 
     uint level;
     uint souls;
     uint64 earned_souls;
-    uint unknown_8 <comment="could be coventant", bgcolor=cLtPurple>;
+    uint unknown3  <bgcolor=cLtPurple>;
     CharState state;
-    wchar_t name[14] <comment="utf-8 using">;
+    wchar_t name[14] <comment="utf-8 using">; // garbage characters after nulls, is length here correct?
     BYTE unkown_9[6];
     GENDER gender;
 
@@ -75,7 +89,7 @@ typedef struct{
     byte unknown_4 <bgcolor=cLtPurple>;
     byte unknown_5 <bgcolor=cLtPurple>;
     
-    CharClass klass;
+    CharClass class;
     CharBody body;
     CharGift gift;
     byte unknown_5 <bgcolor=cLtPurple>;
@@ -95,15 +109,23 @@ typedef struct{
     STAMINA stamina <fgcolor=cLtBlue>;
     uint unknown_2 <bgcolor=cLtPurple>;
     CharStats body;
-    StatsUnknown2 unknown_stats <bgcolor=cLtPurple>;
-  
+
+
+    BYTE unknown1[34];
+    uint sin; // i havent tested this
+
+    BYTE unknown2[8];
+
     uint poison_resistance;
     uint bleeding_resistence;
     uint poison_resistance_2;
     uint curse_resistence;
-    uint unknown_3 <comment="could be resistence", bgcolor=cLtPurple>;
 
+	byte unknown3[3];
+
+	Covenant covenant;
     CharFace face;
-    CharHairColor hair_color;
     CharHair hair_2;
+    CharHairColor hair_color;
+	byte unknown3c;
 } Stats;
