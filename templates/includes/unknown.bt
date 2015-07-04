@@ -64,6 +64,6 @@ typedef struct{
 
 typedef struct{
     ushort UnknownData[72] <bgcolor=cLtYellow>;
-    ushort playthrough <comment="ng+ counter?", bgcolor=cLtRed>; // not tested
+    ushort playthrough <comment="ng+ counter?">; // I've verified this, changing this from 0 to 1 makes the enemies have much more hp, and oscar wont give you estus flask in asylum.
     uint   ZeroFill[2] <bgcolor=cLtYellow>;
 } UnknownBlob1;
