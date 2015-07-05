@@ -143,8 +143,15 @@ typedef struct{
     EmptyContainers empty(6);
 } OnlineData;
 
+// ok this is specifically bonfires RESTED AT, not lit. (i.e. relevant to which bonfires we can warp to. only warpable bonfires in this struct??)
 typedef struct{
-  uint bonfireenabled1 : 1 ;
+
+// I noticed that if you do not light any bonfires in the asylum, if you die after running past the second bonfire, your spawn point is still set there. Probably the game state moves your spawn point automatically during the tutorial so you dont get trapped behind a locked gate.
+
+// 2,8,13,14,28,29,30
+// must be from {depths,fairlady,anorlondo1,anorlondotomb,paintedworld,tombgiants1}?
+// undead burg first bonfire not here
+  uint bonfireenabled1 : 1 <comment="undead parish"> ;
   uint bonfireenabled2 : 1 ;
   uint bonfireenabled3 : 1 ;
   uint bonfireenabled4 : 1 ;
@@ -152,14 +159,14 @@ typedef struct{
   uint bonfireenabled6 : 1 ;
   uint bonfireenabled7 : 1 ;
   uint bonfireenabled8 : 1 ;
-  uint bonfireenabled9 : 1 ;
+  uint bonfireenabled9 : 1 <comment="chamber of the princess">;
   uint bonfireenabled10 : 1 ;
-  uint bonfireenabled11 : 1 ;
+  uint bonfireenabled11 : 1 <comment="altar of sunlight">;
   uint bonfireenabled12 : 1 ;
   uint bonfireenabled13 : 1 ;
   uint bonfireenabled14 : 1 ;
   uint bonfireenabled15 : 1 ;
-  uint bonfireenabled16 : 1 <comment="firelink?">; // enables when arriving at firelink first time
+  uint bonfireenabled16 : 1 <comment="firelink shrine">; // enables when arriving at firelink first time
   uint bonfireenabled17 : 1 ;
   uint bonfireenabled18 : 1 ;
   uint bonfireenabled19 : 1 ;
@@ -179,9 +186,9 @@ typedef struct{
 } Bonfires;
 
 typedef struct{
-    uint unknown[4];
+    uint unknown[4]; // i think here is where we can find 'lit' info
     byte UnknownData8b[38-20] <bgcolor=cLtYellow>;
-    Bonfires enabledBonfires<bgcolor=cLtGreen>; // not tested enough
+    Bonfires bonfiresRestedAt<bgcolor=cLtGreen>;
     byte unknown2[214] <bgcolor=cLtYellow>;
     byte filler[788] <bgcolor=cWhite>;
     byte unknown3[224] <bgcolor=cLtYellow>;
@@ -218,7 +225,7 @@ typedef struct {
 
     uint lastindex; // the item with the highest index // whatever that means? not tested
     Attuned attunementslots[12];
-    uint UnknownData1;
+    uint UnknownData1; // going from hydra, to beating ornstein smaug, this wentt from 1 to 0
 
     uint equippedItems[5]; // could these also be the index-remember-previous-selection feature?
 
@@ -244,6 +251,7 @@ typedef struct {
     BonfireSection firstsection;
     UnknownBulkSection unknownSections[72];
     //unknownSection[2].marker[8] includes the bit that unlocks the undead burg ladder shortcut. it is bit 0x08 if my calculations are correct
+	//unknownSection[2].marker[91] 0A-08 indicates sunlightaltar bonfire lit?
 
     byte zerofill2[10] <bgcolor=cWhite,fgcolor=cGreen>;
 
@@ -258,6 +266,8 @@ typedef struct {
     UnknownArea areadata[2578] <bgcolor=cLtYellow>; //Im getting indications that this is just garbage data?
 
     Checksum secondary; // this is the md5 checksum of all bytes in this save slot, excluding the header and the length fields
+    // the secondary checksum isnt actually required to be correct to form a correct save file. The save file loads despite it being edited.
+
     ubyte offset[12] <bgcolor=cWhite>;
 } SaveSlot;
 
@@ -286,12 +296,12 @@ if (meta.SlotMetaBlockSize != 0x20)
 
 local uint slots = 0;
 local uint test = 0;
-for( slots = 0; slots < 10; slots++ )
+for( slots = 0; slots <= 10; slots++ )
 {
     // if totalhp stat is zero, this is not a valid save slot
     test = ReadUInt( FTell() + 116 );
     if( test != 0 )
         SaveSlot slot;
     else
-        FSeek( FTell() + 0x60020 );
+        FSeek( FTell() + 60020h );
 }

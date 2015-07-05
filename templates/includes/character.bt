@@ -61,7 +61,7 @@ typedef struct{
     uint64 intelligence;
     uint64 faith;
     uint64 unknown1 <bgcolor=cLtPurple>;
-    uint unknown2 <bgcolor=cLtPurple>;
+    uint unknown2 <bgcolor=cLtPurple>; // usually has a value 0, i've seen value 4
     uint humanity;
     uint64 resistance; // is this uint64 or uint32?
     uint level;
@@ -77,6 +77,8 @@ typedef struct{
     uint unknown_total;
 } UnknownCharStat <bgcolor=cLtPurple>;
 
+
+// poise? i think poise is inferred from item use etc.
 typedef struct{
     HP hp <fgcolor=cLtRed>;
     UnknownCharStat unknown_stat <comment="could be some other player resource such like as hp/stamina", bgcolor=cLtPurple>;
