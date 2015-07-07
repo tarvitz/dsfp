@@ -8,7 +8,7 @@
 //--------------------------------------
 
 typedef struct{
-    uint unknown[22]; // most of these look like uints?
+    uint unknown[19]; // most of these look like uints?
 } StatsUnknown1 <bgcolor=cLtYellow>;
 
 typedef struct{

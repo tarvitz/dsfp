@@ -137,6 +137,7 @@ typedef struct{
     // should have index field 8;
     OnlineContainer onlineGhostAnimations <comment="bloodstain animations">;
 
+    // could these be white/red soapstone messages?
     // shouldhave index fields 9 & 10
     UnknownOnline unknownContainer[2]<optimize=false>;
 
@@ -206,6 +207,8 @@ typedef struct {
 
     Checksum header; // this is written after the md5 in the footer of the save slot is written, it includes all parts of the save slot except for the ChecksumHeader
     uint length; //number of bytes that should be included in the checksum, 393216 ( entire slot is 393248 )
+    uint unknown_a[2];
+    uint gametime; // milliseconds since game start
     StatsUnknown1 unknown <comment="unknown data">;
 
     Stats stats;
@@ -251,7 +254,7 @@ typedef struct {
     BonfireSection firstsection;
     UnknownBulkSection unknownSections[72];
     //unknownSection[2].marker[8] includes the bit that unlocks the undead burg ladder shortcut. it is bit 0x08 if my calculations are correct
-	//unknownSection[2].marker[91] 0A-08 indicates sunlightaltar bonfire lit?
+    //unknownSection[2].marker[91] 0A-08 indicates sunlightaltar bonfire lit?
 
     byte zerofill2[10] <bgcolor=cWhite,fgcolor=cGreen>;
 
@@ -270,6 +273,30 @@ typedef struct {
 
     ubyte offset[12] <bgcolor=cWhite>;
 } SaveSlot;
+
+typedef struct {
+    Checksum header;
+    ubyte data[4+8+4+0x4C];
+    Stats stats;
+    Pack pack;
+    uint data2[3];
+    byte utilbox[0x1c*64];
+    byte itembox[0x1c*(2048-64)];
+    byte data3[0x6c+0x10+0x10+0x28+0x14+4+0x64];
+    byte bottomlessbox[0x20*2048];
+    Gestures gestures;
+    UnknownBlob1 playthrough_counter;
+    UnknownBox unknown_box[64];
+    UnknownStruct unknown_box_2[120];
+    UnknownBlob2 counters;
+    BonfireSection firstsection;
+    byte unknownSections[72*0x500];
+    byte zerofill2[10] <bgcolor=cWhite,fgcolor=cGreen>;
+    ubyte onlinedata[131242]<bgcolor=cLtPurple>;
+    UnknownArea areadata[2578] <bgcolor=cLtYellow>; 
+    Checksum secondary;
+    ubyte offset[12] <bgcolor=cWhite>;
+} EmptySlot;
 
 LittleEndian(); 
 
@@ -299,9 +326,10 @@ local uint test = 0;
 for( slots = 0; slots <= 10; slots++ )
 {
     // if totalhp stat is zero, this is not a valid save slot
+    // there must be a better indicator for this?
     test = ReadUInt( FTell() + 116 );
     if( test != 0 )
         SaveSlot slot;
     else
-        FSeek( FTell() + 60020h );
+        EmptySlot empty;
 }
