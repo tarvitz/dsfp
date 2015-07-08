@@ -21,28 +21,34 @@ typedef struct(uint l){
     byte data[l];
 } Message;
 
-// the outer container basic structure:
-// {
-//    uint totallength;
-//    uint unknown;
-//    Messages message[];
-//    uint unknown;
-//    uint containerindex;
-// }
-// 
-// The message array size depends on totallength and the size of the individual messages
-// each message can have a different size.
-//
-// message basic structure:
-// {
-//   uint length;
-//   byte data[length];
-//   byte padding[?????];
-//   uint tag;
-// }
-// padding is really weird. the array can be anything between 0 and 3.
+/* the outer container basic structure:
+ * -----
+ *    uint totallength;
+ *    uint unknown;
+ *    Messages message[];
+ *    uint unknown;
+ *    uint containerindex;
+ * -----
+ */ 
+
+/* The message array size depends on totallength and the size of the individual 
+ * messages. each message can have a different size.
+ *
+ * message basic structure:
+ * -------
+ *   uint length;
+ *   byte data[length];
+ *   byte padding[?????];
+ *   uint tag;
+ * -------
+ */
+
+ // padding is really weird. the array can be anything between 0 and 3.
 // It always pads to alignment of 2, but sometimes it skips past a 2-aligmnent to alignment of 4, i dont know why.
-// the tag indicates if another message exists after this. 0x1 means there is. 0xFFFF0000 means this message is the last one.
+// the while loop within the do-while loop fixes this for now, but it would be better to find the reason for the alignments differing
+// the tag indicates if another message exists after this. 0x1 means there is. 0xFFFF0000 means "this message is the last one".
+
+
 typedef struct{
     uint length;
     uint indicatortag;
@@ -50,14 +56,7 @@ typedef struct{
     do{
         uint length;
         Message data(length);
-// i dont get how the rules for alignment work. sometimes there is
-// no aligmnent, other times it skipps a 2 or 4 byte aligment with
-// no indication as to why
-//        while(FTell()%4!=2){
- //           FSeek( FTell() + 1 );
- //       }
-        // There must be some sort of pattern, right?
-        // anyway for now just pass
+        // skip until next nonzero byte
         while( ReadByte() == 0 ){
             FSeek( FTell() + 1 );
         }
