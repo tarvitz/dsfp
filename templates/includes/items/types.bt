@@ -11363,9 +11363,9 @@ typedef enum<uint>{
     Wood_Bolt = 2103000,
     Wood_Bolt_15 = 2103015,
     Lightning_Bolt = 2104000,
-    Lightning_Bolt_15 = 2104015
+    Lightning_Bolt_15 = 2104015,
+    Empty = 4294967295
 } ItemWeapon;
-
 
 typedef enum<uint>{
     Titanite_Shard = 1000,

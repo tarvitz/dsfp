@@ -6,16 +6,14 @@
 // Revision: 0.0.1
 // Purpose: for DarkSouls_PTDE.bt
 //--------------------------------------
-// Character stats
-#include "unknown.bt";
 
 typedef enum <uint> {
     HUMAN = 0, HOLLOW = 8
 } CharState;
 
 typedef enum<BYTE>{
-   warrior = 0, knight = 1, wanderer = 2,  thief = 3, bandit = 4,
-   hunter = 5, sorcerer = 6, pyromancer = 7, cleric = 8, deprived = 9
+    warrior = 0, knight = 1, wanderer = 2,  thief = 3, bandit = 4,
+    hunter = 5, sorcerer = 6, pyromancer = 7, cleric = 8, deprived = 9
 } CharClass;
 
 typedef enum<BYTE>{
@@ -40,21 +38,13 @@ typedef enum<BYTE>{
 } CharHairColor;
 
 typedef enum<BYTE>{
-   none = 0, blessing = 1, black_firebomb = 2, twin_humanities = 3, binoculars = 4,
-   pendant = 5, master_key = 6, tiny_being_ring = 7, old_witch_ring = 8
+    none = 0, blessing = 1, black_firebomb = 2, twin_humanities = 3, binoculars = 4,
+    pendant = 5, master_key = 6, tiny_being_ring = 7, old_witch_ring = 8
 } CharGift;
 
 typedef enum<BYTE>{
-	nocovenant=0,
-	wayofwhite,
-	princessguard,
-	warriorofsunlight,
-	darkwraith,
-	pathofdragon,
-	gravelordservant,
-	foresthunter,
-	darkmoonblade,
-	chaosservant
+    nocovenant=0, wayofwhite, princessguard, warriorofsunlight, darkwraith,
+    pathofdragon,gravelordservant, foresthunter, darkmoonblade, chaosservant
 } Covenant;
 
 // is the middle one total or current?
@@ -70,29 +60,15 @@ typedef struct{
     uint64 dexterity;
     uint64 intelligence;
     uint64 faith;
-
-    uint64 unknown <bgcolor=cLtPurple>;
-    uint unknown2;
+    uint64 unknown1 <bgcolor=cLtPurple>;
+    uint unknown2 <bgcolor=cLtPurple>; // usually has a value 0, i've seen value 4
     uint humanity;
     uint64 resistance; // is this uint64 or uint32?
-
     uint level;
     uint souls;
     uint64 earned_souls;
-    uint unknown3  <bgcolor=cLtPurple>;
+    uint unknown3 <bgcolor=cLtPurple>;
     CharState state;
-    wchar_t name[14] <comment="utf-8 using">; // garbage characters after nulls, is length here correct?
-    BYTE unkown_9[6];
-    GENDER gender;
-
-    byte unknown_3 <comment="not class", bgcolor=cLtPurple>;
-    byte unknown_4 <bgcolor=cLtPurple>;
-    byte unknown_5 <bgcolor=cLtPurple>;
-    
-    CharClass class;
-    CharBody body;
-    CharGift gift;
-    byte unknown_5 <bgcolor=cLtPurple>;
 } CharStats;
 
 typedef struct{
@@ -101,31 +77,42 @@ typedef struct{
     uint unknown_total;
 } UnknownCharStat <bgcolor=cLtPurple>;
 
+
+// poise? i think poise is inferred from item use etc.
 typedef struct{
     HP hp <fgcolor=cLtRed>;
-    UnknownCharStat unknown_stat <comment="could be some other player resource such like as hp/stamina",
-                                  bgcolor=cLtPurple>;
+    UnknownCharStat unknown_stat <comment="could be some other player resource such like as hp/stamina", bgcolor=cLtPurple>;
     uint unknown_1 <bgcolor=cLtPurple>;
     STAMINA stamina <fgcolor=cLtBlue>;
     uint unknown_2 <bgcolor=cLtPurple>;
-    CharStats body;
+    CharStats stats;
+    wchar_t name[14] <comment="utf-8">; // garbage characters after nulls?
+    BYTE unknown_3[6] <bgcolor=cLtPurple>;
+    GENDER gender;
 
+    byte unknown_4 <bgcolor=cLtPurple>;
+    byte unknown_5[2] <bgcolor=cLtPurple>;
 
-    BYTE unknown1[34];
-    uint sin; // i havent tested this
+    CharClass class;
+    CharBody bodytype;
+    CharGift gift;
+    byte unknown_6 <bgcolor=cLtPurple>;
 
-    BYTE unknown2[8];
+    BYTE unknown_7[34] <bgcolor=cLtPurple>;
+    uint sin <bgcolor=cLtRed>; // i havent tested this
+
+    BYTE unknown_8[8] <bgcolor=cLtPurple>;
 
     uint poison_resistance;
     uint bleeding_resistence;
     uint poison_resistance_2;
     uint curse_resistence;
 
-	byte unknown3[3];
+    byte unknown_9[3] <bgcolor=cLtPurple>;
 
-	Covenant covenant;
+    Covenant covenant;
     CharFace face;
     CharHair hair_2;
     CharHairColor hair_color;
-	byte unknown3c;
+    byte unknown_10 <bgcolor=cLtPurple>;
 } Stats;

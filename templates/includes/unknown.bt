@@ -7,34 +7,57 @@
 // Purpose: for DarkSouls_PTDE.bt
 //--------------------------------------
 
-// Checksum
 typedef struct{
-    byte md5[16];
-} Checksum <bgcolor=cLtGreen>;
-
-typedef struct{
-    uint unknown[22]; // most of these look like uints?
+    uint unknown[19]; // most of these look like uints?
 } StatsUnknown1 <bgcolor=cLtYellow>;
 
 typedef struct{
-   ubyte UnknownData3[50] <bgcolor=cLtYellow>;
-// I suspect the character creation options can be found around here
-   ubyte skintone;
-   byte UnknownData4[57] <bgcolor=cLtYellow>;
-} CharacterParams;
-
-typedef struct{
-    ushort unknown1 <bgcolor=cLtYellow>;
-	ushort unknown2 <bgcolor=cLtYellow>;
-	ushort petrus <comment="shrug - 21, look skyward - 23, unlearned - 20">;
-	ushort unknown4 <bgcolor=cLtYellow>;
-	ushort unknown5 <bgcolor=cLtYellow>;
-	ushort unknown6 <bgcolor=cLtYellow>;
-	ushort unknown7 <bgcolor=cLtYellow>;
-	ushort unknown8 <bgcolor=cLtYellow>;
-} LearnedGestures;
-
-typedef struct{
-	int zero;
-	int negative;
+    int zero;
+    int negative;
 } UnknownStruct<bgcolor=cLtYellow>;
+
+typedef struct{
+    uint length;
+    byte data[length];
+} UnknownDynamic;
+
+typedef struct{
+    byte data[16];
+} UnknownArea;
+
+typedef struct{
+    ushort index;
+    ushort id;
+} UnknownTuple <read=WriteTuple>;
+
+string WriteTuple(UnknownTuple &b) {
+    string result;
+    SPrintf(result, "%u : %u", b.index, b.id);
+    return result;
+}
+
+typedef struct{
+    uint unknown <bgcolor=cLtYellow>;
+    uint unknown2 <bgcolor=cLtYellow>;
+    uint unknown3 <bgcolor=cWhite>;
+    uint index <bgcolor=cLtPurple>; // there is a pattern here somewhere, i just know it
+    byte marker[112] <bgcolor=cLtYellow>; // this is just to mark area as yellow, to make it easier to find patterns
+    byte unknown_data[1152]; // very rare that this is not zero filled
+} UnknownBulkSection;
+
+typedef struct{
+    uint unknown1;
+    uint investigate1 <bgcolor=cLtPurple>; // bitfield?
+    ushort investigate2; // somewhere here it aligns to 4 again
+    uint unknown2[3];
+    uint investigate3 <bgcolor=cLtPurple>;
+    byte unknown3[28];
+    uint deathcount;
+    uint end_section; // i think this is an end marker?
+} UnknownBlob2;
+
+typedef struct{
+    ushort UnknownData[72] <bgcolor=cLtYellow>;
+    ushort playthrough <comment="ng+ counter?">; // I've verified this, changing this from 0 to 1 makes the enemies have much more hp, and oscar wont give you estus flask in asylum.
+    uint   ZeroFill[2] <bgcolor=cLtYellow>;
+} UnknownBlob1;
