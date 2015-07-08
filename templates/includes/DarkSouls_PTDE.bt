@@ -10,6 +10,7 @@
 #include "character.bt";
 #include "backpack.bt"
 #include "unknown.bt";
+#include "online.bt";
 
 typedef struct{
     ubyte flag1 : 1 ;
@@ -62,87 +63,6 @@ typedef struct{
     UnknownTuple UnknownData5b[4] <bgcolor=cLtYellow>;
     uint ZeroPad[16] <bgcolor=cWhite>;
 } Gestures;
-
-typedef struct (uint count){
-    UnknownOnline empty[count]<optimize=false>;
-} EmptyContainers;
-
-typedef struct(uint l){
-    byte data[l];
-} Message;
-
-// the outer container basic structure:
-// {
-//    uint totallength;
-//    uint unknown;
-//    Messages message[];
-//    uint unknown;
-//    uint containerindex;
-// }
-// 
-// The message array size depends on totallength and the size of the individual messages
-// each message can have a different size.
-//
-// message basic structure:
-// {
-//   uint length;
-//   byte data[length];
-//   byte padding[?????];
-//   uint tag;
-// }
-// padding is really weird. the array can be anything between 0 and 3.
-// It always pads to alignment of 2, but sometimes it skips past a 2-aligmnent to alignment of 4, i dont know why.
-// the tag indicates if another message exists after this. 0x1 means there is. 0xFFFF0000 means this message is the last one.
-typedef struct{
-    uint length;
-    uint indicatortag;
-    local uint mark = indicatortag;
-    do{
-        uint length;
-        Message data(length);
-// i dont get how the rules for alignment work. sometimes there is
-// no aligmnent, other times it skipps a 2 or 4 byte aligment with
-// no indication as to why
-//        while(FTell()%4!=2){
- //           FSeek( FTell() + 1 );
- //       }
-        // There must be some sort of pattern, right?
-        // anyway for now just pass
-        while( ReadByte() == 0 ){
-            FSeek( FTell() + 1 );
-        }
-        uint tag;
-        mark = tag;
-    }while(mark==1);
-    uint unknown;
-    uint containerIndex;
-} OnlineContainer;
-
-typedef struct{
-    uint ChrHeaderLength;
-    byte ChrHeader[ChrHeaderLength]; // some bytes in here definitely track enemy deaths
-    // the case I tested was writing byte 30 and 34, which made some enemies in the level spawn dead.
-    // it resets when you change area?
-
-    uint ObjHeaderLength;
-    byte ObjHeader[ObjHeaderLength]; // broken objects tracker?
-    byte TrailingData[88];
-
-    EmptyContainers empty(4);
-
-    // assumes they are always in the same order,
-    // should have index field 7
-    OnlineContainer onlineMessages <comment="orange player messages">;
-
-    // should have index field 8;
-    OnlineContainer onlineGhostAnimations <comment="bloodstain animations">;
-
-    // could these be white/red soapstone messages?
-    // shouldhave index fields 9 & 10
-    UnknownOnline unknownContainer[2]<optimize=false>;
-
-    EmptyContainers empty(6);
-} OnlineData;
 
 // ok this is specifically bonfires RESTED AT, not lit. (i.e. relevant to which bonfires we can warp to. only warpable bonfires in this struct??)
 typedef struct{
@@ -208,7 +128,7 @@ typedef struct {
     Checksum header; // this is written after the md5 in the footer of the save slot is written, it includes all parts of the save slot except for the ChecksumHeader
     uint length; //number of bytes that should be included in the checksum, 393216 ( entire slot is 393248 )
     uint unknown_a[2];
-    uint gametime; // milliseconds since game start
+    uint gametime; // milliseconds since game start, verified, max out at 3599999000 (999:59:59)
     StatsUnknown1 unknown <comment="unknown data">;
 
     Stats stats;

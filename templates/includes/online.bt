@@ -1,0 +1,95 @@
+//--------------------------------------
+//--- 010 Editor v5.0 Binary Template
+//
+// File: DRAKS0005.sl2
+// Author: Tarvitz
+// Revision: 0.0.1
+// Purpose: 4 fun
+//--------------------------------------
+
+typedef struct{
+    uint length;
+    byte data[length];
+    uint containerIndex;
+} UnknownOnline;
+
+typedef struct (uint count){
+    UnknownOnline empty[count]<optimize=false>;
+} EmptyContainers;
+
+typedef struct(uint l){
+    byte data[l];
+} Message;
+
+// the outer container basic structure:
+// {
+//    uint totallength;
+//    uint unknown;
+//    Messages message[];
+//    uint unknown;
+//    uint containerindex;
+// }
+// 
+// The message array size depends on totallength and the size of the individual messages
+// each message can have a different size.
+//
+// message basic structure:
+// {
+//   uint length;
+//   byte data[length];
+//   byte padding[?????];
+//   uint tag;
+// }
+// padding is really weird. the array can be anything between 0 and 3.
+// It always pads to alignment of 2, but sometimes it skips past a 2-aligmnent to alignment of 4, i dont know why.
+// the tag indicates if another message exists after this. 0x1 means there is. 0xFFFF0000 means this message is the last one.
+typedef struct{
+    uint length;
+    uint indicatortag;
+    local uint mark = indicatortag;
+    do{
+        uint length;
+        Message data(length);
+// i dont get how the rules for alignment work. sometimes there is
+// no aligmnent, other times it skipps a 2 or 4 byte aligment with
+// no indication as to why
+//        while(FTell()%4!=2){
+ //           FSeek( FTell() + 1 );
+ //       }
+        // There must be some sort of pattern, right?
+        // anyway for now just pass
+        while( ReadByte() == 0 ){
+            FSeek( FTell() + 1 );
+        }
+        uint tag;
+        mark = tag;
+    }while(mark==1);
+    uint unknown;
+    uint containerIndex;
+} OnlineContainer;
+
+typedef struct{
+    uint ChrHeaderLength;
+    byte ChrHeader[ChrHeaderLength]; // some bytes in here definitely track enemy deaths
+    // the case I tested was writing byte 30 and 34, which made some enemies in the level spawn dead.
+    // it resets when you change area?
+
+    uint ObjHeaderLength;
+    byte ObjHeader[ObjHeaderLength]; // broken objects tracker?
+    byte TrailingData[88];
+
+    EmptyContainers empty(4);
+
+    // assumes they are always in the same order,
+    // should have index field 7
+    OnlineContainer onlineMessages <comment="orange player messages">;
+
+    // should have index field 8;
+    OnlineContainer onlineGhostAnimations <comment="bloodstain animations">;
+
+    // could these be white/red soapstone messages?
+    // shouldhave index fields 9 & 10
+    UnknownOnline unknownContainer[2]<optimize=false>;
+
+    EmptyContainers empty(6);
+} OnlineData;

@@ -19,12 +19,6 @@ typedef struct{
 typedef struct{
     uint length;
     byte data[length];
-    uint containerIndex;
-} UnknownOnline;
-
-typedef struct{
-    uint length;
-    byte data[length];
 } UnknownDynamic;
 
 typedef struct{
