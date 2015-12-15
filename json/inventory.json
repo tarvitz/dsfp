@@ -1,5 +1,5 @@
 {
   "WATCH": [
-    {"start": "0x0ca0", "size": "0xd900", "comment": "first 10 inventory slots"}
+    {"start": "0x0ca0", "size": "0xd900", "comment": "inventory"}
   ]
 }
