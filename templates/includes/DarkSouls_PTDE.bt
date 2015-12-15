@@ -1,0 +1,255 @@
+//--------------------------------------
+//--- 010 Editor v5.0 Binary Template
+//
+// File: DRAKS0005.sl2
+// Author: Tarvitz
+// Revision: 0.0.1
+// Purpose: 4 fun
+//--------------------------------------
+#include "bnd4.bt";
+#include "character.bt";
+#include "backpack.bt"
+#include "unknown.bt";
+#include "online.bt";
+
+typedef struct{
+    ubyte flag1 : 1 ;
+    ubyte flag2 : 1 ;
+    ubyte flag3 : 1 ;
+    ubyte flag4 : 1 ;
+    ubyte flag5 : 1 ;
+    ubyte flag6 : 1 ;
+    ubyte flag7 : 1 ;
+    ubyte flag8 : 1 ;
+} BitFlags;
+
+typedef struct{
+    float R;
+    float G;
+    float B;
+    float A;
+} Color;
+
+typedef struct{
+    byte md5[16];
+} Checksum <bgcolor=cLtGreen>;
+
+typedef struct{
+   ubyte UnknownData3[50] <bgcolor=cLtYellow>;
+// I suspect the character creation options can be found around here
+   ubyte skintone;
+   byte UnknownData4[57] <bgcolor=cLtYellow>;
+} CharacterParams;
+
+typedef struct{
+    Item magic;
+    uint count;
+} Attuned;
+
+// I'm not sure exactly how these map, if they are just shorts or UnknownTuple
+typedef struct{
+    UnknownTuple unknown1 <bgcolor=cLtYellow>;
+    UnknownTuple petrus <comment="shrug - 21, look skyward - 23, unlearned - 20">;
+    UnknownTuple unknown3 <bgcolor=cLtYellow>;
+    UnknownTuple unknown4 <bgcolor=cLtYellow>;
+} LearnedGestures;
+
+typedef struct{
+    UnknownTuple UnknownData5a[10] <bgcolor=cLtYellow>;
+    // equipped gestures are stored somewhere else, this is specifically if they are available or not
+    // enabling this wont remove the speak option and vice verse
+    LearnedGestures gestures;
+    //maybe more gestures?
+    UnknownTuple UnknownData5b[4] <bgcolor=cLtYellow>;
+    uint ZeroPad[16] <bgcolor=cWhite>;
+} Gestures;
+
+// ok this is specifically bonfires RESTED AT, not lit. (i.e. relevant to which bonfires we can warp to. only warpable bonfires in this struct??)
+typedef struct{
+
+// I noticed that if you do not light any bonfires in the asylum, if you die after running past the second bonfire, your spawn point is still set there. Probably the game state moves your spawn point automatically during the tutorial so you dont get trapped behind a locked gate.
+
+// 2,8,13,14,28,29,30
+// must be from {depths,fairlady,anorlondo1,anorlondotomb,paintedworld,tombgiants1}?
+// undead burg first bonfire not here
+  uint bonfireenabled1 : 1 <comment="undead parish"> ;
+  uint bonfireenabled2 : 1 ;
+  uint bonfireenabled3 : 1 ;
+  uint bonfireenabled4 : 1 ;
+  uint bonfireenabled5 : 1 ;
+  uint bonfireenabled6 : 1 ;
+  uint bonfireenabled7 : 1 ;
+  uint bonfireenabled8 : 1 ;
+  uint bonfireenabled9 : 1 <comment="chamber of the princess">;
+  uint bonfireenabled10 : 1 ;
+  uint bonfireenabled11 : 1 <comment="altar of sunlight">;
+  uint bonfireenabled12 : 1 ;
+  uint bonfireenabled13 : 1 ;
+  uint bonfireenabled14 : 1 ;
+  uint bonfireenabled15 : 1 ;
+  uint bonfireenabled16 : 1 <comment="firelink shrine">; // enables when arriving at firelink first time
+  uint bonfireenabled17 : 1 ;
+  uint bonfireenabled18 : 1 ;
+  uint bonfireenabled19 : 1 ;
+  uint bonfireenabled20 : 1 ;
+  uint bonfireenabled21 : 1 ;
+  uint bonfireenabled22 : 1 ;
+  uint bonfireenabled23 : 1 ;
+  uint bonfireenabled24 : 1 ;
+  uint bonfireenabled25 : 1 ;
+  uint bonfireenabled26 : 1 ;
+  uint bonfireenabled27 : 1 ;
+  uint bonfireenabled28 : 1 ;
+  uint bonfireenabled29 : 1 ;
+  uint bonfireenabled30 : 1 ;
+  uint bonfireenabled31 : 1 ;
+  uint bonfireenabled32 : 1 ;
+} Bonfires;
+
+typedef struct{
+    uint unknown[4]; // i think here is where we can find 'lit' info
+    byte UnknownData8b[38-20] <bgcolor=cLtYellow>;
+    Bonfires bonfiresRestedAt<bgcolor=cLtGreen>;
+    byte unknown2[214] <bgcolor=cLtYellow>;
+    byte filler[788] <bgcolor=cWhite>;
+    byte unknown3[224] <bgcolor=cLtYellow>;
+    byte filler2[16] <bgcolor=cWhite>;
+} BonfireSection;
+
+typedef struct {
+    local int unknown_size_1 = sizeof(StatsUnknown1);
+    local int stats_size = sizeof(Stats);
+    local int pack_size = sizeof(Pack);
+    local int backpack_amount = 2048; // is this hard code constant? // i dont know, we could try filling the backpack 
+// with 2047 items and se what happens when we try to pick up another. if it refuses its constant, if it dynamically resize the 
+// pack then we know
+
+
+    Checksum header; // this is written after the md5 in the footer of the save slot is written, it includes all parts of the save slot except for the ChecksumHeader
+    uint length; //number of bytes that should be included in the checksum, 393216 ( entire slot is 393248 )
+    uint unknown_a[2];
+    uint gametime; // milliseconds since game start, verified, max out at 3599999000 (999:59:59)
+    StatsUnknown1 unknown <comment="unknown data">;
+
+    Stats stats;
+    Pack pack;
+
+    uint backpack_items_amount;
+    uint backpack_keys_amount;
+    uint backpack_size;
+    // 0-63 indexes for utils box
+    local uint utilbox_size = 64;
+    local uint itembox_size = backpack_size - utilbox_size;
+
+    //warning, if you've dropped an item, there may be blank items interleaved among the existing
+    //items and some items will be pushed into the empty part of the box display
+    PartiallyUsedBox util_box(utilbox_size,backpack_keys_amount);
+    PartiallyUsedBox item_box(itembox_size,backpack_items_amount);
+
+    uint lastindex; // the item with the highest index // whatever that means? not tested
+    Attuned attunementslots[12];
+    uint UnknownData1; // going from hydra, to beating ornstein smaug, this wentt from 1 to 0
+
+    uint equippedItems[5]; // could these also be the index-remember-previous-selection feature?
+
+    UnknownTuple UnknownData2[10]<bgcolor=cLtYellow>;
+
+    Color hair; // @ address: 0xE644
+    Color eye; 
+    CharacterParams creationdata;
+
+    BottomlessBox box[backpack_amount];
+
+    Gestures gestures;
+
+    // the end part of the playthrough counter looks like it is almost in a box struct?
+    UnknownBlob1 playthrough_counter;
+    UnknownBox unknown_box[64];
+    UnknownStruct unknown_box_2[120];
+
+    UnknownBlob2 counters;
+
+
+    // a section has length 0x500
+    BonfireSection firstsection;
+    UnknownBulkSection unknownSections[72];
+    //unknownSection[2].marker[8] includes the bit that unlocks the undead burg ladder shortcut. it is bit 0x08 if my calculations are correct
+    //unknownSection[2].marker[91] 0A-08 indicates sunlightaltar bonfire lit?
+
+    byte zerofill2[10] <bgcolor=cWhite,fgcolor=cGreen>;
+
+    local uint mark = FTell();
+
+    OnlineData online;
+
+    // Here we have a dynamic length zero pad, skip to next part with numbers
+    FSeek(mark+131242);
+
+    //0x56280 burg bonfire?
+    UnknownArea areadata[2578] <bgcolor=cLtYellow>; //Im getting indications that this is just garbage data?
+
+    Checksum secondary; // this is the md5 checksum of all bytes in this save slot, excluding the header and the length fields
+    // the secondary checksum isnt actually required to be correct to form a correct save file. The save file loads despite it being edited.
+
+    ubyte offset[12] <bgcolor=cWhite>;
+} SaveSlot;
+
+typedef struct {
+    Checksum header;
+    ubyte data[4+8+4+0x4C];
+    Stats stats;
+    Pack pack;
+    uint data2[3];
+    byte utilbox[0x1c*64];
+    byte itembox[0x1c*(2048-64)];
+    byte data3[0x6c+0x10+0x10+0x28+0x14+4+0x64];
+    byte bottomlessbox[0x20*2048];
+    Gestures gestures;
+    UnknownBlob1 playthrough_counter;
+    UnknownBox unknown_box[64];
+    UnknownStruct unknown_box_2[120];
+    UnknownBlob2 counters;
+    BonfireSection firstsection;
+    byte unknownSections[72*0x500];
+    byte zerofill2[10] <bgcolor=cWhite,fgcolor=cGreen>;
+    ubyte onlinedata[131242]<bgcolor=cLtPurple>;
+    UnknownArea areadata[2578] <bgcolor=cLtYellow>; 
+    Checksum secondary;
+    ubyte offset[12] <bgcolor=cWhite>;
+} EmptySlot;
+
+LittleEndian(); 
+
+local uint tag = ReadUInt( FTell() );
+
+// IDENTIFY BND4 token
+// this is 0x20434f43 for x360 saves (coc?)
+// another tag for x360 is at 0x360: 3a084d4e (little endian)
+if( tag != 0x34444e42)
+{
+    Warning("Not a Dark Souls prepare to die edition file save format");
+    return -1;
+}
+
+SetBackColor( cLtGray );
+BND4 meta;
+
+// slots should be configurated according to record's dsContainersAmount // not really, what if you've deleted slot 1 but slot 2 exists?
+if (meta.SlotMetaBlockSize != 0x20)
+{
+    Warning("Not a Dark Souls prepare to die edition file save format");
+    return -1;
+}
+
+local uint slots = 0;
+local uint test = 0;
+for( slots = 0; slots <= 10; slots++ )
+{
+    // if totalhp stat is zero, this is not a valid save slot
+    // there must be a better indicator for this?
+    test = ReadUInt( FTell() + 116 );
+    if( test != 0 )
+        SaveSlot slot;
+    else
+        EmptySlot empty;
+}
