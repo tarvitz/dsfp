@@ -5,28 +5,29 @@
     :platform: Linux, Windows, MacOS X
     :synopsis: watches for dark souls save file modifications and prints
         any modified data in console
-.. moduleauthor:: Tarvitz<tarvitz@blacklibrary.ru>
+.. moduleauthor:: Tarvitz <tarvitz@blacklibrary.ru>
 """
 
 from __future__ import unicode_literals
+import os
+import sys
+import six
+import struct
+import json
+import argparse
 from time import sleep
 from datetime import datetime
-import struct
-import sys
-import os
-import six
-import textwrap
+from textwrap import wrap
+from struct import pack, unpack
 
 PROJECT_ROOT = os.path.pardir
+sys.path.insert(0, os.path.join(PROJECT_ROOT, 'dsfp'))
+
+from dsfp.utils import chunks
 
 
 def rel(path):
     return os.path.join(PROJECT_ROOT, path)
-
-sys.path.insert(0, os.path.join(PROJECT_ROOT, 'dsfp'))
-
-import simplejson as json
-import argparse
 
 
 class Node(object):
@@ -78,6 +79,33 @@ class Leaf(Node):
     def __repr__(self):
         return "<Leaf: 0x%08x>" % self.start
 
+
+def _wrap(source, parts):
+    """
+    wrap source to list of equal parts python 3+ only
+
+    :param str source: source to wrap
+    :param int parts: N equal parts
+    :rtype: list[str]
+    :return: list of str with N or equal length
+    """
+    return list(chunks(source, parts))
+
+
+def text_wrap(source, parts):
+    """
+    wrap source to list of equal parts
+
+    :param str source: source to wrap
+    :param int parts: N equal parts
+    :rtype: list[str]
+    :return: list of str with N or equal length
+    """
+    if six.PY2:
+        return wrap(source, parts)
+    return _wrap(source, parts)
+
+
 class NewDiff(object):
     """
 
@@ -116,15 +144,25 @@ class NewDiff(object):
                 old_data = self.read_stream(self.old_stream, block)
                 new_data = self.read_stream(self.new_stream, block)
                 for idx, (old, new) in enumerate(
-                        zip(textwrap.wrap(old_data, word_size),
-                            textwrap.wrap(new_data, word_size))
+                        zip(text_wrap(old_data, word_size),
+                            text_wrap(new_data, word_size))
                 ):
                     size = int(block['size'], 16) + idx * word_size
                     start = int(block['start'], 16) + idx * word_size
                     if old == new:
                         continue
+                    #: todo decide what's version of python would be
+                    #: more prioritized as textwrap.wrap does not work with
+                    #: bytestring and iterate through it coverts chars back to
+                    #: int there's only one option convert/pack them back in
+                    #: python 3+ which could give performance drop downs.
+                    processed_old = old
+                    processed_new = new
+                    if isinstance(old, list) and isinstance(new, list):
+                        processed_old = pack('B' * word_size, *old)
+                        processed_new = pack('B' * word_size, *new)
                     nodes.append(
-                        Leaf(start, size, old, new)
+                        Leaf(start, size, processed_old, processed_new)
                     )
         return nodes
 
@@ -178,8 +216,31 @@ class Spy(object):
             modified += 1
 
 
+def get_default_file_name():
+    """
+    running on windows it would get default draks0005.sl2 file location
+
+    :rtype: str
+    :return: draks0005.sl2 file location
+    """
+    prefix = os.path.join(
+        os.getenv('HOME'), 'Documents/NBGI/DarkSouls/'
+    )
+    path = ''
+    default_file = 'draks0005.sl2'
+    if sys.version_info[:2] >= (3, 5):
+        path = next(x for x in os.scandir(prefix) if x.is_dir()).path
+    else:
+        for root, directory, files in os.walk(prefix):
+            for filename in files:
+                if filename == default_file:
+                    path = os.path.join(prefix, root)
+                    break
+    return os.path.join(path, default_file)
+
+
 def main(ns):
-    filename = ns.filename
+    filename = ns.filename or get_default_file_name()
     watchers = []
     if ns.watch_table:
         for stream in ns.watch_table:
@@ -199,7 +260,7 @@ if __name__ == '__main__':
     )
     parser.add_argument('-f', '--filename', metavar='draks0005.sl2',
                         type=str, dest='filename',
-                        help='save file', required=True)
+                        help='save file', required=False)
     parser.add_argument('-w', '--watch-table',
                         dest='watch_table',
                         metavar='table.json,table2.json',
