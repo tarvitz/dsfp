@@ -50,9 +50,11 @@ typedef struct(uint l){
 
 
 typedef struct{
-    uint length;
+    uint block_size;
     uint indicatortag;
     local uint mark = indicatortag;
+    byte message[block_size - 8];
+    /* todo: this block is unstable and could break on some saves
     do{
         uint length;
         Message data(length);
@@ -62,7 +64,7 @@ typedef struct{
         }
         uint tag;
         mark = tag;
-    }while(mark==1);
+    }while(mark == 1); */
     uint unknown;
     uint containerIndex;
 } OnlineContainer;

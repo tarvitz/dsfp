@@ -183,7 +183,7 @@ typedef struct {
     OnlineData online;
 
     // Here we have a dynamic length zero pad, skip to next part with numbers
-    FSeek(mark+131242);
+    FSeek(mark + 131242);
 
     //0x56280 burg bonfire?
     UnknownArea areadata[2578] <bgcolor=cLtYellow>; //Im getting indications that this is just garbage data?

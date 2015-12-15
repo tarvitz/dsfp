@@ -52,6 +52,9 @@ have been written in 2014 has some wrong information about different places.
 Use `010editor <http://www.sweetscape.com/010editor/>`_ to process Dark Souls
 save file with given templates.
 
+Works proper with 6.0.x versions, (5.0 on current master branch could have
+some flaws in file read process)
+
 Installation
 ~~~~~~~~~~~~
 For general installation you would probably need virtual environment with pip
