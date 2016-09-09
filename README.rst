@@ -1,5 +1,6 @@
 DarkSouls Save File Parser
 ==========================
+
 .. _badges:
 
 .. image:: https://travis-ci.org/tarvitz/dsfp.svg?branch=master
@@ -29,6 +30,8 @@ DarkSouls Save File Parser
 
 .. contents:: :local:
     :depth: 2
+
+**Note** that this repository has pretty much data about internal save file infrastructure and its design. Thouhg everything stored inside 010 editor templates. If you need to process through dark souls save file and make it dynamicly you'd probably need to build your own library based on discovered knowledge. Don't rely that python library someday could even appear ;)
 
 Original source
 ~~~~~~~~~~~~~~~
@@ -123,8 +126,6 @@ dictionary format
        }]
 
 
-
-
 Datasheets
 ~~~~~~~~~~
 There's no many information about Dark Souls save file format (as well as the
@@ -154,6 +155,8 @@ Development
 
 Roadmap
 ~~~~~~~
+**note** there's no commitment that I'll do it someday. Just a simple plan if I get back to darksouls file format for any reason.
+
 I have no certain roadmap for this project and I inspect the data whenever I want
 to do it. In general these moments could be very short/long from time to time. So don't
 expect me finishing this work to some certain moment or something clear enough.
