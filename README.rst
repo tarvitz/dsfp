@@ -22,7 +22,8 @@ DarkSouls Save File Parser
 Works with:
 
 - Dark Souls: Prepare to Die Edition
-- Dark Souls: Remastered
+
+**Note**, Dark Souls: Remastered could be supported as well, however its data is encrypted or obfuscated by some algo, it makes reading with templates and dsfp itself mearly possible. (So basically only unencrypted data are read properly).
 
 **!!!Note!!!** that this repository has pretty much data about internal save file infrastructure and its design. Thouhg everything stored inside 010 editor templates. If you need to process through dark souls save file and make it dynamicly you'd probably need to build your own library based on discovered knowledge. Don't rely that python library someday could even appear ;)
 
